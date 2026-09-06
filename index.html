@@ -194,58 +194,221 @@ main{padding:12px 12px 90px;max-width:640px;margin:0 auto}
    ===================================================================== */
 const WORDS = [
   /* ---- Lesson 1 · No Screens Before Bed ---- */
-  {w:"bedtime",       m:"잠자리에 들 시간", s:"“**Bedtime**, Max,” calls Stella the robot.", l:"Lesson 1", p:"8"},
-  {w:"call",          m:"부르다", s:"“Bedtime, Max,” **calls** Stella the robot.", l:"Lesson 1", p:"8"},
-  {w:"robot",         m:"로봇", s:"“Bedtime, Max,” calls Stella the **robot**.", l:"Lesson 1", p:"8"},
-  {w:"room",          m:"방", s:"Max goes to his **room**.", l:"Lesson 1", p:"8"},
-  {w:"later",         m:"나중에", s:"**Later**, Stella checks on Max.", l:"Lesson 1", p:"8"},
-  {w:"check on",      m:"~를 살펴보다", s:"Later, Stella **checks on** Max.", l:"Lesson 1", p:"8"},
-  {w:"sleep",         m:"자다", s:"“Aren’t you **sleeping**?” she asks.", l:"Lesson 1", p:"8"},
-  {w:"ask",           m:"묻다", s:"“Aren’t you sleeping?” she **asks**.", l:"Lesson 1", p:"8"},
-  {w:"bring",         m:"가져다주다", s:"Stella **brings** him warm milk.", l:"Lesson 1", p:"8"},
-  {w:"warm",          m:"따뜻한", s:"Stella brings him **warm** milk.", l:"Lesson 1", p:"8"},
-  {w:"milk",          m:"우유", s:"Stella brings him warm **milk**.", l:"Lesson 1", p:"8"},
-  {w:"relax",         m:"긴장을 풀다, 쉬다", s:"“This will help you **relax**,” she says.", l:"Lesson 1", p:"8"},
-  {w:"drink",         m:"마시다", s:"Max **drinks** it.", l:"Lesson 1", p:"8"},
-  {w:"activity",      m:"활동, 한 일", s:"“Let’s check your **activity**,” Stella says.", l:"Lesson 1", p:"9"},
-  {w:"play",          m:"(게임을) 하다", s:"“You **played** Bug Blaster.”", l:"Lesson 1", p:"9"},
-  {w:"fun",           m:"재미있는", s:"“It was **fun**!” Max says.", l:"Lesson 1", p:"9"},
-  {w:"watch",         m:"보다", s:"“**Watching** screens before bed isn’t good,” Stella says.", l:"Lesson 1", p:"9"},
-  {w:"screen",        m:"화면", s:"“Watching **screens** before bed isn’t good,” Stella says.", l:"Lesson 1", p:"9"},
-  {w:"before",        m:"~하기 전에", s:"“Watching screens **before** bed isn’t good,” Stella says.", l:"Lesson 1", p:"9"},
-  {w:"light",         m:"빛", s:"“Their **light** wakes up your brain.”", l:"Lesson 1", p:"9"},
-  {w:"wake up",       m:"깨우다, 깨다", s:"“Their light **wakes up** your brain.”", l:"Lesson 1", p:"9"},
-  {w:"brain",         m:"뇌", s:"“Their light wakes up your **brain**.”", l:"Lesson 1", p:"9"},
-  {w:"tell",          m:"말해 주다", s:"She **tells** Max all about it.", l:"Lesson 1", p:"9"},
-  {w:"go on and on",  m:"끝없이 계속 이야기하다", s:"She **goes on and on**.", l:"Lesson 1", p:"9"},
-  {w:"soon",          m:"곧", s:"**Soon**, Max is asleep.", l:"Lesson 1", p:"9"},
-  {w:"asleep",        m:"잠이 든", s:"Soon, Max is **asleep**.", l:"Lesson 1", p:"9"},
-  {w:"work",          m:"효과가 있다", s:"“It **works** every time,” says Stella.", l:"Lesson 1", p:"9"},
-  {w:"every time",    m:"언제나, 매번", s:"“It works **every time**,” says Stella.", l:"Lesson 1", p:"9"},
+  {id:"bedtime", w:"bedtime",       m:"잠자리에 들 시간", s:"“**Bedtime**, Max,” calls Stella the robot.", b:"Seed2(A1)", l:"Lesson 1", p:"8"},
+  {id:"call", w:"call",          m:"부르다", s:"“Bedtime, Max,” **calls** Stella the robot.", b:"Seed2(A1)", l:"Lesson 1", p:"8"},
+  {id:"robot", w:"robot",         m:"로봇", s:"“Bedtime, Max,” calls Stella the **robot**.", b:"Seed2(A1)", l:"Lesson 1", p:"8"},
+  {id:"room", w:"room",          m:"방", s:"Max goes to his **room**.", b:"Seed2(A1)", l:"Lesson 1", p:"8"},
+  {id:"later", w:"later",         m:"나중에", s:"**Later**, Stella checks on Max.", b:"Seed2(A1)", l:"Lesson 1", p:"8"},
+  {id:"check-on", w:"check on",      m:"~를 살펴보다", s:"Later, Stella **checks on** Max.", b:"Seed2(A1)", l:"Lesson 1", p:"8"},
+  {id:"sleep", w:"sleep",         m:"자다", s:"“Aren’t you **sleeping**?” she asks.", b:"Seed2(A1)", l:"Lesson 1", p:"8"},
+  {id:"sleep-2", w:"sleep",         m:"잠 (명사)", s:"He gets eight hours of **sleep**.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"ask", w:"ask",           m:"묻다", s:"“Aren’t you sleeping?” she **asks**.", b:"Seed2(A1)", l:"Lesson 1", p:"8"},
+  {id:"bring", w:"bring",         m:"가져다주다", s:"Stella **brings** him warm milk.", b:"Seed2(A1)", l:"Lesson 1", p:"8"},
+  {id:"warm", w:"warm",          m:"따뜻한", s:"Stella brings him **warm** milk.", b:"Seed2(A1)", l:"Lesson 1", p:"8"},
+  {id:"milk", w:"milk",          m:"우유", s:"Stella brings him warm **milk**.", b:"Seed2(A1)", l:"Lesson 1", p:"8"},
+  {id:"relax", w:"relax",         m:"긴장을 풀다, 쉬다", s:"“This will help you **relax**,” she says.", b:"Seed2(A1)", l:"Lesson 1", p:"8"},
+  {id:"drink", w:"drink",         m:"마시다", s:"Max **drinks** it.", b:"Seed2(A1)", l:"Lesson 1", p:"8"},
+  {id:"activity", w:"activity",      m:"활동, 한 일", s:"“Let’s check your **activity**,” Stella says.", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
+  {id:"play", w:"play",          m:"(게임을) 하다", s:"“You **played** Bug Blaster.”", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
+  {id:"fun", w:"fun",           m:"재미있는", s:"“It was **fun**!” Max says.", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
+  {id:"fun-2", w:"fun",           m:"재미 (명사) — have fun: 즐겁게 지내다", s:"I’m having **fun** at summer camp.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"watch", w:"watch",         m:"보다", s:"“**Watching** screens before bed isn’t good,” Stella says.", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
+  {id:"screen", w:"screen",        m:"화면", s:"“Watching **screens** before bed isn’t good,” Stella says.", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
+  {id:"before", w:"before",        m:"~하기 전에", s:"“Watching screens **before** bed isn’t good,” Stella says.", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
+  {id:"light", w:"light",         m:"빛", s:"“Their **light** wakes up your brain.”", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
+  {id:"wake-up", w:"wake up",       m:"깨우다 (~를)", s:"“Their light **wakes up** your brain.”", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
+  {id:"wake-up-2", w:"wake up",       m:"잠에서 깨다 (스스로)", s:"When summer ends, he **wakes up**.", b:"Seed2(A1)", l:"Lesson 4", p:"45"},
+  {id:"brain", w:"brain",         m:"뇌", s:"“Their light wakes up your **brain**.”", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
+  {id:"tell", w:"tell",          m:"말해 주다", s:"She **tells** Max all about it.", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
+  {id:"i-told-you", w:"I told you",    m:"내가 말했잖아", s:"“**I told you**,” says Mila.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"go-on-and-on", w:"go on and on",  m:"끝없이 계속 이야기하다", s:"She **goes on and on**.", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
+  {id:"soon", w:"soon",          m:"곧", s:"**Soon**, Max is asleep.", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
+  {id:"asleep", w:"asleep",        m:"잠이 든", s:"Soon, Max is **asleep**.", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
+  {id:"work", w:"work",          m:"효과가 있다", s:"“It **works** every time,” says Stella.", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
+  {id:"every-time", w:"every time",    m:"언제나, 매번", s:"“It works **every time**,” says Stella.", b:"Seed2(A1)", l:"Lesson 1", p:"9"},
 
   /* ---- Lesson 2 · Sleepless at Summer Camp ---- */
-  {w:"sleepless",     m:"잠을 못 이루는", s:"**Sleepless** at Summer Camp", l:"Lesson 2", p:"20"},
-  {w:"summer camp",   m:"여름 캠프", s:"I’m having fun at **summer camp**.", l:"Lesson 2", p:"20"},
-  {w:"meet",          m:"만나다 (과거형 met)", s:"I **met** some friends.", l:"Lesson 2", p:"20"},
-  {w:"friend",        m:"친구", s:"I met some **friends**.", l:"Lesson 2", p:"20"},
-  {w:"explore",       m:"탐험하다", s:"It’s fun to **explore** the forest.", l:"Lesson 2", p:"20"},
-  {w:"forest",        m:"숲", s:"It’s fun to explore the **forest**.", l:"Lesson 2", p:"20"},
-  {w:"problem",       m:"문제", s:"The **problem** is it’s difficult to sleep.", l:"Lesson 2", p:"20"},
-  {w:"difficult",     m:"어려운", s:"The problem is it’s **difficult** to sleep.", l:"Lesson 2", p:"20"},
-  {w:"night",         m:"밤", s:"The first **night**, a loud thunderstorm kept me awake.", l:"Lesson 2", p:"20"},
-  {w:"loud",          m:"시끄러운", s:"The first night, a **loud** thunderstorm kept me awake.", l:"Lesson 2", p:"20"},
-  {w:"thunderstorm",  m:"천둥번개를 동반한 비", s:"The first night, a loud **thunderstorm** kept me awake.", l:"Lesson 2", p:"20"},
-  {w:"awake",         m:"깨어 있는", s:"A loud thunderstorm kept me **awake**.", l:"Lesson 2", p:"20"},
-  {w:"hot",           m:"더운", s:"And last night, it was really **hot**!", l:"Lesson 2", p:"20"},
-  {w:"fall asleep",   m:"잠들다", s:"I couldn’t **fall asleep**.", l:"Lesson 2", p:"20"},
-  {w:"strange",       m:"이상한", s:"It’s **strange**.", l:"Lesson 2", p:"20"},
-  {w:"stormy",        m:"폭풍우가 치는", s:"Last year wasn’t hot and **stormy** like this.", l:"Lesson 2", p:"20"},
-  {w:"tired",         m:"피곤한", s:"I’m so **tired** and keep dozing off.", l:"Lesson 2", p:"21"},
-  {w:"doze off",      m:"꾸벅꾸벅 졸다", s:"I’m so tired and keep **dozing off**.", l:"Lesson 2", p:"21"},
-  {w:"luckily",       m:"다행히도", s:"**Luckily**, there are only two more nights.", l:"Lesson 2", p:"21"},
-  {w:"cool",          m:"시원한", s:"It’ll be good to be back in my **cool**, quiet room!", l:"Lesson 2", p:"21"},
-  {w:"quiet",         m:"조용한", s:"It’ll be good to be back in my cool, **quiet** room!", l:"Lesson 2", p:"21"},
-  {w:"weekend",       m:"주말", s:"I’m going to sleep all **weekend**!", l:"Lesson 2", p:"21"}
+  {id:"sleepless", w:"sleepless",     m:"잠을 못 이루는", s:"**Sleepless** at Summer Camp", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"summer-camp", w:"summer camp",   m:"여름 캠프", s:"I’m having fun at **summer camp**.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"meet", w:"meet",          m:"만나다 (과거형 met)", s:"I **met** some friends.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"friend", w:"friend",        m:"친구", s:"I met some **friends**.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"explore", w:"explore",       m:"탐험하다", s:"It’s fun to **explore** the forest.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"forest", w:"forest",        m:"숲", s:"It’s fun to explore the **forest**.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"problem", w:"problem",       m:"문제", s:"The **problem** is it’s difficult to sleep.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"difficult", w:"difficult",     m:"어려운", s:"The problem is it’s **difficult** to sleep.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"night", w:"night",         m:"밤", s:"The first **night**, a loud thunderstorm kept me awake.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"loud", w:"loud",          m:"시끄러운", s:"The first night, a **loud** thunderstorm kept me awake.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"thunderstorm", w:"thunderstorm",  m:"천둥번개를 동반한 비", s:"The first night, a loud **thunderstorm** kept me awake.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"awake", w:"awake",         m:"깨어 있는", s:"A loud thunderstorm kept me **awake**.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"hot", w:"hot",           m:"더운", s:"And last night, it was really **hot**!", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"fall-asleep", w:"fall asleep",   m:"잠들다", s:"I couldn’t **fall asleep**.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"strange", w:"strange",       m:"이상한", s:"It’s **strange**.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"stormy", w:"stormy",        m:"폭풍우가 치는", s:"Last year wasn’t hot and **stormy** like this.", b:"Seed2(A1)", l:"Lesson 2", p:"20"},
+  {id:"tired", w:"tired",         m:"피곤한", s:"I’m so **tired** and keep dozing off.", b:"Seed2(A1)", l:"Lesson 2", p:"21"},
+  {id:"doze-off", w:"doze off",      m:"꾸벅꾸벅 졸다", s:"I’m so tired and keep **dozing off**.", b:"Seed2(A1)", l:"Lesson 2", p:"21"},
+  {id:"luckily", w:"luckily",       m:"다행히도", s:"**Luckily**, there are only two more nights.", b:"Seed2(A1)", l:"Lesson 2", p:"21"},
+  {id:"cool", w:"cool",          m:"시원한", s:"It’ll be good to be back in my **cool**, quiet room!", b:"Seed2(A1)", l:"Lesson 2", p:"21"},
+  {id:"quiet", w:"quiet",         m:"조용한", s:"It’ll be good to be back in my cool, **quiet** room!", b:"Seed2(A1)", l:"Lesson 2", p:"21"},
+  {id:"weekend", w:"weekend",       m:"주말", s:"I’m going to sleep all **weekend**!", b:"Seed2(A1)", l:"Lesson 2", p:"21"},
+
+  /* ---- Lesson 3 · Sleep for the Win ---- */
+  {id:"dragon", w:"dragon",            m:"용", s:"Mila the **dragon** is getting ready for bed.", b:"Seed2(A1)", l:"Lesson 3", p:"32"},
+  {id:"get-ready-for", w:"get ready for",     m:"~할 준비를 하다", s:"Mila the dragon is **getting ready for** bed.", b:"Seed2(A1)", l:"Lesson 3", p:"32"},
+  {id:"fly", w:"fly",               m:"날다", s:"“Let’s **fly**!” says her brother, Kaylex.", b:"Seed2(A1)", l:"Lesson 3", p:"32"},
+  {id:"brother", w:"brother",           m:"오빠, 남동생", s:"“Let’s fly!” says her **brother**, Kaylex.", b:"Seed2(A1)", l:"Lesson 3", p:"32"},
+  {id:"school", w:"school",            m:"학교", s:"“We have **school** tomorrow,” says Mila.", b:"Seed2(A1)", l:"Lesson 3", p:"32"},
+  {id:"tomorrow", w:"tomorrow",          m:"내일", s:"“We have school **tomorrow**,” says Mila.", b:"Seed2(A1)", l:"Lesson 3", p:"32"},
+  {id:"need", w:"need",              m:"필요하다", s:"“We **need** a good night’s sleep.”", b:"Seed2(A1)", l:"Lesson 3", p:"32"},
+  {id:"a-good-night-s-sleep", w:"a good night’s sleep", m:"푹 자는 잠", s:"“We need **a good night’s sleep**.”", b:"Seed2(A1)", l:"Lesson 3", p:"32"},
+  {id:"fly-away", w:"fly away",          m:"날아가 버리다", s:"Kaylex says and **flies away**.", b:"Seed2(A1)", l:"Lesson 3", p:"32"},
+  {id:"next-day", w:"next day",          m:"다음 날", s:"The **next day**, the dragons practice breathing fire.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"practice", w:"practice",          m:"연습하다", s:"The next day, the dragons **practice** breathing fire.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"breathe", w:"breathe",           m:"내뿜다, 숨 쉬다", s:"The next day, the dragons practice **breathing** fire.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"fire", w:"fire",              m:"불", s:"The next day, the dragons practice breathing **fire**.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"try", w:"try",               m:"해 보다", s:"Kaylex **tries**, but he only blows smoke.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"blow", w:"blow",              m:"내뿜다, 불다", s:"Kaylex tries, but he only **blows** smoke.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"smoke", w:"smoke",             m:"연기", s:"Kaylex tries, but he only blows **smoke**.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"turn", w:"turn",              m:"차례", s:"When it’s Mila’s **turn**, she hits the target.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"hit", w:"hit",               m:"맞히다", s:"When it’s Mila’s turn, she **hits** the target.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"target", w:"target",            m:"과녁", s:"When it’s Mila’s turn, she hits the **target**.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"important", w:"important",         m:"중요한", s:"“Sleep is **important**,” Mila says.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"early", w:"early",             m:"일찍", s:"That night, Kaylex goes to bed **early**.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"hour", w:"hour",              m:"시간", s:"He gets eight **hours** of sleep.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"easily", w:"easily",            m:"쉽게", s:"The next day, he **easily** wins the flying race.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"win", w:"win",               m:"이기다", s:"The next day, he easily **wins** the flying race.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+  {id:"race", w:"race",              m:"경주", s:"The next day, he easily wins the flying **race**.", b:"Seed2(A1)", l:"Lesson 3", p:"33"},
+
+  /* ---- Lesson 4 · Summer Sleepers ---- */
+  {id:"interesting", w:"interesting",   m:"흥미로운", s:"I have a very **interesting** pet.", b:"Seed2(A1)", l:"Lesson 4", p:"44"},
+  {id:"pet", w:"pet",           m:"반려동물", s:"I have a very interesting **pet**.", b:"Seed2(A1)", l:"Lesson 4", p:"44"},
+  {id:"giant", w:"giant",         m:"거대한", s:"It’s a **giant** African land snail!", b:"Seed2(A1)", l:"Lesson 4", p:"44"},
+  {id:"land", w:"land",          m:"육지, 땅", s:"It’s a giant African **land** snail!", b:"Seed2(A1)", l:"Lesson 4", p:"44"},
+  {id:"snail", w:"snail",         m:"달팽이", s:"It’s a giant African land **snail**!", b:"Seed2(A1)", l:"Lesson 4", p:"44"},
+  {id:"most", w:"most",          m:"대부분의", s:"**Most** snails live in cool, wet places.", b:"Seed2(A1)", l:"Lesson 4", p:"44"},
+  {id:"live", w:"live",          m:"살다", s:"Most snails **live** in cool, wet places.", b:"Seed2(A1)", l:"Lesson 4", p:"44"},
+  {id:"wet", w:"wet",           m:"축축한", s:"Most snails live in cool, **wet** places.", b:"Seed2(A1)", l:"Lesson 4", p:"44"},
+  {id:"place", w:"place",         m:"장소, 곳", s:"Most snails live in cool, wet **places**.", b:"Seed2(A1)", l:"Lesson 4", p:"44"},
+  {id:"weather", w:"weather",       m:"날씨", s:"When the **weather** gets too hot, he just goes to sleep.", b:"Seed2(A1)", l:"Lesson 4", p:"44"},
+  {id:"too", w:"too",           m:"너무", s:"When the weather gets **too** hot, he just goes to sleep.", b:"Seed2(A1)", l:"Lesson 4", p:"44"},
+  {id:"in-fact", w:"in fact",       m:"사실은", s:"**In fact**, he sleeps all summer!", b:"Seed2(A1)", l:"Lesson 4", p:"44"},
+  {id:"summer", w:"summer",        m:"여름", s:"In fact, he sleeps all **summer**!", b:"Seed2(A1)", l:"Lesson 4", p:"44"},
+  {id:"slime", w:"slime",         m:"끈적한 점액", s:"My snail puts **slime** around the hole in his shell.", b:"Seed2(A1)", l:"Lesson 4", p:"45"},
+  {id:"around", w:"around",        m:"~ 둘레에", s:"My snail puts slime **around** the hole in his shell.", b:"Seed2(A1)", l:"Lesson 4", p:"45"},
+  {id:"hole", w:"hole",          m:"구멍", s:"My snail puts slime around the **hole** in his shell.", b:"Seed2(A1)", l:"Lesson 4", p:"45"},
+  {id:"shell", w:"shell",         m:"껍데기", s:"My snail puts slime around the hole in his **shell**.", b:"Seed2(A1)", l:"Lesson 4", p:"45"},
+  {id:"hard", w:"hard",          m:"단단한", s:"The slime gets **hard** and keeps him moist.", b:"Seed2(A1)", l:"Lesson 4", p:"45"},
+  {id:"keep", w:"keep",          m:"~한 상태로 유지하다", s:"The slime gets hard and **keeps** him moist.", b:"Seed2(A1)", l:"Lesson 4", p:"45"},
+  {id:"keep-ing", w:"keep + -ing",   m:"계속 ~하다", s:"I’m so tired and **keep dozing** off.", b:"Seed2(A1)", l:"Lesson 2", p:"21"},
+  {id:"moist", w:"moist",         m:"촉촉한", s:"The slime gets hard and keeps him **moist**.", b:"Seed2(A1)", l:"Lesson 4", p:"45"},
+  {id:"protect", w:"protect",       m:"보호하다", s:"That **protects** him.", b:"Seed2(A1)", l:"Lesson 4", p:"45"},
+  {id:"end", w:"end",           m:"끝나다", s:"When summer **ends**, he wakes up.", b:"Seed2(A1)", l:"Lesson 4", p:"45"},
+  {id:"boring", w:"boring",        m:"지루한", s:"It’s a little **boring** while he’s asleep.", b:"Seed2(A1)", l:"Lesson 4", p:"45"},
+  {id:"hope", w:"hope",          m:"바라다", s:"I **hope** summer ends soon!", b:"Seed2(A1)", l:"Lesson 4", p:"45"},
+
+  /* ---- Lesson 5 · The Surprise ---- */
+  {id:"large", w:"large",          m:"큰", s:"There’s a **large** cardboard box in class.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"cardboard-box", w:"cardboard box",  m:"종이 상자", s:"There’s a large **cardboard box** in class.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"class", w:"class",          m:"교실, 반", s:"There’s a large cardboard box in **class**, but the kids ignore it.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"kid", w:"kid",            m:"아이", s:"There’s a large cardboard box in class, but the **kids** ignore it.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"ignore", w:"ignore",         m:"무시하다", s:"There’s a large cardboard box in class, but the kids **ignore** it.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"bell", w:"bell",           m:"종", s:"The **bell** rings.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"ring", w:"ring",           m:"울리다", s:"The bell **rings**.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"expect", w:"expect",         m:"기대하다", s:"They **expect** Ms. Gerard to enter, but she doesn’t.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"enter", w:"enter",          m:"들어오다", s:"They expect Ms. Gerard to **enter**, but she doesn’t.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"clock", w:"clock",          m:"시계", s:"The **clock** ticks as they wait.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"tick", w:"tick",           m:"똑딱거리다", s:"The clock **ticks** as they wait.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"wait", w:"wait",           m:"기다리다", s:"The clock ticks as they **wait**.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"notice", w:"notice",         m:"알아차리다", s:"Abdul **notices** a note on Ms. Gerard’s desk.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"note", w:"note",           m:"쪽지", s:"Abdul notices a **note** on Ms. Gerard’s desk.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"desk", w:"desk",           m:"책상", s:"Abdul notices a note on Ms. Gerard’s **desk**.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"read", w:"read",           m:"읽다", s:"He **reads** it aloud.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"aloud", w:"aloud",          m:"소리 내어", s:"He reads it **aloud**.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"look-for", w:"look for",       m:"~를 찾다", s:"He reads it aloud: “**Look for** a sphere.”", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"sphere", w:"sphere",         m:"구, 공 모양", s:"“What’s a **sphere**?” Marni asks.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"ball", w:"ball",           m:"공", s:"“It’s like a **ball**,” Abdul explains.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"explain", w:"explain",        m:"설명하다", s:"“It’s like a ball,” Abdul **explains**.", b:"Seed2(A1)", l:"Lesson 5", p:"60"},
+  {id:"check", w:"check",          m:"확인해 보다", s:"Marni **checks** the globe and finds another note.", b:"Seed2(A1)", l:"Lesson 5", p:"61"},
+  {id:"globe", w:"globe",          m:"지구본", s:"Marni checks the **globe** and finds another note.", b:"Seed2(A1)", l:"Lesson 5", p:"61"},
+  {id:"find", w:"find",           m:"찾아내다", s:"Marni checks the globe and **finds** another note.", b:"Seed2(A1)", l:"Lesson 5", p:"61"},
+  {id:"another", w:"another",        m:"또 다른", s:"Marni checks the globe and finds **another** note.", b:"Seed2(A1)", l:"Lesson 5", p:"61"},
+  {id:"cube", w:"cube",           m:"정육면체", s:"It says, “Find a **cube**.”", b:"Seed2(A1)", l:"Lesson 5", p:"61"},
+  {id:"burst-out-of", w:"burst out of",   m:"~에서 튀어나오다", s:"Ms. Gerard **bursts out of** the box shouting, “Surprise!”", b:"Seed2(A1)", l:"Lesson 5", p:"61"},
+  {id:"shout", w:"shout",          m:"소리치다", s:"Ms. Gerard bursts out of the box **shouting**, “Surprise!”", b:"Seed2(A1)", l:"Lesson 5", p:"61"},
+  {id:"surprise", w:"surprise",       m:"놀람, 뜻밖의 일", s:"Ms. Gerard bursts out of the box shouting, “**Surprise**!”", b:"Seed2(A1)", l:"Lesson 5", p:"61"},
+
+  /* ---- Lesson 6 · Paper Airplane ---- */
+  {id:"paper-airplane", w:"paper airplane", m:"종이비행기", s:"**Paper airplanes** can teach us about shapes.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"teach", w:"teach",          m:"가르쳐 주다", s:"Paper airplanes can **teach** us about shapes.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"shape", w:"shape",          m:"모양", s:"Paper airplanes can teach us about **shapes**.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"start-with", w:"start with",     m:"~로 시작하다", s:"**Start with** a square piece of paper.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"square", w:"square",         m:"정사각형", s:"Start with a **square** piece of paper.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"piece", w:"piece",          m:"조각, 장", s:"Start with a square **piece** of paper.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"paper", w:"paper",          m:"종이", s:"Start with a square piece of **paper**.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"equal", w:"equal",          m:"똑같은", s:"Squares have four **equal** sides.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"side", w:"side",           m:"변, 옆면", s:"Squares have four equal **sides**.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"fold", w:"fold",           m:"접다", s:"**Fold** the square in half and open it.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"in-half", w:"in half",        m:"반으로", s:"Fold the square **in half** and open it.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"open", w:"open",           m:"펼치다, 열다", s:"Fold the square in half and **open** it.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"rectangle", w:"rectangle",      m:"직사각형", s:"Now, there are two **rectangles**.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"longer-than", w:"longer than",    m:"~보다 더 긴", s:"But two are **longer than** the others.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"others", w:"others",         m:"나머지 것들", s:"But two are longer than the **others**.", b:"Seed2(A1)", l:"Lesson 6", p:"72"},
+  {id:"next", w:"next",           m:"다음으로", s:"**Next**, fold the top-right corner to the center.", b:"Seed2(A1)", l:"Lesson 6", p:"73"},
+  {id:"corner", w:"corner",         m:"모서리, 구석", s:"Next, fold the top-right **corner** to the center.", b:"Seed2(A1)", l:"Lesson 6", p:"73"},
+  {id:"center", w:"center",         m:"가운데", s:"Next, fold the top-right corner to the **center**.", b:"Seed2(A1)", l:"Lesson 6", p:"73"},
+  {id:"triangle", w:"triangle",       m:"삼각형", s:"That makes a **triangle** with three sides.", b:"Seed2(A1)", l:"Lesson 6", p:"73"},
+  {id:"outside", w:"outside",        m:"바깥쪽의", s:"Then, fold the **outside** corners to the center.", b:"Seed2(A1)", l:"Lesson 6", p:"73"},
+  {id:"plane", w:"plane",          m:"비행기", s:"Now, fold the **plane** in half.", b:"Seed2(A1)", l:"Lesson 6", p:"73"},
+  {id:"finally", w:"finally",        m:"마지막으로", s:"**Finally**, fold the wings back the other way.", b:"Seed2(A1)", l:"Lesson 6", p:"73"},
+  {id:"wing", w:"wing",           m:"날개", s:"Finally, fold the **wings** back the other way.", b:"Seed2(A1)", l:"Lesson 6", p:"73"},
+  {id:"the-other-way", w:"the other way",  m:"반대 방향으로", s:"Finally, fold the wings back **the other way**.", b:"Seed2(A1)", l:"Lesson 6", p:"73"},
+  {id:"ready-to", w:"ready to",       m:"~할 준비가 된", s:"Now, it’s **ready to** fly!", b:"Seed2(A1)", l:"Lesson 6", p:"73"},
+
+  /* ---- Lesson 7 · The Bear Bet ---- */
+  {id:"bet", w:"bet",        m:"장담하다, 내기하다", s:"“I **bet** I can make a bear with seven circles,” Erica says.", b:"Seed2(A1)", l:"Lesson 7", p:"84"},
+  {id:"bear", w:"bear",       m:"곰", s:"“I bet I can make a **bear** with seven circles,” Erica says.", b:"Seed2(A1)", l:"Lesson 7", p:"84"},
+  {id:"circle", w:"circle",     m:"원, 동그라미", s:"“I bet I can make a bear with seven **circles**,” Erica says.", b:"Seed2(A1)", l:"Lesson 7", p:"84"},
+  {id:"draw", w:"draw",       m:"그리다", s:"Erica **draws** circles of different sizes.", b:"Seed2(A1)", l:"Lesson 7", p:"84"},
+  {id:"different", w:"different",  m:"서로 다른", s:"Erica draws circles of **different** sizes.", b:"Seed2(A1)", l:"Lesson 7", p:"84"},
+  {id:"size", w:"size",       m:"크기", s:"Erica draws circles of different **sizes**.", b:"Seed2(A1)", l:"Lesson 7", p:"84"},
+  {id:"add", w:"add",        m:"더하다, 덧붙이다", s:"She **adds** two smaller circles for ears.", b:"Seed2(A1)", l:"Lesson 7", p:"84"},
+  {id:"small", w:"small",      m:"작은", s:"She adds two **smaller** circles for ears.", b:"Seed2(A1)", l:"Lesson 7", p:"84"},
+  {id:"ear", w:"ear",        m:"귀", s:"She adds two smaller circles for **ears**.", b:"Seed2(A1)", l:"Lesson 7", p:"84"},
+  {id:"medium", w:"medium",     m:"중간 크기의", s:"She draws a **medium** circle for a mouth.", b:"Seed2(A1)", l:"Lesson 7", p:"84"},
+  {id:"mouth", w:"mouth",      m:"입", s:"She draws a medium circle for a **mouth**.", b:"Seed2(A1)", l:"Lesson 7", p:"84"},
+  {id:"nose", w:"nose",       m:"코", s:"She makes a small circle for a **nose**.", b:"Seed2(A1)", l:"Lesson 7", p:"84"},
+  {id:"tiny", w:"tiny",       m:"아주 작은", s:"Finally, she adds two **tiny** circles for eyes.", b:"Seed2(A1)", l:"Lesson 7", p:"84"},
+  {id:"eye", w:"eye",        m:"눈", s:"Finally, she adds two tiny circles for **eyes**.", b:"Seed2(A1)", l:"Lesson 7", p:"84"},
+  {id:"pretty", w:"pretty",     m:"꽤 (pretty good: 꽤 잘했다)", s:"“**Pretty** good,” Jerry says.", b:"Seed2(A1)", l:"Lesson 7", p:"85"},
+  {id:"laugh", w:"laugh",      m:"웃다", s:"“I bet I can make you **laugh** with one circle.”", b:"Seed2(A1)", l:"Lesson 7", p:"85"},
+  {id:"cut-out", w:"cut out",    m:"오려내다", s:"Jerry **cuts out** the bear’s mouth.", b:"Seed2(A1)", l:"Lesson 7", p:"85"},
+  {id:"hold-up", w:"hold up",    m:"들어 올리다", s:"Then, he **holds** the bear **up** and sticks his tongue through the hole.", b:"Seed2(A1)", l:"Lesson 7", p:"85"},
+  {id:"stick", w:"stick",      m:"내밀다, 찔러 넣다", s:"He holds the bear up and **sticks** his tongue through the hole.", b:"Seed2(A1)", l:"Lesson 7", p:"85"},
+  {id:"tongue", w:"tongue",     m:"혀", s:"He holds the bear up and sticks his **tongue** through the hole.", b:"Seed2(A1)", l:"Lesson 7", p:"85"},
+  {id:"through", w:"through",    m:"~를 통과해서", s:"He sticks his tongue **through** the hole.", b:"Seed2(A1)", l:"Lesson 7", p:"85"},
+
+  /* ---- Lesson 8 · No More Boring Buildings! ---- */
+  {id:"family", w:"family",          m:"가족", s:"Darren’s **family** is on a tour.", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"tour", w:"tour",            m:"관광, 견학", s:"Darren’s family is on a **tour**.", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"guide", w:"guide",           m:"안내인, 가이드", s:"The **guide** talks about buildings.", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"talk-about", w:"talk about",      m:"~에 대해 이야기하다", s:"The guide **talks about** buildings.", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"building", w:"building",        m:"건물", s:"The guide talks about **buildings**.", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"huge", w:"huge",            m:"거대한", s:"“They’re **huge** glass boxes,” Darren tells his dad.", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"glass", w:"glass",           m:"유리", s:"“They’re huge **glass** boxes,” Darren tells his dad.", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"box", w:"box",             m:"상자", s:"“They’re huge glass **boxes**,” Darren tells his dad.", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"dad", w:"dad",             m:"아빠", s:"“They’re huge glass boxes,” Darren tells his **dad**.", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"not-all", w:"not all",         m:"모두 ~인 것은 아니다", s:"“**Not all** buildings,” the guide explains.", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"wave", w:"wave",            m:"파도", s:"“Some are spheres or **waves**.”", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"unique", w:"unique",          m:"독특한", s:"“Others are **unique**.”", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"look-like", w:"look like",       m:"~처럼 보이다", s:"“The Sydney Opera House **looks like** sailboats.”", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"sailboat", w:"sailboat",        m:"돛단배", s:"“The Sydney Opera House looks like **sailboats**.”", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"describe", w:"describe",        m:"설명하다, 묘사하다", s:"He **describes** other buildings.", b:"Seed2(A1)", l:"Lesson 8", p:"96"},
+  {id:"special", w:"special",         m:"특별한", s:"“We’ll see a **special** building soon,” says the guide.", b:"Seed2(A1)", l:"Lesson 8", p:"97"},
+  {id:"guess", w:"guess",           m:"알아맞히다", s:"“**Guess** the shape.”", b:"Seed2(A1)", l:"Lesson 8", p:"97"},
+  {id:"spaceship", w:"spaceship",       m:"우주선", s:"“A **spaceship**?” Darren guesses.", b:"Seed2(A1)", l:"Lesson 8", p:"97"},
+  {id:"turn-a-corner", w:"turn a corner",   m:"모퉁이를 돌다", s:"They **turn a corner**.", b:"Seed2(A1)", l:"Lesson 8", p:"97"},
+  {id:"become", w:"become",          m:"~가 되다", s:"Darren’s eyes **become** big.", b:"Seed2(A1)", l:"Lesson 8", p:"97"},
+  {id:"in-the-shape-of", w:"in the shape of", m:"~ 모양의", s:"There’s a building **in the shape of** a pineapple.", b:"Seed2(A1)", l:"Lesson 8", p:"97"},
+  {id:"pineapple", w:"pineapple",       m:"파인애플", s:"There’s a building in the shape of a **pineapple**.", b:"Seed2(A1)", l:"Lesson 8", p:"97"}
 ];
 
 /* ---------- 저장소 (localStorage, 실패 시 메모리) ---------- */
@@ -257,14 +420,38 @@ const store = (()=>{
     set(k,v){ try{ ok?localStorage.setItem(k,v):mem[k]=v }catch(e){ mem[k]=v } }
   };
 })();
+const key = d => d.id;
+
+/* 저장 키를 고정 id로 바꾸면서, 예전 형식(단어 / 단어|뜻)으로 저장된
+   체크 기록을 한 번만 자동으로 옮긴다. 이후 뜻을 수정해도 풀리지 않음. */
 let learned = new Set(JSON.parse(store.get("learned")||"[]"));
+(function migrate(){
+  if(store.get("learned_v")==="3") return;
+  const byWordMeaning={}, byWord={}, ids=new Set();
+  WORDS.forEach(d=>{
+    byWordMeaning[d.w+"|"+d.m]=d.id;
+    (byWord[d.w]=byWord[d.w]||[]).push(d.id);
+    ids.add(d.id);
+  });
+  const moved=new Set();
+  learned.forEach(k=>{
+    if(ids.has(k)) moved.add(k);
+    else if(byWordMeaning[k]) moved.add(byWordMeaning[k]);
+    else if(byWord[k]) byWord[k].forEach(id=>moved.add(id));
+  });
+  learned=moved;
+  store.set("learned", JSON.stringify([...learned]));
+  store.set("learned_v","3");
+})();
 const saveLearned = ()=> store.set("learned", JSON.stringify([...learned]));
 
 /* ---------- 상태 ---------- */
+const BOOKS = [...new Set(WORDS.map(d=>d.b).filter(Boolean))];
 const FILTERS = [
   {id:"all",  label:"전체"},
   {id:"todo", label:"안 외운 것"},
-  {id:"done", label:"외운 것"}
+  {id:"done", label:"외운 것"},
+  ...(BOOKS.length>1 ? BOOKS.map(b=>({id:"B:"+b, label:b})) : [])
 ];
 let filter="all", query="", hide=false, mode="list", ci=0, revealed=false;
 
@@ -275,8 +462,9 @@ const plain = t => t.replace(/\*\*/g,"");
 function visible(){
   const q = query.trim().toLowerCase();
   return WORDS.filter((d,i)=>{
-    if(filter==="done" && !learned.has(d.w)) return false;
-    if(filter==="todo" &&  learned.has(d.w)) return false;
+    if(filter==="done" && !learned.has(key(d))) return false;
+    if(filter==="todo" &&  learned.has(key(d))) return false;
+    if(filter.startsWith("B:") && d.b!==filter.slice(2)) return false;
     if(!q) return true;
     return (d.w+" "+d.m+" "+d.s).toLowerCase().includes(q);
   });
@@ -294,14 +482,14 @@ function renderList(){
     return;
   }
   el.innerHTML = rows.map(d=>{
-    const on = learned.has(d.w);
+    const on = learned.has(key(d));
     return `<article class="entry ${on?"done":""} ${hide?"hide":""}">
       <div class="w">${esc(d.w)}</div>
       <div class="m">${esc(d.m)}</div>
       <div class="s">${mark(d.s)}</div>
       
       <div class="side">
-        <button class="mini ${on?"on":""}" data-done="${esc(d.w)}"
+        <button class="mini ${on?"on":""}" data-done="${esc(key(d))}"
                 aria-label="${on?"외움 해제":"외움 표시"}">✓</button>
         <button class="mini" data-say="${esc(d.w)}" aria-label="발음 듣기">🔊</button>
       </div>
