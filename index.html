@@ -193,9 +193,59 @@ main{padding:12px 12px 90px;max-width:640px;margin:0 auto}
    sentence 안에서 해당 단어는 **별표 두 개**로 감싸면 강조 표시됨.
    ===================================================================== */
 const WORDS = [
-  {w:"adventure", m:"모험", s:"They went on an **adventure** in the deep forest.", src:"샘플"},
-  {w:"brave",     m:"용감한", s:"The **brave** girl jumped into the cold water.", src:"샘플"},
-  {w:"quietly",   m:"조용히", s:"He closed the door **quietly**.", src:"샘플"}
+  /* ---- Lesson 1 · No Screens Before Bed ---- */
+  {w:"bedtime",       m:"잠자리에 들 시간", s:"“**Bedtime**, Max,” calls Stella the robot.", l:"Lesson 1", p:"8"},
+  {w:"call",          m:"부르다", s:"“Bedtime, Max,” **calls** Stella the robot.", l:"Lesson 1", p:"8"},
+  {w:"robot",         m:"로봇", s:"“Bedtime, Max,” calls Stella the **robot**.", l:"Lesson 1", p:"8"},
+  {w:"room",          m:"방", s:"Max goes to his **room**.", l:"Lesson 1", p:"8"},
+  {w:"later",         m:"나중에", s:"**Later**, Stella checks on Max.", l:"Lesson 1", p:"8"},
+  {w:"check on",      m:"~를 살펴보다", s:"Later, Stella **checks on** Max.", l:"Lesson 1", p:"8"},
+  {w:"sleep",         m:"자다", s:"“Aren’t you **sleeping**?” she asks.", l:"Lesson 1", p:"8"},
+  {w:"ask",           m:"묻다", s:"“Aren’t you sleeping?” she **asks**.", l:"Lesson 1", p:"8"},
+  {w:"bring",         m:"가져다주다", s:"Stella **brings** him warm milk.", l:"Lesson 1", p:"8"},
+  {w:"warm",          m:"따뜻한", s:"Stella brings him **warm** milk.", l:"Lesson 1", p:"8"},
+  {w:"milk",          m:"우유", s:"Stella brings him warm **milk**.", l:"Lesson 1", p:"8"},
+  {w:"relax",         m:"긴장을 풀다, 쉬다", s:"“This will help you **relax**,” she says.", l:"Lesson 1", p:"8"},
+  {w:"drink",         m:"마시다", s:"Max **drinks** it.", l:"Lesson 1", p:"8"},
+  {w:"activity",      m:"활동, 한 일", s:"“Let’s check your **activity**,” Stella says.", l:"Lesson 1", p:"9"},
+  {w:"play",          m:"(게임을) 하다", s:"“You **played** Bug Blaster.”", l:"Lesson 1", p:"9"},
+  {w:"fun",           m:"재미있는", s:"“It was **fun**!” Max says.", l:"Lesson 1", p:"9"},
+  {w:"watch",         m:"보다", s:"“**Watching** screens before bed isn’t good,” Stella says.", l:"Lesson 1", p:"9"},
+  {w:"screen",        m:"화면", s:"“Watching **screens** before bed isn’t good,” Stella says.", l:"Lesson 1", p:"9"},
+  {w:"before",        m:"~하기 전에", s:"“Watching screens **before** bed isn’t good,” Stella says.", l:"Lesson 1", p:"9"},
+  {w:"light",         m:"빛", s:"“Their **light** wakes up your brain.”", l:"Lesson 1", p:"9"},
+  {w:"wake up",       m:"깨우다, 깨다", s:"“Their light **wakes up** your brain.”", l:"Lesson 1", p:"9"},
+  {w:"brain",         m:"뇌", s:"“Their light wakes up your **brain**.”", l:"Lesson 1", p:"9"},
+  {w:"tell",          m:"말해 주다", s:"She **tells** Max all about it.", l:"Lesson 1", p:"9"},
+  {w:"go on and on",  m:"끝없이 계속 이야기하다", s:"She **goes on and on**.", l:"Lesson 1", p:"9"},
+  {w:"soon",          m:"곧", s:"**Soon**, Max is asleep.", l:"Lesson 1", p:"9"},
+  {w:"asleep",        m:"잠이 든", s:"Soon, Max is **asleep**.", l:"Lesson 1", p:"9"},
+  {w:"work",          m:"효과가 있다", s:"“It **works** every time,” says Stella.", l:"Lesson 1", p:"9"},
+  {w:"every time",    m:"언제나, 매번", s:"“It works **every time**,” says Stella.", l:"Lesson 1", p:"9"},
+
+  /* ---- Lesson 2 · Sleepless at Summer Camp ---- */
+  {w:"sleepless",     m:"잠을 못 이루는", s:"**Sleepless** at Summer Camp", l:"Lesson 2", p:"20"},
+  {w:"summer camp",   m:"여름 캠프", s:"I’m having fun at **summer camp**.", l:"Lesson 2", p:"20"},
+  {w:"meet",          m:"만나다 (과거형 met)", s:"I **met** some friends.", l:"Lesson 2", p:"20"},
+  {w:"friend",        m:"친구", s:"I met some **friends**.", l:"Lesson 2", p:"20"},
+  {w:"explore",       m:"탐험하다", s:"It’s fun to **explore** the forest.", l:"Lesson 2", p:"20"},
+  {w:"forest",        m:"숲", s:"It’s fun to explore the **forest**.", l:"Lesson 2", p:"20"},
+  {w:"problem",       m:"문제", s:"The **problem** is it’s difficult to sleep.", l:"Lesson 2", p:"20"},
+  {w:"difficult",     m:"어려운", s:"The problem is it’s **difficult** to sleep.", l:"Lesson 2", p:"20"},
+  {w:"night",         m:"밤", s:"The first **night**, a loud thunderstorm kept me awake.", l:"Lesson 2", p:"20"},
+  {w:"loud",          m:"시끄러운", s:"The first night, a **loud** thunderstorm kept me awake.", l:"Lesson 2", p:"20"},
+  {w:"thunderstorm",  m:"천둥번개를 동반한 비", s:"The first night, a loud **thunderstorm** kept me awake.", l:"Lesson 2", p:"20"},
+  {w:"awake",         m:"깨어 있는", s:"A loud thunderstorm kept me **awake**.", l:"Lesson 2", p:"20"},
+  {w:"hot",           m:"더운", s:"And last night, it was really **hot**!", l:"Lesson 2", p:"20"},
+  {w:"fall asleep",   m:"잠들다", s:"I couldn’t **fall asleep**.", l:"Lesson 2", p:"20"},
+  {w:"strange",       m:"이상한", s:"It’s **strange**.", l:"Lesson 2", p:"20"},
+  {w:"stormy",        m:"폭풍우가 치는", s:"Last year wasn’t hot and **stormy** like this.", l:"Lesson 2", p:"20"},
+  {w:"tired",         m:"피곤한", s:"I’m so **tired** and keep dozing off.", l:"Lesson 2", p:"21"},
+  {w:"doze off",      m:"꾸벅꾸벅 졸다", s:"I’m so tired and keep **dozing off**.", l:"Lesson 2", p:"21"},
+  {w:"luckily",       m:"다행히도", s:"**Luckily**, there are only two more nights.", l:"Lesson 2", p:"21"},
+  {w:"cool",          m:"시원한", s:"It’ll be good to be back in my **cool**, quiet room!", l:"Lesson 2", p:"21"},
+  {w:"quiet",         m:"조용한", s:"It’ll be good to be back in my cool, **quiet** room!", l:"Lesson 2", p:"21"},
+  {w:"weekend",       m:"주말", s:"I’m going to sleep all **weekend**!", l:"Lesson 2", p:"21"}
 ];
 
 /* ---------- 저장소 (localStorage, 실패 시 메모리) ---------- */
@@ -249,7 +299,7 @@ function renderList(){
       <div class="w">${esc(d.w)}</div>
       <div class="m">${esc(d.m)}</div>
       <div class="s">${mark(d.s)}</div>
-      ${d.src?`<div class="src">${esc(d.src)}</div>`:""}
+      
       <div class="side">
         <button class="mini ${on?"on":""}" data-done="${esc(d.w)}"
                 aria-label="${on?"외움 해제":"외움 표시"}">✓</button>
