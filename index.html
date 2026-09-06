@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1B2A41">
+<title>박수아 영단어장</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --paper:#ffffff;
+  --bg:#EFF3F6;
+  --ink:#1B2A41;
+  --ink-soft:#61718A;
+  --rule:#D9E1EA;
+  --accent:#1E7A6B;
+  --mark:#FFE28A;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Pretendard Variable",Pretendard,-apple-system,system-ui,sans-serif;
+  font-size:16px;line-height:1.5;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+button{font:inherit;color:inherit;cursor:pointer}
+
+/* ---------- 상단 ---------- */
+header{
+  position:sticky;top:0;z-index:20;
+  background:var(--ink);color:#fff;
+  padding:14px 16px 12px;
+  padding-top:calc(14px + env(safe-area-inset-top));
+}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand h1{margin:0;font-size:19px;font-weight:600;letter-spacing:-.02em}
+.brand .count{font-size:13px;color:#9FB3C8}
+.tools{display:flex;gap:8px;margin-top:11px}
+#q{
+  flex:1;min-width:0;border:0;border-radius:9px;
+  padding:9px 12px;font-size:15px;background:#2C4160;color:#fff;
+}
+#q::placeholder{color:#8FA3BC}
+#q:focus{outline:2px solid var(--mark);outline-offset:1px}
+.iconbtn{
+  border:0;background:#2C4160;color:#DCE7F2;border-radius:9px;
+  padding:0 13px;font-size:14px;white-space:nowrap;
+}
+.iconbtn:focus-visible{outline:2px solid var(--mark)}
+
+.chips{display:flex;gap:7px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  border:1px solid #40587A;background:transparent;color:#B9C9DC;
+  border-radius:999px;padding:5px 12px;font-size:13.5px;white-space:nowrap;
+}
+.chip[aria-pressed="true"]{background:var(--mark);border-color:var(--mark);color:#1B2A41;font-weight:600}
+
+/* ---------- 목록 ---------- */
+main{padding:12px 12px 90px;max-width:640px;margin:0 auto}
+.entry{
+  background:var(--paper);border-radius:12px;
+  padding:13px 14px 14px;margin-bottom:9px;
+  border:1px solid var(--rule);
+  display:grid;grid-template-columns:1fr auto;gap:2px 10px;
+}
+.entry.done{border-color:#BFDCD5;background:#F7FCFB}
+.w{
+  grid-column:1;
+  font-family:"Newsreader",Georgia,serif;
+  font-size:25px;font-weight:600;letter-spacing:-.01em;line-height:1.15;
+}
+.side{grid-column:2;grid-row:1 / span 3;display:flex;flex-direction:column;gap:6px;align-items:center}
+.mini{
+  border:1px solid var(--rule);background:#fff;border-radius:8px;
+  width:38px;height:32px;display:grid;place-items:center;font-size:15px;color:var(--ink-soft);
+}
+.mini.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.m{grid-column:1;font-size:16px;color:var(--ink);margin-top:3px}
+.s{grid-column:1;font-size:14.5px;color:var(--ink-soft);margin-top:6px;line-height:1.55}
+.s mark{background:var(--mark);color:var(--ink);border-radius:3px;padding:0 2px;font-weight:600}
+.src{grid-column:1;font-size:12px;color:#9AA8BC;margin-top:7px}
+.hide .m,.hide .s{filter:blur(5px);opacity:.55}
+.hide .m:active,.hide .s:active{filter:none;opacity:1}
+
+.empty{
+  background:var(--paper);border:1px dashed #C3D0DE;border-radius:12px;
+  padding:26px 20px;text-align:center;color:var(--ink-soft);font-size:15px;line-height:1.7;
+}
+
+/* ---------- 카드 모드 ---------- */
+#card{display:none;padding:16px 14px 100px;max-width:640px;margin:0 auto}
+#card.on{display:block}
+.flip{
+  background:var(--paper);border:1px solid var(--rule);border-radius:16px;
+  min-height:56vh;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;text-align:center;padding:28px 22px;gap:14px;
+}
+.flip .fw{font-family:"Newsreader",Georgia,serif;font-size:42px;font-weight:600;line-height:1.1}
+.flip .fm{font-size:21px}
+.flip .fs{font-size:16px;color:var(--ink-soft);line-height:1.6}
+.flip .fs mark{background:var(--mark);padding:0 2px;border-radius:3px;font-weight:600}
+.veil{color:#B4C0CE;font-size:15px}
+.nav{display:flex;gap:9px;margin-top:14px}
+.nav button{
+  flex:1;border:1px solid var(--rule);background:#fff;border-radius:11px;padding:13px;font-size:15px;
+}
+.nav .primary{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600}
+.pos{text-align:center;margin-top:12px;color:var(--ink-soft);font-size:13.5px}
+
+/* ---------- 하단 바 ---------- */
+.bar{
+  position:fixed;left:0;right:0;bottom:0;z-index:20;
+  background:rgba(255,255,255,.94);backdrop-filter:blur(8px);
+  border-top:1px solid var(--rule);
+  display:flex;gap:8px;padding:9px 12px calc(9px + env(safe-area-inset-bottom));
+  max-width:640px;margin:0 auto;
+}
+.bar button{
+  flex:1;border:1px solid var(--rule);background:#fff;border-radius:10px;
+  padding:11px 6px;font-size:14px;
+}
+.bar button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* ---------- 인쇄(A4) ---------- */
+#print{display:none}
+@page{size:A4 portrait;margin:16mm 14mm}
+@media print{
+  header,.bar,main,#card{display:none !important}
+  body{background:#fff;font-size:10pt}
+  #print{display:block}
+  .ph{display:flex;justify-content:space-between;align-items:baseline;
+      border-bottom:1.2pt solid #000;padding-bottom:5px;margin-bottom:9px}
+  .ph h2{margin:0;font-size:14pt;font-weight:600;letter-spacing:-.02em}
+  .ph span{font-size:9pt;color:#444}
+  table{width:100%;border-collapse:collapse}
+  thead{display:table-header-group}
+  tr{page-break-inside:avoid}
+  th,td{border-bottom:.5pt solid #999;padding:5px 4px;text-align:left;vertical-align:top}
+  th{border-bottom:1pt solid #000;font-size:9pt;font-weight:600}
+  .cn{width:7%;color:#666;font-size:9pt}
+  .cw{width:20%;font-family:"Newsreader",Georgia,serif;font-size:11.5pt;font-weight:600}
+  .cm{width:24%}
+  .cs{width:49%;font-size:9.5pt;line-height:1.4}
+  .cs mark{background:none;font-weight:700;text-decoration:underline}
+  .chk{display:inline-block;width:9px;height:9px;border:.5pt solid #666;margin-right:5px;vertical-align:-1px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>박수아 영단어장</h1>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="tools">
+    <input id="q" type="search" placeholder="단어나 뜻으로 찾기" autocomplete="off">
+    <button class="iconbtn" id="printBtn">인쇄</button>
+  </div>
+  <div class="chips" id="chips"></div>
+</header>
+
+<main id="list"></main>
+
+<section id="card">
+  <div class="flip" id="flip"></div>
+  <div class="nav">
+    <button id="prev">이전</button>
+    <button class="primary" id="reveal">뜻 보기</button>
+    <button id="next">다음</button>
+  </div>
+  <div class="pos" id="pos"></div>
+</section>
+
+<nav class="bar">
+  <button id="mList" aria-pressed="true">목록</button>
+  <button id="mCard" aria-pressed="false">카드</button>
+  <button id="mHide" aria-pressed="false">뜻 가리기</button>
+</nav>
+
+<div id="print"></div>
+
+<script>
+/* =====================================================================
+   단어 데이터 — 새 페이지를 찍어 올릴 때마다 아래 배열에 이어서 추가됨.
+   sentence 안에서 해당 단어는 **별표 두 개**로 감싸면 강조 표시됨.
+   ===================================================================== */
+const WORDS = [
+  {w:"adventure", m:"모험", s:"They went on an **adventure** in the deep forest.", src:"샘플"},
+  {w:"brave",     m:"용감한", s:"The **brave** girl jumped into the cold water.", src:"샘플"},
+  {w:"quietly",   m:"조용히", s:"He closed the door **quietly**.", src:"샘플"}
+];
+
+/* ---------- 저장소 (localStorage, 실패 시 메모리) ---------- */
+const store = (()=>{
+  let ok=true; try{localStorage.setItem("_t","1");localStorage.removeItem("_t")}catch(e){ok=false}
+  const mem={};
+  return {
+    get(k){ try{ return ok?localStorage.getItem(k):mem[k] }catch(e){ return mem[k] } },
+    set(k,v){ try{ ok?localStorage.setItem(k,v):mem[k]=v }catch(e){ mem[k]=v } }
+  };
+})();
+let learned = new Set(JSON.parse(store.get("learned")||"[]"));
+const saveLearned = ()=> store.set("learned", JSON.stringify([...learned]));
+
+/* ---------- 상태 ---------- */
+const FILTERS = [
+  {id:"all",  label:"전체"},
+  {id:"todo", label:"안 외운 것"},
+  {id:"done", label:"외운 것"}
+];
+let filter="all", query="", hide=false, mode="list", ci=0, revealed=false;
+
+const esc = t => t.replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const mark = t => esc(t).replace(/\*\*(.+?)\*\*/g, "<mark>$1</mark>");
+const plain = t => t.replace(/\*\*/g,"");
+
+function visible(){
+  const q = query.trim().toLowerCase();
+  return WORDS.filter((d,i)=>{
+    if(filter==="done" && !learned.has(d.w)) return false;
+    if(filter==="todo" &&  learned.has(d.w)) return false;
+    if(!q) return true;
+    return (d.w+" "+d.m+" "+d.s).toLowerCase().includes(q);
+  });
+}
+
+/* ---------- 목록 ---------- */
+function renderList(){
+  const rows = visible();
+  const el = document.getElementById("list");
+  document.getElementById("count").textContent = `${WORDS.length}단어 · 외움 ${learned.size}`;
+
+  if(!rows.length){
+    el.innerHTML = `<div class="empty">${WORDS.length ? "찾는 단어가 없어요." :
+      "아직 단어가 없어요.<br>교재 페이지를 사진으로 찍어 올리면<br>여기에 하나씩 쌓입니다."}</div>`;
+    return;
+  }
+  el.innerHTML = rows.map(d=>{
+    const on = learned.has(d.w);
+    return `<article class="entry ${on?"done":""} ${hide?"hide":""}">
+      <div class="w">${esc(d.w)}</div>
+      <div class="m">${esc(d.m)}</div>
+      <div class="s">${mark(d.s)}</div>
+      ${d.src?`<div class="src">${esc(d.src)}</div>`:""}
+      <div class="side">
+        <button class="mini ${on?"on":""}" data-done="${esc(d.w)}"
+                aria-label="${on?"외움 해제":"외움 표시"}">✓</button>
+        <button class="mini" data-say="${esc(d.w)}" aria-label="발음 듣기">🔊</button>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+/* ---------- 카드 ---------- */
+function renderCard(){
+  const rows = visible();
+  const flip = document.getElementById("flip");
+  if(!rows.length){ flip.innerHTML=`<div class="veil">보여줄 단어가 없어요.</div>`;
+                    document.getElementById("pos").textContent=""; return; }
+  if(ci>=rows.length) ci=0;
+  const d = rows[ci];
+  flip.innerHTML = `<div class="fw">${esc(d.w)}</div>` + (revealed
+    ? `<div class="fm">${esc(d.m)}</div><div class="fs">${mark(d.s)}</div>`
+    : `<div class="veil">카드를 누르면 뜻이 보여요</div>`);
+  document.getElementById("pos").textContent = `${ci+1} / ${rows.length}`;
+  document.getElementById("reveal").textContent = revealed ? "뜻 숨기기" : "뜻 보기";
+}
+
+/* ---------- 인쇄용 표 ---------- */
+function renderPrint(){
+  const rows = visible();
+  const today = new Date().toLocaleDateString("ko-KR");
+  document.getElementById("print").innerHTML = `
+    <div class="ph"><h2>박수아 영단어장</h2><span>${rows.length}단어 · ${today}</span></div>
+    <table><thead><tr>
+      <th class="cn">No.</th><th class="cw">단어</th><th class="cm">뜻</th><th class="cs">문장</th>
+    </tr></thead><tbody>
+    ${rows.map((d,i)=>`<tr>
+      <td class="cn">${i+1}</td>
+      <td class="cw"><span class="chk"></span>${esc(d.w)}</td>
+      <td class="cm">${esc(d.m)}</td>
+      <td class="cs">${mark(d.s)}</td>
+    </tr>`).join("")}
+    </tbody></table>`;
+}
+
+function render(){
+  document.getElementById("list").style.display = mode==="list" ? "" : "none";
+  document.getElementById("card").classList.toggle("on", mode==="card");
+  mode==="list" ? renderList() : renderCard();
+}
+
+/* ---------- 이벤트 ---------- */
+const chips = document.getElementById("chips");
+chips.innerHTML = FILTERS.map(f=>
+  `<button class="chip" data-f="${f.id}" aria-pressed="${f.id==="all"}">${f.label}</button>`).join("");
+chips.addEventListener("click", e=>{
+  const b=e.target.closest("[data-f]"); if(!b) return;
+  filter=b.dataset.f; ci=0; revealed=false;
+  [...chips.children].forEach(c=>c.setAttribute("aria-pressed", c===b));
+  render();
+});
+
+document.getElementById("q").addEventListener("input", e=>{ query=e.target.value; ci=0; render(); });
+
+document.getElementById("list").addEventListener("click", e=>{
+  const dn=e.target.closest("[data-done]"), sy=e.target.closest("[data-say]");
+  if(dn){ const w=dn.dataset.done; learned.has(w)?learned.delete(w):learned.add(w); saveLearned(); render(); }
+  if(sy) say(sy.dataset.say);
+});
+
+function say(w){
+  if(!("speechSynthesis" in window)) return;
+  const u=new SpeechSynthesisUtterance(w); u.lang="en-US"; u.rate=.85;
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+}
+
+document.getElementById("flip").addEventListener("click", ()=>{ revealed=!revealed; renderCard(); });
+document.getElementById("reveal").addEventListener("click", ()=>{ revealed=!revealed; renderCard(); });
+document.getElementById("prev").addEventListener("click", ()=>{
+  const n=visible().length; if(!n) return; ci=(ci-1+n)%n; revealed=false; renderCard(); });
+document.getElementById("next").addEventListener("click", ()=>{
+  const n=visible().length; if(!n) return; ci=(ci+1)%n; revealed=false; renderCard(); });
+
+document.getElementById("mList").addEventListener("click", ()=>setMode("list"));
+document.getElementById("mCard").addEventListener("click", ()=>setMode("card"));
+function setMode(m){
+  mode=m; revealed=false;
+  document.getElementById("mList").setAttribute("aria-pressed", m==="list");
+  document.getElementById("mCard").setAttribute("aria-pressed", m==="card");
+  render();
+}
+const hideBtn=document.getElementById("mHide");
+hideBtn.addEventListener("click", ()=>{
+  hide=!hide; hideBtn.setAttribute("aria-pressed",hide); render();
+});
+
+document.getElementById("printBtn").addEventListener("click", ()=>{ renderPrint(); window.print(); });
+window.addEventListener("beforeprint", renderPrint);
+
+render();
+</script>
+</body>
+</html>
