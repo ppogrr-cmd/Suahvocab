@@ -238,6 +238,17 @@ main{padding:12px 12px 90px;max-width:640px;margin:0 auto}
 .crow.lock{background:#EDF1F5;border-style:dashed;cursor:default}
 .crow.lock .th{width:68px;aspect-ratio:4/3;display:grid;place-items:center;
   background:#DFE6EC;color:#AEBBC8;font-size:22px}
+.backup{margin-top:26px;background:var(--paper);border:1px solid var(--rule);
+  border-radius:12px;padding:13px 14px}
+.backup h4{margin:0 0 4px;font-size:14.5px}
+.backup p{margin:0 0 10px;font-size:12.5px;color:var(--ink-soft);line-height:1.55}
+.backup .bt{display:flex;gap:8px}
+.backup .bt button{flex:1;border:1px solid var(--rule);background:#fff;border-radius:9px;
+  padding:9px;font-size:13.5px;cursor:pointer}
+.backup .bt button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.backup textarea{width:100%;margin-top:9px;border:1px solid var(--rule);border-radius:9px;
+  padding:9px;font-size:11px;font-family:ui-monospace,monospace;height:74px;resize:none;
+  color:var(--ink);background:#F7FAFC}
 .clist-h{margin:20px 2px 0;font-size:13.5px;color:var(--ink-soft);display:flex;
   align-items:center;justify-content:space-between;gap:8px}
 .clist-h .clr{border:1px solid var(--rule);background:#fff;color:var(--ink);
@@ -778,9 +789,10 @@ document.getElementById("q").addEventListener("input", e=>{ query=e.target.value
 
 document.getElementById("list").addEventListener("click", e=>{
   const dn=e.target.closest("[data-done]"), sy=e.target.closest("[data-say]");
-  if(dn){ const w=dn.dataset.done; learned.has(w)?learned.delete(w):learned.add(w);
-          saveLearned(); render();
-          updateDexDot(); }
+  if(dn){ const w=dn.dataset.done;
+          if(learned.has(w)){ learned.delete(w); pendingDel.add(w); }
+          else { learned.add(w); pendingDel.delete(w); }
+          saveLearned(); savePendingDel(); render(); updateDexDot(); syncPush(); }
   if(sy) say(sy.dataset.say);
 });
 
@@ -1179,7 +1191,8 @@ function renderDex(){
              <div class="ko">${esc(c.con)}</div>
              <div class="mo">아직 열지 않은 카드</div></div></div>`
     ).join("")+`</div>`
-    : `<div class="dex-msg" style="margin-top:10px">여기에 해당하는 도시가 아직 없어요.</div>`);
+    : `<div class="dex-msg" style="margin-top:10px">여기에 해당하는 도시가 아직 없어요.</div>`)
+    + backupBox();
 }
 
 function packArea(n,leftCount){
@@ -1227,7 +1240,7 @@ function openPack(){
      <div class="ko">${esc(c.ko)} · ${esc(c.cko)}</div>
      <div class="mo"><b>${esc(c.mo)}</b></div></div>`;
   document.getElementById("pack").classList.add("open");
-  unlocked.add(c.id); saveCities();                 // 뒤집는 순간 바로 수집
+  unlocked.add(c.id); saveCities(); syncPush();     // 뒤집는 순간 바로 수집
   setTimeout(()=>say(c.en), 620);
   setTimeout(()=>{ const b=document.getElementById("packOk"); if(b) b.hidden=false; }, 900);
 }
@@ -1253,6 +1266,114 @@ document.getElementById("dexTop").addEventListener("click", e=>{
 });
 document.getElementById("dexGrid").addEventListener("click", e=>{
   if(e.target.closest("#clrF")){ dexFilter=null; rxFilter=null; renderDex(); }
+});
+
+
+/* ---------- 기기끼리 기록 맞추기 ----------
+   켠 기기끼리만 합쳐진다(딸 폰 + 아이패드). 끈 기기는 지금처럼 혼자 기록한다.
+   서버가 준비되지 않았으면 조용히 기기 저장만 쓴다. */
+let syncOn = store.get("syncOn")==="1";
+let pendingDel = new Set(JSON.parse(store.get("pendingDel")||"[]"));
+let syncState = "";                     // 화면에 보여줄 상태 문구
+const savePendingDel = ()=> store.set("pendingDel", JSON.stringify([...pendingDel]));
+
+function applyRemote(o){
+  let changed=false;
+  (o.l||[]).forEach(x=>{ if(!pendingDel.has(x) && !learned.has(x)){ learned.add(x); changed=true; } });
+  (o.c||[]).forEach(x=>{ if(!unlocked.has(x)){ unlocked.add(x); changed=true; } });
+  Object.entries(o.r||{}).forEach(([k,v])=>{ if(!reacts[k]){ reacts[k]=v; changed=true; } });
+  if(changed){ saveLearned(); saveCities(); saveReacts(); }
+  return changed;
+}
+
+async function syncPull(){
+  if(!syncOn) return;
+  try{
+    const r=await fetch("/api/sync",{cache:"no-store"});
+    if(r.status===503){ syncState="서버 연결 전"; renderIfDex(); return; }
+    if(!r.ok) throw 0;
+    const changed=applyRemote(await r.json());
+    syncState="맞춤"; if(changed) render(); else renderIfDex();
+  }catch(e){ syncState="연결 안 됨"; renderIfDex(); }
+}
+
+let pushTimer=null;
+function syncPush(){
+  if(!syncOn) return;
+  clearTimeout(pushTimer);
+  pushTimer=setTimeout(async ()=>{
+    try{
+      const r=await fetch("/api/sync",{method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({l:[...learned], c:[...unlocked], r:reacts, del:[...pendingDel]})});
+      if(r.status===503){ syncState="서버 연결 전"; renderIfDex(); return; }
+      if(!r.ok) throw 0;
+      pendingDel.clear(); savePendingDel();
+      applyRemote(await r.json());
+      syncState="맞춤"; renderIfDex();
+    }catch(e){ syncState="연결 안 됨"; renderIfDex(); }
+  }, 1200);
+}
+function renderIfDex(){ if(mode==="dex") renderDex(); }
+
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) syncPull(); });
+if(syncOn) syncPull();
+
+/* ---------- 기록 옮기기 ----------
+   아이폰은 사파리와 홈 화면 앱의 저장 공간을 따로 쓴다.
+   한쪽에서 코드를 내보내 다른 쪽에서 불러오면 기록이 합쳐진다. */
+function backupBox(){
+  return `<div class="backup">
+    <h4>딸 기기끼리 기록 맞추기</h4>
+    <p>딸 폰과 아이패드에서만 켜세요. 켜 둔 기기끼리 외운 단어·모은 도시·이모티콘이 자동으로 합쳐집니다.
+       아버님 폰은 꺼 두면 지금처럼 따로 기록됩니다.</p>
+    <div class="bt">
+      <button id="syncBtn" aria-pressed="${syncOn}">${syncOn?"동기화 켜짐":"동기화 꺼짐"}</button>
+    </div>
+    ${syncOn&&syncState?`<p style="margin:8px 0 0">상태: ${esc(syncState)}</p>`:""}
+  </div>
+
+  <div class="backup">
+    <h4>기록 옮기기 · 백업</h4>
+    <p>사파리에서 체크한 기록이 홈 화면 앱에 안 보일 때 쓰세요.
+       원래 쓰던 쪽에서 <b>내보내기</b>를 눌러 코드를 복사하고, 다른 쪽에서 <b>불러오기</b>에 붙여넣으면 합쳐집니다.</p>
+    <div class="bt">
+      <button id="bkOut">내보내기</button>
+      <button id="bkIn">불러오기</button>
+    </div>
+    <textarea id="bkArea" readonly hidden placeholder="코드가 여기에 나옵니다"></textarea>
+  </div>`;
+}
+function makeCode(){
+  return btoa(JSON.stringify({v:1, l:[...learned], c:[...unlocked], r:reacts}));
+}
+function applyCode(code){
+  const o=JSON.parse(atob(code.trim()));
+  (o.l||[]).forEach(x=>learned.add(x));
+  (o.c||[]).forEach(x=>unlocked.add(x));
+  Object.entries(o.r||{}).forEach(([k,v])=>{ if(!reacts[k]) reacts[k]=v; });
+  saveLearned(); saveCities(); saveReacts();
+}
+document.getElementById("dexGrid").addEventListener("click", e=>{
+  if(e.target.closest("#syncBtn")){
+    syncOn=!syncOn; store.set("syncOn", syncOn?"1":"0");
+    syncState=""; renderDex();
+    if(syncOn){ syncPull(); syncPush(); }
+    return;
+  }
+  if(e.target.closest("#bkOut")){
+    const t=document.getElementById("bkArea");
+    t.hidden=false; t.value=makeCode(); t.removeAttribute("readonly");
+    t.focus(); t.setSelectionRange(0, t.value.length); t.setAttribute("readonly","");
+    return;
+  }
+  if(e.target.closest("#bkIn")){
+    const v=prompt("다른 기기나 사파리에서 내보낸 코드를 붙여넣으세요.");
+    if(!v) return;
+    try{ applyCode(v); renderDex(); alert("기록을 불러왔어요."); }
+    catch(err){ alert("코드를 알아볼 수 없어요. 다시 복사해 보세요."); }
+    return;
+  }
 });
 document.getElementById("dexGrid").addEventListener("click", e=>{
   const t=e.target.closest("[data-city]"); if(t) openCity(t.dataset.city);
@@ -1289,7 +1410,7 @@ document.getElementById("cityModal").addEventListener("click", e=>{
   if(rx){
     const k=rx.dataset.rx;
     if(reacts[modalCity]===k) delete reacts[modalCity]; else reacts[modalCity]=k;
-    saveReacts(); openCity(modalCity); renderDex(); return;
+    saveReacts(); syncPush(); openCity(modalCity); renderDex(); return;
   }
   if(e.target.closest(".cm-close") || e.target.id==="cityModal"){
     document.getElementById("cityModal").hidden=true; return;
