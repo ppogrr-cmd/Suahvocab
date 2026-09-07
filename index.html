@@ -281,6 +281,19 @@ main{padding:12px 12px 90px;max-width:640px;margin:0 auto}
 .crow .rb{font-size:18px;flex:none;margin-left:2px}
 .cm-close{width:100%;border:0;background:var(--ink);color:#fff;padding:12px;font-size:15px}
 
+#settings{display:none;padding:14px 12px 100px;max-width:640px;margin:0 auto}
+#settings.on{display:block}
+.info{background:var(--paper);border:1px solid var(--rule);border-radius:12px;padding:4px 14px;margin-bottom:12px}
+.info div{display:flex;justify-content:space-between;gap:10px;padding:10px 0;
+  border-bottom:1px solid var(--rule);font-size:14px}
+.info div:last-child{border-bottom:0}
+.info span{color:var(--ink-soft)}
+.info b{font-weight:600;font-variant-numeric:tabular-nums}
+.info .fold{cursor:pointer}
+.info .fold .ar{font-style:normal;color:var(--ink-soft);font-size:11px;margin-left:2px}
+.info .sub{padding:8px 0 8px 12px;font-size:13px;color:var(--ink-soft);border-bottom:1px solid var(--rule)}
+.info .sub b{color:var(--ink);font-weight:500}
+
 /* ---------- 하단 바 ---------- */
 .bar{
   position:fixed;left:0;right:0;bottom:0;z-index:20;
@@ -291,8 +304,9 @@ main{padding:12px 12px 90px;max-width:640px;margin:0 auto}
 }
 .bar button{
   flex:1;border:1px solid var(--rule);background:#fff;border-radius:10px;
-  padding:11px 2px;font-size:13.5px;
+  padding:11px 1px;font-size:12.5px;letter-spacing:-.02em;
 }
+.bar .dot{margin-left:2px}
 .bar button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
 body.makemode .tools,body.makemode .chips{display:none}
 
@@ -392,6 +406,8 @@ body.makemode .tools,body.makemode .chips{display:none}
   <div id="dexGrid"></div>
 </section>
 
+<section id="settings"></section>
+
 <div id="cityModal" hidden><div class="cm-box" id="cmBox"></div></div>
 
 <nav class="bar">
@@ -399,6 +415,7 @@ body.makemode .tools,body.makemode .chips{display:none}
   <button id="mCard" aria-pressed="false">카드</button>
   <button id="mMake" aria-pressed="false">문장</button>
   <button id="mDex"  aria-pressed="false">Passport<i class="dot" id="dexDot" hidden></i></button>
+  <button id="mSet"  aria-pressed="false">설정</button>
 </nav>
 
 <div id="print"></div>
@@ -767,11 +784,13 @@ function render(){
   document.getElementById("card").classList.toggle("on", mode==="card");
   document.getElementById("maker").classList.toggle("on", mode==="make");
   document.getElementById("dex").classList.toggle("on", mode==="dex");
-  document.body.classList.toggle("makemode", mode==="make"||mode==="dex");
+  document.getElementById("settings").classList.toggle("on", mode==="set");
+  document.body.classList.toggle("makemode", mode!=="list" && mode!=="card");
   if(mode==="list") renderList();
   else if(mode==="card") renderCard();
   else if(mode==="make") renderMaker();
-  else renderDex();
+  else if(mode==="dex") renderDex();
+  else renderSettings();
 }
 
 /* ---------- 이벤트 ---------- */
@@ -818,12 +837,14 @@ document.getElementById("mList").addEventListener("click", ()=>setMode("list"));
 document.getElementById("mCard").addEventListener("click", ()=>setMode("card"));
 document.getElementById("mMake").addEventListener("click", ()=>setMode("make"));
 document.getElementById("mDex").addEventListener("click", ()=>setMode("dex"));
+document.getElementById("mSet").addEventListener("click", ()=>setMode("set"));
 function setMode(m){
   mode=m; revealed=false;
   document.getElementById("mList").setAttribute("aria-pressed", m==="list");
   document.getElementById("mCard").setAttribute("aria-pressed", m==="card");
   document.getElementById("mMake").setAttribute("aria-pressed", m==="make");
   document.getElementById("mDex").setAttribute("aria-pressed", m==="dex");
+  document.getElementById("mSet").setAttribute("aria-pressed", m==="set");
   render();
 }
 const hideBtn=document.getElementById("mHide");
@@ -1191,8 +1212,7 @@ function renderDex(){
              <div class="ko">${esc(c.con)}</div>
              <div class="mo">아직 열지 않은 카드</div></div></div>`
     ).join("")+`</div>`
-    : `<div class="dex-msg" style="margin-top:10px">여기에 해당하는 도시가 아직 없어요.</div>`)
-    + backupBox();
+    : `<div class="dex-msg" style="margin-top:10px">여기에 해당하는 도시가 아직 없어요.</div>`);
 }
 
 function packArea(n,leftCount){
@@ -1269,8 +1289,8 @@ document.getElementById("dexGrid").addEventListener("click", e=>{
 });
 
 
-/* ---------- 기기끼리 기록 맞추기 ----------
-   켠 기기끼리만 합쳐진다(딸 폰 + 아이패드). 끈 기기는 지금처럼 혼자 기록한다.
+/* ---------- 기기 간 동기화 ----------
+   동기화를 켠 기기끼리만 합쳐진다. 끈 기기는 그 안에만 기록한다.
    서버가 준비되지 않았으면 조용히 기기 저장만 쓴다. */
 let syncOn = store.get("syncOn")==="1";
 let pendingDel = new Set(JSON.parse(store.get("pendingDel")||"[]"));
@@ -1314,7 +1334,7 @@ function syncPush(){
     }catch(e){ syncState="연결 안 됨"; renderIfDex(); }
   }, 1200);
 }
-function renderIfDex(){ if(mode==="dex") renderDex(); }
+function renderIfDex(){ if(mode==="dex") renderDex(); else if(mode==="set") renderSettings(); }
 
 document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) syncPull(); });
 if(syncOn) syncPull();
@@ -1322,28 +1342,48 @@ if(syncOn) syncPull();
 /* ---------- 기록 옮기기 ----------
    아이폰은 사파리와 홈 화면 앱의 저장 공간을 따로 쓴다.
    한쪽에서 코드를 내보내 다른 쪽에서 불러오면 기록이 합쳐진다. */
-function backupBox(){
-  return `<div class="backup">
-    <h4>딸 기기끼리 기록 맞추기</h4>
-    <p>딸 폰과 아이패드에서만 켜세요. 켜 둔 기기끼리 외운 단어·모은 도시·이모티콘이 자동으로 합쳐집니다.
-       아버님 폰은 꺼 두면 지금처럼 따로 기록됩니다.</p>
-    <div class="bt">
-      <button id="syncBtn" aria-pressed="${syncOn}">${syncOn?"동기화 켜짐":"동기화 꺼짐"}</button>
-    </div>
-    ${syncOn&&syncState?`<p style="margin:8px 0 0">상태: ${esc(syncState)}</p>`:""}
-  </div>
-
-  <div class="backup">
-    <h4>기록 옮기기 · 백업</h4>
-    <p>사파리에서 체크한 기록이 홈 화면 앱에 안 보일 때 쓰세요.
-       원래 쓰던 쪽에서 <b>내보내기</b>를 눌러 코드를 복사하고, 다른 쪽에서 <b>불러오기</b>에 붙여넣으면 합쳐집니다.</p>
-    <div class="bt">
-      <button id="bkOut">내보내기</button>
-      <button id="bkIn">불러오기</button>
-    </div>
-    <textarea id="bkArea" readonly hidden placeholder="코드가 여기에 나옵니다"></textarea>
-  </div>`;
+const UPDATED="2026-09-07";
+let booksOpen=false;
+function bookList(){
+  const m={};
+  WORDS.forEach(d=>{ if(d.b) m[d.b]=(m[d.b]||0)+1; });
+  return Object.entries(m).sort((a,b)=>b[1]-a[1]);
 }
+
+function renderSettings(){
+  document.getElementById("settings").innerHTML=`
+    <div class="info">
+      <div><span>최종 업데이트</span><b>${UPDATED}</b></div>
+      <div><span>단어</span><b>${WORDS.length}개</b></div>
+      <div><span>외운 단어</span><b>${learned.size}개</b></div>
+      <div><span>모은 도시</span><b>${unlocked.size} / ${CITIES.length}</b></div>
+      <div class="fold" id="bookRow"><span>교재</span><b>${bookList().length}권 <i class="ar">${booksOpen?"▾":"▸"}</i></b></div>
+      ${booksOpen ? bookList().map(([b,n])=>
+        `<div class="sub"><span>${esc(b)}</span><b>${n}개</b></div>`).join("") : ""}
+    </div>
+
+    <div class="backup">
+      <h4>기기 간 동기화</h4>
+      <p>동기화를 켠 기기끼리 외운 단어·모은 도시·이모티콘이 자동으로 합쳐집니다.
+         꺼 두면 그 기기 안에만 기록됩니다.</p>
+      <div class="bt">
+        <button id="syncBtn" aria-pressed="${syncOn}">${syncOn?"동기화 켜짐":"동기화 꺼짐"}</button>
+      </div>
+      ${syncOn&&syncState?`<p style="margin:8px 0 0">상태: ${esc(syncState)}</p>`:""}
+    </div>
+
+    <div class="backup">
+      <h4>기록 옮기기 · 백업</h4>
+      <p>동기화를 쓰지 않고 기록만 옮길 때 사용합니다.
+         기록이 있는 쪽에서 <b>내보내기</b>로 코드를 복사하고, 받을 쪽에서 <b>불러오기</b>에 붙여넣으면 합쳐집니다.</p>
+      <div class="bt">
+        <button id="bkOut">내보내기</button>
+        <button id="bkIn">불러오기</button>
+      </div>
+      <textarea id="bkArea" readonly hidden placeholder="코드가 여기에 나옵니다"></textarea>
+    </div>`;
+}
+
 function makeCode(){
   return btoa(JSON.stringify({v:1, l:[...learned], c:[...unlocked], r:reacts}));
 }
@@ -1354,10 +1394,11 @@ function applyCode(code){
   Object.entries(o.r||{}).forEach(([k,v])=>{ if(!reacts[k]) reacts[k]=v; });
   saveLearned(); saveCities(); saveReacts();
 }
-document.getElementById("dexGrid").addEventListener("click", e=>{
+document.getElementById("settings").addEventListener("click", e=>{
+  if(e.target.closest("#bookRow")){ booksOpen=!booksOpen; renderSettings(); return; }
   if(e.target.closest("#syncBtn")){
     syncOn=!syncOn; store.set("syncOn", syncOn?"1":"0");
-    syncState=""; renderDex();
+    syncState=""; renderSettings();
     if(syncOn){ syncPull(); syncPush(); }
     return;
   }
@@ -1370,7 +1411,7 @@ document.getElementById("dexGrid").addEventListener("click", e=>{
   if(e.target.closest("#bkIn")){
     const v=prompt("다른 기기나 사파리에서 내보낸 코드를 붙여넣으세요.");
     if(!v) return;
-    try{ applyCode(v); renderDex(); alert("기록을 불러왔어요."); }
+    try{ applyCode(v); renderSettings(); alert("기록을 불러왔어요."); }
     catch(err){ alert("코드를 알아볼 수 없어요. 다시 복사해 보세요."); }
     return;
   }
