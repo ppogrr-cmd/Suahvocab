@@ -56,6 +56,7 @@ header{
 .ico{display:grid;place-items:center;padding:0 11px}
 .ico svg{width:21px;height:21px;display:block}
 .iconbtn.rec{background:#C0392B;color:#fff;animation:pulse 1.1s ease-in-out infinite}
+.iconbtn[aria-pressed="true"]{background:var(--mark);color:#1B2A41}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 
 .chips{display:flex;gap:7px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
@@ -86,6 +87,7 @@ main{padding:12px 12px 90px;max-width:640px;margin:0 auto}
   width:38px;height:32px;display:grid;place-items:center;font-size:15px;color:var(--ink-soft);
 }
 .mini.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.mini svg{width:17px;height:17px;display:block}
 .m{grid-column:1;font-size:16px;color:var(--ink);margin-top:3px}
 .s{grid-column:1;font-size:14.5px;color:var(--ink-soft);margin-top:6px;line-height:1.55}
 .s mark{background:var(--mark);color:var(--ink);border-radius:3px;padding:0 2px;font-weight:600}
@@ -106,6 +108,15 @@ main{padding:12px 12px 90px;max-width:640px;margin:0 auto}
   min-height:56vh;display:flex;flex-direction:column;justify-content:center;
   align-items:center;text-align:center;padding:28px 22px;gap:14px;
 }
+.flip .sp{
+  -webkit-appearance:none;appearance:none;background:none;border:0;color:inherit;font:inherit;
+  width:100%;display:block;padding:6px 4px;border-radius:12px;cursor:pointer;text-align:center;
+}
+.flip .sp:active{background:#EFF4F7}
+.flip .sp:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.spk{display:inline-grid;place-items:center;vertical-align:middle;margin-left:8px;color:#A9B6C6}
+.spk svg{width:17px;height:17px;display:block}
+.flip .fw .spk svg{width:23px;height:23px}
 .flip .fw{font-family:"Newsreader",Georgia,serif;font-size:42px;font-weight:600;line-height:1.1}
 .flip .fm{font-size:21px}
 .flip .fs{font-size:16px;color:var(--ink-soft);line-height:1.6}
@@ -142,6 +153,114 @@ main{padding:12px 12px 90px;max-width:640px;margin:0 auto}
 .mk-count{margin:14px 2px 8px;font-size:13.5px;color:var(--ink-soft)}
 .mk-none{background:var(--paper);border:1px dashed #C3D0DE;border-radius:11px;
          padding:22px 18px;margin-top:14px;text-align:center;color:var(--ink-soft);line-height:1.7}
+
+/* ---------- 도시 카드 도감 ---------- */
+#dex{display:none;padding:14px 12px 100px;max-width:640px;margin:0 auto}
+#dex.on{display:block}
+.dex-msg{background:var(--paper);border:1px solid var(--rule);border-radius:12px;
+  padding:14px;text-align:center;font-size:14.5px;color:var(--ink-soft);line-height:1.6}
+.dex-msg b{color:var(--ink);font-size:16px}
+.bar .dot{display:inline-block;min-width:17px;height:17px;line-height:17px;padding:0 4px;
+  border-radius:9px;background:#E24A3B;color:#fff;font-size:11px;font-weight:700;
+  margin-left:4px;vertical-align:top;font-variant-numeric:tabular-nums}
+
+/* 지도 대시보드 */
+.map-card{background:var(--paper);border:1px solid var(--rule);border-radius:14px;padding:12px 12px 6px}
+.map-head{display:flex;align-items:baseline;justify-content:space-between;margin:0 2px 8px}
+.map-head b{font-size:17px}
+.map-head span{font-size:13px;color:var(--ink-soft)}
+.wmap{width:100%;height:auto;display:block;margin:2px 0 6px}
+.wmap path{cursor:pointer;transition:opacity .15s}
+.wmap path:active{opacity:.7}
+.wmap .pin{cursor:pointer}
+.wmap .pin path{filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
+.wmap .pin:active{opacity:.75}
+.legend{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:6px}
+.lg{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:9px;
+  border:1px solid var(--rule);font-size:12.5px;cursor:pointer;background:#fff}
+.lg[aria-pressed="true"]{border-color:var(--ink);background:#F3F6F9}
+.lg .sw{width:11px;height:11px;border-radius:3px;flex:none}
+.lg .nm{flex:1;min-width:0}
+.lg .ct{color:var(--ink-soft);font-variant-numeric:tabular-nums}
+
+/* 뒤집을 카드 */
+.pack-wrap{margin:16px 0 4px;text-align:center}
+.pack-lead{font-size:15px;color:var(--ink);margin-bottom:2px}
+.pack-lead b{color:#C0392B}
+.pack-sub{font-size:12.5px;color:var(--ink-soft);margin:0 auto 11px;max-width:330px}
+.pack{perspective:1100px;width:196px;height:262px;margin:0 auto 10px;cursor:pointer}
+.pack-in{position:relative;width:100%;height:100%;transform-style:preserve-3d;
+  transition:transform .8s cubic-bezier(.2,.85,.25,1)}
+.pack.open .pack-in{transform:rotateY(180deg)}
+.pack .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:16px;overflow:hidden;box-shadow:0 5px 18px rgba(27,42,65,.2)}
+.pack .front{background:linear-gradient(140deg,#27496B,#16324F);display:grid;place-items:center;gap:6px}
+.pack .front .globe{width:78px;height:78px;opacity:.55}
+.pack .front .txt{color:#9FC0DC;font-size:13px;letter-spacing:.02em}
+.pack .back{transform:rotateY(180deg);background:var(--paper);border:1px solid var(--rule)}
+.pack .back .cm-t{padding:10px 12px 12px}
+.pack .back .en{font-size:22px}
+.pack-ok{border:0;border-radius:11px;background:var(--ink);color:#fff;padding:11px 26px;font-size:15px}
+.chance{display:flex;align-items:center;gap:9px;background:var(--paper);border:1px solid var(--rule);
+  border-radius:12px;padding:10px 14px;margin:12px auto 7px;max-width:330px}
+.chance .ci{display:grid;place-items:center;color:var(--accent);flex:none}
+.chance .ci svg{width:21px;height:21px;display:block}
+.chance .cl{flex:1;text-align:left;font-size:14.5px}
+.chance .cv{font-size:22px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.chance .cv em{font-style:normal;font-size:14px;font-weight:400;color:var(--ink-soft);margin-left:2px}
+.go{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:330px;
+  margin:0 auto 12px;border:0;border-radius:12px;background:var(--accent);color:#fff;
+  padding:13px;font-size:16px;font-weight:600;cursor:pointer}
+.go svg{width:20px;height:20px;display:block}
+.go:disabled{background:#DFE6EC;color:#9AA8BC;cursor:default}
+.pack.sample{cursor:pointer}
+.pack.sample .pack-in{transition:none}
+.pack-note{font-size:12px;color:#9AA8BC;margin-top:2px}
+
+/* 도시 목록 */
+.clist{margin-top:18px;display:flex;flex-direction:column;gap:8px}
+.crow{display:flex;align-items:center;gap:11px;background:var(--paper);
+  border:1px solid var(--rule);border-radius:12px;padding:8px 11px 8px 8px;cursor:pointer}
+.crow .th{width:68px;flex:none;border-radius:8px;overflow:hidden}
+.crow .th svg{width:100%;height:auto;display:block}
+.crow .tx{min-width:0;flex:1}
+.crow .en{font-family:"Newsreader",Georgia,serif;font-size:18px;font-weight:600;line-height:1.2}
+.crow .ko{font-size:12.5px;color:var(--ink-soft);margin-top:1px}
+.crow .mo{font-size:12px;color:#9AA8BC;margin-top:2px}
+.crow.lock{background:#EDF1F5;border-style:dashed;cursor:default}
+.crow.lock .th{width:68px;aspect-ratio:4/3;display:grid;place-items:center;
+  background:#DFE6EC;color:#AEBBC8;font-size:22px}
+.clist-h{margin:20px 2px 0;font-size:13.5px;color:var(--ink-soft);display:flex;
+  align-items:center;justify-content:space-between;gap:8px}
+.clist-h .clr{border:1px solid var(--rule);background:#fff;color:var(--ink);
+  border-radius:8px;padding:4px 10px;font-size:12.5px;cursor:pointer;flex:none}
+
+#cityModal{position:fixed;inset:0;z-index:40;background:rgba(20,32,48,.55);
+  display:grid;place-items:center;padding:22px}
+#cityModal[hidden]{display:none}
+.cm-box{background:var(--paper);border-radius:18px;overflow:hidden;width:100%;max-width:330px}
+.cm-box svg{width:100%;height:auto;display:block}
+.cm-t{padding:14px 16px 16px}
+.cm-t .en{font-family:"Newsreader",Georgia,serif;font-size:27px;font-weight:600;
+  display:flex;align-items:center;gap:7px;cursor:pointer}
+.cm-t .ko{font-size:15px;color:var(--ink-soft);margin-top:1px}
+.cm-t .mo{font-size:14px;margin-top:9px;padding-top:9px;border-top:1px solid var(--rule)}
+.rxrow{display:flex;gap:6px;margin-top:9px;padding-top:9px;border-top:1px solid var(--rule)}
+.rxrow button{flex:1;border:1px solid var(--rule);background:#fff;border-radius:9px;
+  padding:6px 2px 5px;cursor:pointer;display:grid;gap:1px;place-items:center;line-height:1.1}
+.rxrow button .e{font-size:17px}
+.rxrow button .n{font-size:11.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.rxrow button[aria-pressed="true"]{border-color:var(--ink);background:#F2F6FA}
+.rxrow button[aria-pressed="true"] .n{color:var(--ink);font-weight:700}
+.rx{display:flex;gap:6px;padding:2px 14px 12px}
+.rx button{flex:1;border:1px solid var(--rule);background:#fff;border-radius:10px;
+  padding:7px 2px 5px;cursor:pointer;display:grid;gap:2px;place-items:center;line-height:1.1}
+.rx button .e{font-size:20px}
+.rx button .t{font-size:10.5px;color:var(--ink-soft);white-space:nowrap}
+.rx button[aria-pressed="true"]{border-color:var(--ink);background:#F2F6FA}
+.rx button[aria-pressed="true"] .t{color:var(--ink);font-weight:600}
+.crow .rb{font-size:18px;flex:none;margin-left:2px}
+.cm-close{width:100%;border:0;background:var(--ink);color:#fff;padding:12px;font-size:15px}
 
 /* ---------- 하단 바 ---------- */
 .bar{
@@ -201,6 +320,13 @@ body.makemode .tools,body.makemode .chips{display:none}
         <path d="M12 17.5V21"/>
       </svg>
     </button>
+    <button class="iconbtn ico" id="mHide" aria-pressed="false" aria-label="뜻 가리기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M2.6 12S6.2 5.6 12 5.6 21.4 12 21.4 12 17.8 18.4 12 18.4 2.6 12 2.6 12Z"/>
+        <circle cx="12" cy="12" r="2.9"/>
+      </svg>
+    </button>
     <button class="iconbtn ico" id="printBtn" aria-label="인쇄하기">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -242,11 +368,18 @@ body.makemode .tools,body.makemode .chips{display:none}
   <div id="mkOut"></div>
 </section>
 
+<section id="dex">
+  <div id="dexTop"></div>
+  <div id="dexGrid"></div>
+</section>
+
+<div id="cityModal" hidden><div class="cm-box" id="cmBox"></div></div>
+
 <nav class="bar">
   <button id="mList" aria-pressed="true">목록</button>
   <button id="mCard" aria-pressed="false">카드</button>
   <button id="mMake" aria-pressed="false">문장</button>
-  <button id="mHide" aria-pressed="false">뜻 가리기</button>
+  <button id="mDex"  aria-pressed="false">Passport<i class="dot" id="dexDot" hidden></i></button>
 </nav>
 
 <div id="print"></div>
@@ -523,6 +656,15 @@ const esc = t => t.replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"'
 const mark = t => esc(t).replace(/\*\*(.+?)\*\*/g, "<mark>$1</mark>");
 const plain = t => t.replace(/\*\*/g,"");
 
+/* 마이크·프린터와 같은 굵기·같은 결의 선 아이콘 */
+const SVG = (p)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const ICON_CHECK = SVG(`<path d="M4.5 12.8l4.6 4.6L19.6 6.9"/>`);
+const ICON_TICKET = SVG(`<path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2 2.4 2.4 0 0 0 0 6 2 2 0 0 1-2 2H5a2 2 0 0 1-2-2 2.4 2.4 0 0 0 0-6Z"/><path d="M9.5 7.6v8.8"/>`);
+const ICON_PLANE = SVG(`<path d="M3 13.2 20.6 4.4 12.6 21l-2.5-6.4z"/><path d="M10.1 14.6 20.6 4.4"/>`);
+const ICON_SOUND = SVG(`<path d="M4 9.3h3.3L12 5.4v13.2L7.3 14.7H4a1 1 0 0 1-1-1v-3.4a1 1 0 0 1 1-1Z"/>
+  <path d="M15.6 9.4a3.7 3.7 0 0 1 0 5.2"/><path d="M18.2 6.8a7.4 7.4 0 0 1 0 10.4"/>`);
+
 function visible(){
   const q = query.trim().toLowerCase();
   return WORDS.filter((d,i)=>{
@@ -554,8 +696,8 @@ function renderList(){
       
       <div class="side">
         <button class="mini ${on?"on":""}" data-done="${esc(key(d))}"
-                aria-label="${on?"외움 해제":"외움 표시"}">✓</button>
-        <button class="mini" data-say="${esc(d.w)}" aria-label="발음 듣기">🔊</button>
+                aria-label="${on?"외움 해제":"외움 표시"}">${ICON_CHECK}</button>
+        <button class="mini" data-say="${esc(d.w)}" aria-label="발음 듣기">${ICON_SOUND}</button>
       </div>
     </article>`;
   }).join("");
@@ -569,9 +711,12 @@ function renderCard(){
                     document.getElementById("pos").textContent=""; return; }
   if(ci>=rows.length) ci=0;
   const d = rows[ci];
-  flip.innerHTML = `<div class="fw">${esc(d.w)}</div>` + (revealed
-    ? `<div class="fm">${esc(d.m)}</div><div class="fs">${mark(d.s)}</div>`
-    : `<div class="veil">카드를 누르면 뜻이 보여요</div>`);
+  flip.innerHTML =
+    `<button class="fw sp" data-say="${esc(d.w)}" aria-label="${esc(d.w)} 발음 듣기">${esc(d.w)}<i class="spk">${ICON_SOUND}</i></button>` +
+    (revealed
+      ? `<div class="fm">${esc(d.m)}</div>
+         <button class="fs sp" data-say="${esc(plain(d.s))}" aria-label="예문 발음 듣기">${mark(d.s)}<i class="spk">${ICON_SOUND}</i></button>`
+      : `<div class="veil">영어를 누르면 발음이 들려요<br>빈 곳을 누르면 뜻이 보여요</div>`);
   document.getElementById("pos").textContent = `${ci+1} / ${rows.length}`;
   document.getElementById("reveal").textContent = revealed ? "뜻 숨기기" : "뜻 보기";
 }
@@ -598,10 +743,12 @@ function render(){
   document.getElementById("list").style.display = mode==="list" ? "" : "none";
   document.getElementById("card").classList.toggle("on", mode==="card");
   document.getElementById("maker").classList.toggle("on", mode==="make");
-  document.body.classList.toggle("makemode", mode==="make");
+  document.getElementById("dex").classList.toggle("on", mode==="dex");
+  document.body.classList.toggle("makemode", mode==="make"||mode==="dex");
   if(mode==="list") renderList();
   else if(mode==="card") renderCard();
-  else renderMaker();
+  else if(mode==="make") renderMaker();
+  else renderDex();
 }
 
 /* ---------- 이벤트 ---------- */
@@ -619,17 +766,24 @@ document.getElementById("q").addEventListener("input", e=>{ query=e.target.value
 
 document.getElementById("list").addEventListener("click", e=>{
   const dn=e.target.closest("[data-done]"), sy=e.target.closest("[data-say]");
-  if(dn){ const w=dn.dataset.done; learned.has(w)?learned.delete(w):learned.add(w); saveLearned(); render(); }
+  if(dn){ const w=dn.dataset.done; learned.has(w)?learned.delete(w):learned.add(w);
+          saveLearned(); render();
+          updateDexDot(); }
   if(sy) say(sy.dataset.say);
 });
 
 function say(w){
   if(!("speechSynthesis" in window)) return;
-  const u=new SpeechSynthesisUtterance(w); u.lang="en-US"; u.rate=.85;
+  const u=new SpeechSynthesisUtterance(w); u.lang="en-US";
+  u.rate = w.trim().includes(" ") ? 0.9 : 0.8;   // 문장은 조금 덜 느리게
   speechSynthesis.cancel(); speechSynthesis.speak(u);
 }
 
-document.getElementById("flip").addEventListener("click", ()=>{ revealed=!revealed; renderCard(); });
+document.getElementById("flip").addEventListener("click", e=>{
+  const sp = e.target.closest("[data-say]");
+  if(sp){ say(sp.dataset.say); return; }   // 영어를 누르면 발음만, 카드는 그대로
+  revealed=!revealed; renderCard();
+});
 document.getElementById("reveal").addEventListener("click", ()=>{ revealed=!revealed; renderCard(); });
 document.getElementById("prev").addEventListener("click", ()=>{
   const n=visible().length; if(!n) return; ci=(ci-1+n)%n; revealed=false; renderCard(); });
@@ -639,11 +793,13 @@ document.getElementById("next").addEventListener("click", ()=>{
 document.getElementById("mList").addEventListener("click", ()=>setMode("list"));
 document.getElementById("mCard").addEventListener("click", ()=>setMode("card"));
 document.getElementById("mMake").addEventListener("click", ()=>setMode("make"));
+document.getElementById("mDex").addEventListener("click", ()=>setMode("dex"));
 function setMode(m){
   mode=m; revealed=false;
   document.getElementById("mList").setAttribute("aria-pressed", m==="list");
   document.getElementById("mCard").setAttribute("aria-pressed", m==="card");
   document.getElementById("mMake").setAttribute("aria-pressed", m==="make");
+  document.getElementById("mDex").setAttribute("aria-pressed", m==="dex");
   render();
 }
 const hideBtn=document.getElementById("mHide");
@@ -820,7 +976,7 @@ function renderMaker(){
       <div class="m">${esc(d.m)}</div>
       <div class="s">${mark(d.s)}</div>
       <div class="side">
-        <button class="mini" data-say="${esc(d.w)}" aria-label="발음 듣기">🔊</button>
+        <button class="mini" data-say="${esc(d.w)}" aria-label="발음 듣기">${ICON_SOUND}</button>
       </div>
     </article>`).join("");
   }
@@ -831,6 +987,302 @@ document.getElementById("mkGo").addEventListener("click", renderMaker);
 document.getElementById("kin").addEventListener("input", renderMaker);
 document.getElementById("mkOut").addEventListener("click", e=>{
   const sy=e.target.closest("[data-say]"); if(sy) say(sy.dataset.say);
+});
+
+/* ---------- 도시 카드 도감 ----------
+   외운 단어 10개마다 새 도시 카드 한 장. 도시는 계속 추가할 수 있다. */
+
+const A=(sky,gr,inner)=>`<svg viewBox="0 0 120 90" xmlns="http://www.w3.org/2000/svg">`
+  +`<rect width="120" height="90" fill="${sky}"/><rect y="72" width="120" height="18" fill="${gr}"/>`
+  +inner+`</svg>`;
+
+const CITIES=[
+ {id:"paris",en:"Paris",ko:"파리",cen:"France",cko:"프랑스",con:"유럽",mo:"Eiffel Tower",mko:"에펠탑",
+  art:A("#BFD9EE","#8FA98C",`<path d="M54 72c3-16 4-30 6-46 2 16 3 30 6 46h-4c-1-12-2-22-2-30 0 8-1 18-2 30z" fill="#8B7355"/><rect x="51" y="52" width="18" height="2.6" fill="#8B7355"/><rect x="55" y="40" width="10" height="2.2" fill="#8B7355"/><path d="M53 72q7-9 14 0" fill="none" stroke="#8B7355" stroke-width="2.2"/><circle cx="24" cy="20" r="7" fill="#F6E39B"/>`)},
+ {id:"london",en:"London",ko:"런던",cen:"United Kingdom",cko:"영국",con:"유럽",mo:"Big Ben",mko:"빅 벤",
+  art:A("#C3D4E2","#7E8F84",`<rect x="53" y="26" width="15" height="46" fill="#C9A227"/><rect x="51" y="21" width="19" height="5.5" fill="#B08722"/><path d="M60.5 6 53 21h15z" fill="#B08722"/><circle cx="60.5" cy="34" r="5.4" fill="#FFF8E1"/><path d="M60.5 34v-3.4M60.5 34l2.4 1.8" stroke="#5A4B1E" stroke-width="1.2" stroke-linecap="round"/><rect x="20" y="56" width="16" height="16" fill="#A08C6E"/>`)},
+ {id:"rome",en:"Rome",ko:"로마",cen:"Italy",cko:"이탈리아",con:"유럽",mo:"Colosseum",mko:"콜로세움",
+  art:A("#EBD9BE","#9C8F6E",`<rect x="34" y="36" width="52" height="36" rx="5" fill="#DFCCA6"/><g fill="#9C8158"><rect x="39" y="43" width="7" height="11" rx="3.5"/><rect x="52" y="43" width="7" height="11" rx="3.5"/><rect x="65" y="43" width="7" height="11" rx="3.5"/><rect x="74" y="43" width="7" height="11" rx="3.5"/><rect x="39" y="58" width="7" height="11" rx="3.5"/><rect x="52" y="58" width="7" height="11" rx="3.5"/><rect x="65" y="58" width="7" height="11" rx="3.5"/><rect x="74" y="58" width="7" height="11" rx="3.5"/></g>`)},
+ {id:"athens",en:"Athens",ko:"아테네",cen:"Greece",cko:"그리스",con:"유럽",mo:"Parthenon",mko:"파르테논 신전",
+  art:A("#BDE0F0","#A79B7E",`<path d="M36 34 60 19l24 15z" fill="#EDE6D6"/><rect x="36" y="34" width="48" height="5" fill="#D8CFBB"/><g fill="#F4EEE0"><rect x="40" y="39" width="5.5" height="33"/><rect x="51" y="39" width="5.5" height="33"/><rect x="62" y="39" width="5.5" height="33"/><rect x="73" y="39" width="5.5" height="33"/></g>`)},
+ {id:"barcelona",en:"Barcelona",ko:"바르셀로나",cen:"Spain",cko:"스페인",con:"유럽",mo:"Sagrada Familia",mko:"사그라다 파밀리아",
+  art:A("#F3D9B0","#9A8B6B",`<g fill="#C98B57"><path d="M42 72V46l5-16 5 16v26z"/><path d="M55 72V36l6-21 6 21v36z"/><path d="M70 72V48l5-14 5 14v24z"/></g><g fill="#E8C07A"><circle cx="47" cy="29" r="2.4"/><circle cx="61" cy="14" r="2.6"/><circle cx="75" cy="33" r="2.4"/></g>`)},
+ {id:"amsterdam",en:"Amsterdam",ko:"암스테르담",cen:"Netherlands",cko:"네덜란드",con:"유럽",mo:"Windmill",mko:"풍차",
+  art:A("#CBE3F2","#7FA36B",`<path d="M52 72 56 38h11l4 34z" fill="#A8724D"/><g stroke="#5C4433" stroke-width="3.2" stroke-linecap="round"><path d="M61.5 36 42 22M61.5 36 81 50M61.5 36 48 56M61.5 36 75 16"/></g><circle cx="61.5" cy="36" r="4" fill="#5C4433"/>`)},
+ {id:"tokyo",en:"Tokyo",ko:"도쿄",cen:"Japan",cko:"일본",con:"아시아",mo:"Tokyo Tower",mko:"도쿄 타워",
+  art:A("#F5CFC8","#8B8B94",`<path d="M54 72c3-15 4-29 6.5-44 2.5 15 3.5 29 6.5 44h-4c-1-11-2-21-2.5-28-.5 7-1.5 17-2.5 28z" fill="#E24A3B"/><rect x="51" y="52" width="19" height="2.6" fill="#E24A3B"/><rect x="55" y="41" width="11" height="2.2" fill="#E24A3B"/><rect x="20" y="58" width="13" height="14" fill="#9AA3AE"/><rect x="88" y="54" width="13" height="18" fill="#9AA3AE"/>`)},
+ {id:"seoul",en:"Seoul",ko:"서울",cen:"South Korea",cko:"대한민국",con:"아시아",mo:"Gyeongbokgung",mko:"경복궁",
+  art:A("#CDE6F5","#8FA98C",`<path d="M28 42q32-12 64 0l-8-8q-24-8-48 0z" fill="#3F6B4A"/><rect x="36" y="42" width="48" height="7" fill="#8B5E3C"/><rect x="40" y="49" width="40" height="23" fill="#C29764"/><rect x="54" y="57" width="12" height="15" rx="6" fill="#5C4433"/><path d="M28 42h64" stroke="#2F5238" stroke-width="1.6"/>`)},
+ {id:"beijing",en:"Beijing",ko:"베이징",cen:"China",cko:"중국",con:"아시아",mo:"Great Wall",mko:"만리장성",
+  art:A("#E8DCC0","#7E8B6A",`<path d="M14 72V56l12-7 13 7v-7l13-7 13 7 12-7 17 9v21z" fill="#BCAC8C"/><rect x="76" y="34" width="18" height="21" fill="#A2916F"/><g fill="#A2916F"><rect x="76" y="30" width="4" height="5"/><rect x="84" y="30" width="4" height="5"/><rect x="92" y="30" width="2" height="5"/></g>`)},
+ {id:"agra",en:"Agra",ko:"아그라",cen:"India",cko:"인도",con:"아시아",mo:"Taj Mahal",mko:"타지마할",
+  art:A("#F6DCC0","#93A88E",`<rect x="45" y="46" width="30" height="26" fill="#F4F2EC"/><path d="M60 28c9 0 15 8 15 18H45c0-10 6-18 15-18z" fill="#FAF8F3"/><path d="M60 22v6" stroke="#D9D4C6" stroke-width="2.4" stroke-linecap="round"/><g fill="#EDE9DC"><rect x="33" y="38" width="5.5" height="34" rx="2.7"/><rect x="81" y="38" width="5.5" height="34" rx="2.7"/></g><rect x="55" y="58" width="10" height="14" rx="5" fill="#C9BFA8"/>`)},
+ {id:"istanbul",en:"Istanbul",ko:"이스탄불",cen:"Turkey",cko:"튀르키예",con:"아시아",mo:"Hagia Sophia",mko:"아야 소피아",
+  art:A("#F0D6A8","#8E9A8C",`<rect x="43" y="50" width="34" height="22" fill="#E3B368"/><path d="M60 32c9 0 16 8 16 18H44c0-10 7-18 16-18z" fill="#D89F49"/><g fill="#C08B3A"><rect x="31" y="32" width="4.5" height="40" rx="2.2"/><rect x="84" y="32" width="4.5" height="40" rx="2.2"/></g><circle cx="60" cy="28" r="2.6" fill="#C08B3A"/>`)},
+ {id:"bangkok",en:"Bangkok",ko:"방콕",cen:"Thailand",cko:"태국",con:"아시아",mo:"Wat Arun",mko:"왓 아룬",
+  art:A("#CFE9E2","#8FA98C",`<path d="M60 12 71 46l4 26H45l4-26z" fill="#EFE3C6"/><path d="M60 12 68 40H52z" fill="#E0CFA4"/><g fill="#D8B45E"><rect x="47" y="52" width="26" height="2.4"/><rect x="49" y="60" width="22" height="2.4"/></g><path d="M36 72V54l6-10 6 10v18z" fill="#E4D8BA"/><path d="M72 72V54l6-10 6 10v18z" fill="#E4D8BA"/>`)},
+ {id:"newyork",en:"New York",ko:"뉴욕",cen:"United States",cko:"미국",con:"아메리카",mo:"Statue of Liberty",mko:"자유의 여신상",
+  art:A("#BBD6EA","#7B8A93",`<rect x="50" y="58" width="20" height="14" fill="#8E9A8C"/><path d="M60 24c4.5 0 7 3.4 7 8l-2.4 26h-9.2L53 32c0-4.6 2.5-8 7-8z" fill="#5FA08C"/><circle cx="60" cy="21" r="4.4" fill="#5FA08C"/><g stroke="#5FA08C" stroke-width="1.4"><path d="M56 18l-2-3M64 18l2-3M60 16v-3"/></g><path d="M67 30 76 17" stroke="#5FA08C" stroke-width="2.4"/><path d="M76 17l3.2-6.5 3 6.5z" fill="#F5C542"/>`)},
+ {id:"sanfrancisco",en:"San Francisco",ko:"샌프란시스코",cen:"United States",cko:"미국",con:"아메리카",mo:"Golden Gate Bridge",mko:"금문교",
+  art:A("#F0C9A8","#6E8FA6",`<g stroke="#D9534F" stroke-width="3.4" fill="none"><path d="M30 68V28M90 68V28"/><path d="M30 30q30 24 60 0"/><path d="M30 30q-14 10-22 14M90 30q14 10 22 14"/></g><rect x="8" y="64" width="104" height="4.5" fill="#D9534F"/>`)},
+ {id:"rio",en:"Rio de Janeiro",ko:"리우데자네이루",cen:"Brazil",cko:"브라질",con:"아메리카",mo:"Sugarloaf Mountain",mko:"슈가로프산",
+  art:A("#FFD9A8","#4F86A8",`<path d="M22 72q12-28 26-28t22 28z" fill="#3E7C59"/><path d="M60 72q10-36 24-36t10 36z" fill="#2F6349"/><path d="M38 44 84 33" stroke="#6B6B6B" stroke-width="1.2"/><rect x="58" y="37" width="7" height="5" rx="1.5" fill="#8B8B8B"/><circle cx="26" cy="20" r="7" fill="#FFB169"/>`)},
+ {id:"cusco",en:"Cusco",ko:"쿠스코",cen:"Peru",cko:"페루",con:"아메리카",mo:"Machu Picchu",mko:"마추픽추",
+  art:A("#CFE3F0","#7C8B6A",`<path d="M18 72 46 32l16 22 12-15 26 33z" fill="#6E8B6E"/><g fill="#C4B99E"><rect x="36" y="58" width="34" height="4"/><rect x="40" y="64" width="30" height="4"/><rect x="44" y="52" width="22" height="4"/></g><path d="M46 32 52 42h-12z" fill="#5C7A5C"/>`)},
+ {id:"cairo",en:"Cairo",ko:"카이로",cen:"Egypt",cko:"이집트",con:"아프리카",mo:"Pyramids",mko:"피라미드",
+  art:A("#F7DFA6","#E0C083",`<path d="M14 72 42 30l26 42z" fill="#E4C489"/><path d="M56 72 78 38l22 34z" fill="#D3AF70"/><path d="M42 30 42 72" stroke="#D8B87C" stroke-width="1.2"/><circle cx="98" cy="20" r="9" fill="#F8C96A"/>`)},
+ {id:"nairobi",en:"Nairobi",ko:"나이로비",cen:"Kenya",cko:"케냐",con:"아프리카",mo:"Savanna",mko:"사바나",
+  art:A("#FBD08A","#C9A153",`<rect x="78" y="50" width="4.5" height="22" fill="#8B6B45"/><ellipse cx="80" cy="46" rx="18" ry="7" fill="#5E8B4A"/><path d="M40 72V52l-5-19 7-2 6 21v20z" fill="#E0A94F"/><rect x="40" y="60" width="14" height="12" fill="#E0A94F"/><circle cx="35" cy="31" r="3.4" fill="#C98B3A"/><circle cx="24" cy="20" r="8" fill="#F5A65B"/>`)},
+ {id:"sydney",en:"Sydney",ko:"시드니",cen:"Australia",cko:"호주",con:"오세아니아",mo:"Opera House",mko:"오페라 하우스",
+  art:A("#BEE0F2","#5C93B8",`<g fill="#F6F5F0"><path d="M28 70q4-26 20-26t18 26z"/><path d="M50 70q4-21 18-21t16 21z"/><path d="M70 70q3-15 13-15t11 15z"/></g><rect x="20" y="70" width="80" height="3.4" fill="#CFCFC6"/>`)},
+ {id:"auckland",en:"Auckland",ko:"오클랜드",cen:"New Zealand",cko:"뉴질랜드",con:"오세아니아",mo:"Sky Tower",mko:"스카이 타워",
+  art:A("#CBE7F3","#6F9B7A",`<path d="M56 72 58 42h6l2 30z" fill="#BCC2CB"/><path d="M54 42h14l-2.4-9h-9.2z" fill="#9AA0AA"/><ellipse cx="61" cy="32" rx="10" ry="5.4" fill="#8A9099"/><rect x="60" y="8" width="2.4" height="19" fill="#9AA0AA"/><rect x="24" y="58" width="12" height="14" fill="#A9B3BC"/><rect x="88" y="62" width="11" height="10" fill="#A9B3BC"/>`)}
+];
+
+let unlocked = new Set(JSON.parse(store.get("cities")||"[]"));
+const saveCities = ()=> store.set("cities", JSON.stringify([...unlocked]));
+const NEED = 10;                        // 카드 한 장에 필요한 단어 수
+const owed = ()=> Math.max(0, Math.floor(learned.size/NEED) - unlocked.size);
+function updateDexDot(){
+  const d=document.getElementById("dexDot"); if(!d) return;
+  const n=owed(), left=CITIES.filter(c=>!unlocked.has(c.id)).length;
+  d.hidden = !(n>0 && left); d.textContent = n;
+}
+
+/* ---------- 세계지도 대시보드 ---------- */
+const CONS=["아메리카","유럽","아프리카","아시아","오세아니아"];
+const CON_COLOR={"아메리카":"#E08A5D","유럽":"#5B8DC9","아프리카":"#D9A441","아시아":"#4FA08A","오세아니아":"#9A7BC8"};
+const CON_PATH={
+ "아메리카":"M12 26 20 17 42 20 58 19 80 15 96 20 116 32 126 43 110 52 104 63 99 77 90 72 83 77 86 89 93 90 97 100 102 101 110 97 120 105 131 111 145 118 142 128 132 145 122 157 115 170 110 183 107 170 109 151 110 135 105 118 100 111 95 100 88 93 75 85 66 71 55 59 56 48 45 35 30 33 15 39Z",
+ "유럽":"M168 66 166 56 174 50 180 44 184 34 190 24 200 19 211 23 214 34 210 45 200 50 192 55 184 60 176 66Z M191 52 195 56 197 64 193 62 190 56Z M172 44 178 42 177 50 171 49Z",
+ "아프리카":"M163 84 174 65 190 63 214 75 217 92 223 96 231 96 221 114 220 131 212 145 205 156 198 156 193 127 192 119 190 113 188 106 175 105 163 92Z M222 148 226 144 227 152 223 155Z",
+ "아시아":"M211 22 240 17 270 12 320 16 340 22 350 33 340 39 320 52 305 62 302 72 290 85 285 98 278 101 275 92 270 83 260 101 252 85 245 79 236 79 230 96 223 96 228 72 220 59 215 56 210 52 210 39Z M328 40 334 46 336 56 330 52Z",
+ "오세아니아":"M294 140 309 127 322 126 326 135 333 144 330 161 320 161 309 153 295 156Z M350 163 356 160 358 168 352 172Z"
+};
+const ISLES="M138 10 158 8 162 20 152 32 140 28Z";
+
+const PIN={
+ paris:[182,47], london:[180,44], rome:[193,56], athens:[204,62], barcelona:[182,57],
+ amsterdam:[185,43], tokyo:[320,65], seoul:[307,62], beijing:[296,59], agra:[258,76],
+ istanbul:[209,58], bangkok:[281,93], newyork:[106,58], sanfrancisco:[58,62],
+ rio:[137,141], cusco:[108,129], cairo:[211,72], nairobi:[217,113],
+ sydney:[331,156], auckland:[355,160]
+};
+const PIN_SHAPE="M0 0c0 0-4.6-6-4.6-8.6a4.6 4.6 0 1 1 9.2 0C4.6-6 0 0 0 0z";
+function pins(){
+  return CITIES.filter(c=>unlocked.has(c.id) && PIN[c.id]).map(c=>{
+    const [x,y]=PIN[c.id];
+    return `<g transform="translate(${x},${y})" data-city="${c.id}" class="pin">
+      <circle r="9" fill="transparent"/>
+      <path d="${PIN_SHAPE}" fill="#E23B2E" stroke="#fff" stroke-width="1.1"/>
+      <circle cy="-8.6" r="1.7" fill="#fff"/></g>`;
+  }).join("");
+}
+
+function conStat(){
+  const st={};
+  CONS.forEach(c=>st[c]={have:0,total:0});
+  CITIES.forEach(c=>{ st[c.con].total++; if(unlocked.has(c.id)) st[c.con].have++; });
+  return st;
+}
+
+function worldMap(st,sel){
+  const paths=CONS.map(c=>{
+    const {have,total}=st[c];
+    const ratio = total ? have/total : 0;
+    const col = CON_COLOR[c];
+    const fill = have===0 ? "#DDE4EB" : col;
+    const op = have===0 ? 1 : (0.32 + 0.68*ratio);
+    const stroke = sel===c ? "#16324F" : "#C6D2DC";
+    const sw = sel===c ? 2 : 1;
+    return `<path d="${CON_PATH[c]}" fill="${fill}" fill-opacity="${op.toFixed(2)}"
+      stroke="${stroke}" stroke-width="${sw}" stroke-linejoin="round" data-con="${c}"/>`;
+  }).join("");
+  return `<svg class="wmap" viewBox="0 0 362 192" xmlns="http://www.w3.org/2000/svg" role="img"
+    aria-label="대륙별 수집 현황">
+    <rect width="362" height="192" rx="10" fill="#EAF3F9"/>
+    <g stroke="#D3E4EF" stroke-width=".8">
+      <path d="M0 48h362M0 96h362M0 144h362"/>
+      <path d="M60 0v192M121 0v192M181 0v192M241 0v192M302 0v192"/>
+    </g>
+    <path d="${ISLES}" fill="#DDE4EB" stroke="#C6D2DC" stroke-width="1"/>
+    ${paths}${pins()}</svg>`;
+}
+
+function legend(st,sel){
+  return `<div class="legend">`+CONS.map(c=>{
+    const {have,total}=st[c];
+    return `<button class="lg" data-con="${c}" aria-pressed="${sel===c}">
+      <i class="sw" style="background:${have?CON_COLOR[c]:"#DDE4EB"}"></i>
+      <span class="nm">${c}</span><span class="ct">${have}/${total}</span></button>`;
+  }).join("")+`</div>`;
+}
+
+/* ---------- 도감 ---------- */
+let dexFilter=null, rxFilter=null, packCity=null, sampleIdx=0;
+
+function rxCount(k){
+  return CITIES.filter(c=>unlocked.has(c.id) && reacts[c.id]===k).length;
+}
+
+function rxRow(){
+  return `<div class="rxrow">`+REACTS.map(r=>
+    `<button data-rx-f="${r.k}" aria-pressed="${rxFilter===r.k}" aria-label="${r.t}">
+       <span class="e">${r.e}</span><span class="n">${rxCount(r.k)}</span></button>`).join("")+`</div>`;
+}
+
+function renderDex(){
+  const top=document.getElementById("dexTop"), grid=document.getElementById("dexGrid");
+  const st=conStat(), left=CITIES.filter(c=>!unlocked.has(c.id)), n=owed();
+  updateDexDot();
+
+  top.innerHTML=
+    `<div class="map-card">
+       <div class="map-head"><b>모은 도시 ${unlocked.size} / ${CITIES.length}</b>
+         <span>다음 카드까지 ${Math.max(0,(unlocked.size+1)*NEED - learned.size)}단어</span></div>
+       ${worldMap(st,dexFilter)}
+       ${legend(st,dexFilter)}
+       ${rxRow()}
+     </div>` + packArea(n,left.length);
+
+  let shown = CITIES;
+  if(dexFilter) shown = shown.filter(c=>c.con===dexFilter);
+  if(rxFilter)  shown = shown.filter(c=>unlocked.has(c.id) && reacts[c.id]===rxFilter);
+  const order = [...shown].sort((a,b)=>(unlocked.has(b.id)?1:0)-(unlocked.has(a.id)?1:0));
+
+  const tags=[dexFilter, rxFilter && REACTS.find(r=>r.k===rxFilter).t].filter(Boolean).join(" · ");
+  let head = tags ? `${tags} — ${shown.length}곳` : `도시 ${shown.length}곳`;
+  if(tags) head += ` <button class="clr" id="clrF">전체 보기</button>`;
+
+  grid.innerHTML=`<p class="clist-h">${head}</p>`
+    + (order.length ? `<div class="clist">`+order.map(c=>unlocked.has(c.id)
+      ? `<div class="crow" data-city="${c.id}">
+           <div class="th">${c.art}</div>
+           <div class="tx"><div class="en">${esc(c.en)}</div>
+             <div class="ko">${esc(c.ko)} · ${esc(c.cko)}</div>
+             <div class="mo">${esc(c.mko)}</div></div>
+           <div class="rb">${reactEmoji(c.id)}</div></div>`
+      : `<div class="crow lock"><div class="th">?</div>
+           <div class="tx"><div class="en">? ? ?</div>
+             <div class="ko">${esc(c.con)}</div>
+             <div class="mo">아직 열지 않은 카드</div></div></div>`
+    ).join("")+`</div>`
+    : `<div class="dex-msg" style="margin-top:10px">여기에 해당하는 도시가 아직 없어요.</div>`);
+}
+
+function packArea(n,leftCount){
+  const done=!leftCount, canGo=n>0 && !done;
+  const globe=`<svg class="globe" viewBox="0 0 100 100" fill="none" stroke="#9FC0DC" stroke-width="3">
+    <circle cx="50" cy="50" r="36"/><ellipse cx="50" cy="50" rx="15" ry="36"/>
+    <path d="M15 38h70M15 62h70M50 14v72"/></svg>`;
+  const sc=CITIES[sampleIdx % CITIES.length];
+  const sampleFace=`${sc.art}<div class="cm-t"><div class="en">${esc(sc.en)}</div>
+     <div class="ko">${esc(sc.ko)} · ${esc(sc.cko)}</div>
+     <div class="mo"><b>${esc(sc.mo)}</b></div></div>`;
+
+  return `<div class="pack-wrap">
+    <div class="chance">
+      <i class="ci">${ICON_TICKET}</i>
+      <span class="cl">나의 여행 티켓</span>
+      <b class="cv">${n}<em>장</em></b>
+    </div>
+    <div class="pack-sub">${done
+      ? "도시를 모두 모았어요! 새로운 도시가 곧 추가돼요."
+      : `단어 ${NEED}개를 외울 때마다 티켓이 한 장 생겨요.`}</div>
+
+    <button class="go" id="packGo" ${canGo?"":"disabled"}>
+      ${ICON_PLANE}<span>출발하기</span>
+    </button>
+
+    <div class="pack${canGo?"":" sample open"}" id="pack"><div class="pack-in">
+      <div class="face front">${globe}<div class="txt">READY</div></div>
+      <div class="face back" id="packBack">${canGo?"":sampleFace}</div>
+    </div></div>
+
+    ${canGo
+      ? `<button class="pack-ok" id="packOk" hidden>확인</button>`
+      : `<div class="pack-note">샘플 카드예요 · 눌러서 다른 도시 그림 보기 (${(sampleIdx%CITIES.length)+1}/${CITIES.length})</div>`}
+  </div>`;
+}
+
+function openPack(){
+  const left=CITIES.filter(c=>!unlocked.has(c.id));
+  if(!left.length) return;
+  const c=left[Math.floor(Math.random()*left.length)];
+  packCity=c;
+  document.getElementById("packBack").innerHTML=
+    `${c.art}<div class="cm-t"><div class="en">${esc(c.en)}</div>
+     <div class="ko">${esc(c.ko)} · ${esc(c.cko)}</div>
+     <div class="mo"><b>${esc(c.mo)}</b></div></div>`;
+  document.getElementById("pack").classList.add("open");
+  unlocked.add(c.id); saveCities();                 // 뒤집는 순간 바로 수집
+  setTimeout(()=>say(c.en), 620);
+  setTimeout(()=>{ const b=document.getElementById("packOk"); if(b) b.hidden=false; }, 900);
+}
+
+document.getElementById("dexTop").addEventListener("click", e=>{
+  if(e.target.closest("#packOk")){ renderDex(); return; }
+  if(e.target.closest("#packGo")){ openPack(); return; }
+  const pk=e.target.closest("#pack");
+  if(pk){
+    if(pk.classList.contains("sample")){          // 샘플 카드는 눌러서 다음 도시로
+      sampleIdx=(sampleIdx+1)%CITIES.length; renderDex();
+    }else if(!pk.classList.contains("open")){
+      openPack();
+    }
+    return;
+  }
+  const pin=e.target.closest(".pin");
+  if(pin){ openCity(pin.dataset.city); return; }
+  const rf=e.target.closest("[data-rx-f]");
+  if(rf){ rxFilter = rxFilter===rf.dataset.rxF ? null : rf.dataset.rxF; renderDex(); return; }
+  const c=e.target.closest("[data-con]");
+  if(c){ dexFilter = dexFilter===c.dataset.con ? null : c.dataset.con; renderDex(); }
+});
+document.getElementById("dexGrid").addEventListener("click", e=>{
+  if(e.target.closest("#clrF")){ dexFilter=null; rxFilter=null; renderDex(); }
+});
+document.getElementById("dexGrid").addEventListener("click", e=>{
+  const t=e.target.closest("[data-city]"); if(t) openCity(t.dataset.city);
+});
+
+/* ---------- 도시 카드에 남기는 반응 ---------- */
+const REACTS=[{k:"like",e:"👍",t:"좋아요"},{k:"nope",e:"👎",t:"싫어요"},
+              {k:"love",e:"❤️",t:"사랑해"},{k:"visit",e:"✈️",t:"가보고 싶어"}];
+let reacts = (()=>{ try{ return JSON.parse(store.get("reacts")||"{}"); }catch(e){ return {}; } })();
+const saveReacts = ()=> store.set("reacts", JSON.stringify(reacts));
+const reactEmoji = id => (REACTS.find(r=>r.k===reacts[id])||{}).e || "";
+
+let modalCity=null;
+
+function openCity(id){
+  const c=CITIES.find(x=>x.id===id); if(!c) return;
+  modalCity=id;
+  document.getElementById("cmBox").innerHTML=
+    `${c.art}
+     <div class="cm-t">
+       <div class="en" data-say="${esc(c.en)}">${esc(c.en)}<i class="spk">${ICON_SOUND}</i></div>
+       <div class="ko">${esc(c.ko)} · ${esc(c.cen)} (${esc(c.cko)})</div>
+       <div class="mo"><b>${esc(c.mo)}</b> · ${esc(c.mko)}</div>
+     </div>
+     <div class="rx">${REACTS.map(r=>
+       `<button data-rx="${r.k}" aria-pressed="${reacts[id]===r.k}" aria-label="${r.t}">
+          <span class="e">${r.e}</span><span class="t">${r.t}</span></button>`).join("")}</div>
+     <button class="cm-close">닫기</button>`;
+  document.getElementById("cityModal").hidden=false;
+}
+
+document.getElementById("cityModal").addEventListener("click", e=>{
+  const rx=e.target.closest("[data-rx]");
+  if(rx){
+    const k=rx.dataset.rx;
+    if(reacts[modalCity]===k) delete reacts[modalCity]; else reacts[modalCity]=k;
+    saveReacts(); openCity(modalCity); renderDex(); return;
+  }
+  if(e.target.closest(".cm-close") || e.target.id==="cityModal"){
+    document.getElementById("cityModal").hidden=true; return;
+  }
+  const sp=e.target.closest("[data-say]"); if(sp) say(sp.dataset.say);
 });
 
 document.getElementById("printBtn").addEventListener("click", ()=>{ renderPrint(); window.print(); });
