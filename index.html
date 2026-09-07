@@ -52,6 +52,11 @@ header{
   padding:0 13px;font-size:14px;white-space:nowrap;
 }
 .iconbtn:focus-visible{outline:2px solid var(--mark)}
+.iconbtn[hidden]{display:none}
+.ico{display:grid;place-items:center;padding:0 11px}
+.ico svg{width:21px;height:21px;display:block}
+.iconbtn.rec{background:#C0392B;color:#fff;animation:pulse 1.1s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 
 .chips{display:flex;gap:7px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
@@ -113,6 +118,31 @@ main{padding:12px 12px 90px;max-width:640px;margin:0 auto}
 .nav .primary{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600}
 .pos{text-align:center;margin-top:12px;color:var(--ink-soft);font-size:13.5px}
 
+/* ---------- 문장 도우미 ---------- */
+#maker{display:none;padding:14px 12px 100px;max-width:640px;margin:0 auto}
+#maker.on{display:block}
+.mk-help{margin:0 2px 11px;font-size:13.5px;color:var(--ink-soft);line-height:1.55}
+.mk-in{display:flex;gap:8px;align-items:stretch}
+#kin{
+  flex:1;min-width:0;border:1px solid var(--rule);border-radius:11px;
+  padding:11px 12px;font:inherit;font-size:16px;resize:none;background:var(--paper);color:var(--ink);
+}
+#kin:focus{outline:2px solid var(--accent);outline-offset:-1px}
+.mk-in .iconbtn{background:var(--paper);border:1px solid var(--rule);color:var(--ink-soft)}
+.mk-in .iconbtn.rec{background:#C0392B;border-color:#C0392B;color:#fff}
+#mkGo{
+  width:100%;margin-top:9px;border:0;border-radius:11px;
+  background:var(--ink);color:#fff;padding:12px;font-size:15px;font-weight:600;
+}
+.cov{background:var(--paper);border:1px solid var(--rule);border-radius:11px;
+     padding:12px 14px;margin-top:14px;font-size:16px;line-height:1.7}
+.cov mark{background:var(--mark);border-radius:3px;padding:0 2px}
+.cov .miss{color:#C0392B;font-weight:600;text-decoration:underline wavy #C0392B 1px}
+.cov .lead{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:5px;font-weight:400}
+.mk-count{margin:14px 2px 8px;font-size:13.5px;color:var(--ink-soft)}
+.mk-none{background:var(--paper);border:1px dashed #C3D0DE;border-radius:11px;
+         padding:22px 18px;margin-top:14px;text-align:center;color:var(--ink-soft);line-height:1.7}
+
 /* ---------- 하단 바 ---------- */
 .bar{
   position:fixed;left:0;right:0;bottom:0;z-index:20;
@@ -123,9 +153,10 @@ main{padding:12px 12px 90px;max-width:640px;margin:0 auto}
 }
 .bar button{
   flex:1;border:1px solid var(--rule);background:#fff;border-radius:10px;
-  padding:11px 6px;font-size:14px;
+  padding:11px 2px;font-size:13.5px;
 }
 .bar button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+body.makemode .tools,body.makemode .chips{display:none}
 
 /* ---------- 인쇄(A4) ---------- */
 #print{display:none}
@@ -162,7 +193,22 @@ main{padding:12px 12px 90px;max-width:640px;margin:0 auto}
   </div>
   <div class="tools">
     <input id="q" type="search" placeholder="단어나 뜻으로 찾기" autocomplete="off">
-    <button class="iconbtn" id="printBtn">인쇄</button>
+    <button class="iconbtn ico" id="micBtn" hidden aria-label="음성으로 검색">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="9" y="2.5" width="6" height="11" rx="3"/>
+        <path d="M5.5 11a6.5 6.5 0 0 0 13 0"/>
+        <path d="M12 17.5V21"/>
+      </svg>
+    </button>
+    <button class="iconbtn ico" id="printBtn" aria-label="인쇄하기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M7 8.5V3h10v5.5"/>
+        <path d="M7 18H5a2 2 0 0 1-2-2v-4.5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2h-2"/>
+        <rect x="7" y="14.5" width="10" height="6.5" rx="1"/>
+      </svg>
+    </button>
   </div>
   <div class="chips" id="chips"></div>
 </header>
@@ -179,9 +225,27 @@ main{padding:12px 12px 90px;max-width:640px;margin:0 auto}
   <div class="pos" id="pos"></div>
 </section>
 
+<section id="maker">
+  <p class="mk-help">한국어로 말하거나 쓰면, 단어장에서 쓸 수 있는 단어를 찾아 줍니다. 문장은 직접 만들어 보세요.</p>
+  <div class="mk-in">
+    <textarea id="kin" rows="2" placeholder="예: 달팽이가 여름 내내 잠을 자요"></textarea>
+    <button class="iconbtn ico" id="kmic" hidden aria-label="한국어 음성 입력">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="9" y="2.5" width="6" height="11" rx="3"/>
+        <path d="M5.5 11a6.5 6.5 0 0 0 13 0"/>
+        <path d="M12 17.5V21"/>
+      </svg>
+    </button>
+  </div>
+  <button id="mkGo">단어 찾기</button>
+  <div id="mkOut"></div>
+</section>
+
 <nav class="bar">
   <button id="mList" aria-pressed="true">목록</button>
   <button id="mCard" aria-pressed="false">카드</button>
+  <button id="mMake" aria-pressed="false">문장</button>
   <button id="mHide" aria-pressed="false">뜻 가리기</button>
 </nav>
 
@@ -533,7 +597,11 @@ function renderPrint(){
 function render(){
   document.getElementById("list").style.display = mode==="list" ? "" : "none";
   document.getElementById("card").classList.toggle("on", mode==="card");
-  mode==="list" ? renderList() : renderCard();
+  document.getElementById("maker").classList.toggle("on", mode==="make");
+  document.body.classList.toggle("makemode", mode==="make");
+  if(mode==="list") renderList();
+  else if(mode==="card") renderCard();
+  else renderMaker();
 }
 
 /* ---------- 이벤트 ---------- */
@@ -570,15 +638,199 @@ document.getElementById("next").addEventListener("click", ()=>{
 
 document.getElementById("mList").addEventListener("click", ()=>setMode("list"));
 document.getElementById("mCard").addEventListener("click", ()=>setMode("card"));
+document.getElementById("mMake").addEventListener("click", ()=>setMode("make"));
 function setMode(m){
   mode=m; revealed=false;
   document.getElementById("mList").setAttribute("aria-pressed", m==="list");
   document.getElementById("mCard").setAttribute("aria-pressed", m==="card");
+  document.getElementById("mMake").setAttribute("aria-pressed", m==="make");
   render();
 }
 const hideBtn=document.getElementById("mHide");
 hideBtn.addEventListener("click", ()=>{
   hide=!hide; hideBtn.setAttribute("aria-pressed",hide); render();
+});
+
+/* ---------- 음성 입력 (검색: 영어 / 문장 도우미: 한국어) ---------- */
+function setupVoice(btn, lang, onText){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR || !btn) return;
+  btn.hidden = false;
+
+  const rec = new SR();
+  rec.lang = lang;
+  rec.interimResults = true;
+  rec.maxAlternatives = 1;
+  let on = false;
+  const stop = ()=>{ on=false; btn.classList.remove("rec"); };
+
+  btn.addEventListener("click", ()=>{
+    if(on){ rec.stop(); stop(); return; }
+    try{ rec.start(); on=true; btn.classList.add("rec"); }
+    catch(e){ stop(); }
+  });
+  rec.addEventListener("result", e=>{
+    let t=""; for(const r of e.results) t += r[0].transcript;
+    onText(t.replace(/[.,!?]$/,"").trim());
+  });
+  rec.addEventListener("end", stop);
+  rec.addEventListener("error", ev=>{
+    stop();
+    if(ev.error==="not-allowed")
+      alert("마이크 사용이 차단되어 있어요.\n설정 → Safari → 마이크에서 허용해 주세요.");
+  });
+}
+
+setupVoice(document.getElementById("micBtn"), "en-US", t=>{
+  const q=document.getElementById("q");
+  q.value=t; query=t; ci=0; render();
+});
+setupVoice(document.getElementById("kmic"), "ko-KR", t=>{
+  document.getElementById("kin").value=t; renderMaker();
+});
+
+/* ---------- 문장 도우미 ----------
+   한국어 문장에서 단어장에 있는 단어를 찾아 준다.
+   조사·어미가 붙어도 걸리도록 뜻에서 어간을 뽑아 대조한다. */
+
+// 뜻 문자열에서 검색용 낱말들을 뽑아낸다: "~를 살펴보다" → ["살펴보다"]
+function korTerms(m){
+  return m.replace(/[（(][^)）]*[)）]/g,"")   // 괄호 설명 제거
+          .replace(/—.*$/,"")                 // 대시 뒤 부연 제거
+          .split(/[,、/·]/)
+          .map(t=>t.replace(/~[를을이가에서의로]?/g," ").replace(/\s+/g," ").trim())
+          .filter(t=>/[가-힣]/.test(t));
+}
+
+// 과거형 축약: 그리다→그렸, 자다→잤, 보다→봤
+function contracted(stem){
+  if(!stem) return null;
+  const c=stem.charCodeAt(stem.length-1)-0xAC00;
+  if(c<0||c>11171||c%28!==0) return null;      // 받침 있으면 축약 안 일어남
+  const jung=Math.floor(c/28)%21, cho=Math.floor(c/28/21);
+  const map={0:0,1:1,4:4,5:5,8:9,13:14,20:6};   // ㅏㅐㅓㅔ 그대로 / ㅗ→ㅘ / ㅜ→ㅝ / ㅣ→ㅕ
+  if(!(jung in map)) return null;
+  const ch=0xAC00+((cho*21+map[jung])*28)+20;   // 받침 ㅆ
+  return stem.slice(0,-1)+String.fromCharCode(ch);
+}
+
+// 한 낱말이 문장에 나타나는지 볼 때 쓸 형태들. [형태, 한글자허용]
+function korForms(term){
+  const out=new Map();
+  const push=(f,short)=>{ if(f && (f.length>=2 || short)) out.set(f, out.get(f)||short); };
+  const derive=(t,short)=>{
+    push(t,short);
+    const v=t.match(/^(.+)다$/);                 // 동사·형용사 어간
+    if(v){
+      const one = short && v[1].length===1;
+      push(v[1], one);
+      push(contracted(v[1]), one);               // 과거형
+    }
+    const a=t.match(/^(.+?)(한|인|은|는|던|운|나|린)$/); // 관형형·불규칙
+    if(a && a[1].length>=2) push(a[1],false);
+  };
+  derive(term,true);
+  // 뜻이 여러 낱말이면 각 낱말도 따로 본다 ("천둥번개를 동반한 비" → "천둥번개")
+  if(/\s/.test(term)){
+    term.split(/\s+/).forEach(tk=>{
+      derive(tk.replace(/[를을이가은는의에서로와과]$/,""), false);
+    });
+  }
+  return [...out.entries()];
+}
+
+const ENDINGS="요|아|어|았|었|는|은|을|를|ㄹ|고|지|기|니|나|면|자|ㅁ|음|와|워|여|해|이|가|도|만|에";
+
+function findWords(input){
+  const text=input.trim();
+  if(!text) return {hits:[],ranges:[]};
+  const low=text.toLowerCase();
+  const hits=[], ranges=[];
+
+  WORDS.forEach(d=>{
+    let best=null;
+
+    // 영어 단어를 그대로 쓴 경우
+    const ew=d.w.toLowerCase();
+    const ei=low.indexOf(ew);
+    if(ei>=0) best={i:ei,len:ew.length,via:d.w};
+
+    korTerms(d.m).forEach(term=>{
+      korForms(term).forEach(([f,short])=>{
+        if(f.length>=2){
+          const i=text.indexOf(f);
+          if(i>=0 && (!best||f.length>best.len)) best={i,len:f.length,via:f};
+        }else if(short){
+          // 어간이 한 글자면 어미가 붙은 형태일 때만 인정 ("자"+"요")
+          const re=new RegExp(f+"("+ENDINGS+")");
+          const m2=re.exec(text);
+          if(m2 && (!best||best.len<2)) best={i:m2.index,len:m2[0].length,via:m2[0]};
+        }
+      });
+    });
+
+    if(best){ hits.push({d,...best}); ranges.push([best.i,best.i+best.len]); }
+  });
+
+  hits.sort((a,b)=>a.i-b.i);
+  return {hits,ranges};
+}
+
+// 찾은 부분은 노란색, 못 찾은 부분은 빨간색으로 보여 준다
+function coverage(text,ranges){
+  if(!text.trim()) return "";
+  const merged=[];
+  ranges.slice().sort((a,b)=>a[0]-b[0]).forEach(r=>{
+    const last=merged[merged.length-1];
+    if(last && r[0]<=last[1]) last[1]=Math.max(last[1],r[1]);
+    else merged.push(r.slice());
+  });
+  let out="",p=0;
+  merged.forEach(([s,e])=>{
+    if(s>p) out+=missSpan(text.slice(p,s));
+    out+="<mark>"+esc(text.slice(s,e))+"</mark>";
+    p=e;
+  });
+  if(p<text.length) out+=missSpan(text.slice(p));
+  return out;
+}
+// 조사·공백처럼 굳이 표시할 필요 없는 부분은 그냥 두고, 낱말만 빨갛게
+function missSpan(chunk){
+  return chunk.split(/(\s+)/).map(part=>{
+    if(!part.trim()) return esc(part);
+    return /[가-힣a-zA-Z]{2,}/.test(part)
+      ? '<span class="miss">'+esc(part)+"</span>" : esc(part);
+  }).join("");
+}
+
+function renderMaker(){
+  const text=document.getElementById("kin").value;
+  const out=document.getElementById("mkOut");
+  if(!text.trim()){ out.innerHTML=""; return; }
+
+  const {hits,ranges}=findWords(text);
+  let html=`<div class="cov"><span class="lead">노란색은 단어장에 있는 말, 빨간색은 아직 없는 말이에요.</span>${coverage(text,ranges)}</div>`;
+
+  if(!hits.length){
+    html+=`<div class="mk-none">이 문장에 쓸 만한 단어가 아직 단어장에 없어요.<br>더 쉬운 말로 바꿔서 다시 해 보세요.</div>`;
+  }else{
+    html+=`<p class="mk-count">쓸 수 있는 단어 ${hits.length}개</p>`;
+    html+=hits.map(({d})=>`<article class="entry">
+      <div class="w">${esc(d.w)}</div>
+      <div class="m">${esc(d.m)}</div>
+      <div class="s">${mark(d.s)}</div>
+      <div class="side">
+        <button class="mini" data-say="${esc(d.w)}" aria-label="발음 듣기">🔊</button>
+      </div>
+    </article>`).join("");
+  }
+  out.innerHTML=html;
+}
+
+document.getElementById("mkGo").addEventListener("click", renderMaker);
+document.getElementById("kin").addEventListener("input", renderMaker);
+document.getElementById("mkOut").addEventListener("click", e=>{
+  const sy=e.target.closest("[data-say]"); if(sy) say(sy.dataset.say);
 });
 
 document.getElementById("printBtn").addEventListener("click", ()=>{ renderPrint(); window.print(); });
