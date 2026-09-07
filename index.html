@@ -62,9 +62,11 @@ header{
 .chips{display:flex;gap:7px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
 .chip{
+  display:inline-flex;align-items:center;gap:5px;
   border:1px solid #40587A;background:transparent;color:#B9C9DC;
-  border-radius:999px;padding:5px 12px;font-size:13.5px;white-space:nowrap;
+  border-radius:999px;padding:5px 12px 5px 10px;font-size:13.5px;white-space:nowrap;
 }
+.chip svg{width:14px;height:14px;display:block;flex:none}
 .chip[aria-pressed="true"]{background:var(--mark);border-color:var(--mark);color:#1B2A41;font-weight:600}
 
 /* ---------- 목록 ---------- */
@@ -643,27 +645,31 @@ let learned = new Set(JSON.parse(store.get("learned")||"[]"));
 const saveLearned = ()=> store.set("learned", JSON.stringify([...learned]));
 
 /* ---------- 상태 ---------- */
-const BOOKS = [...new Set(WORDS.map(d=>d.b).filter(Boolean))];
-const FILTERS = [
-  {id:"all",  label:"전체"},
-  {id:"todo", label:"안 외운 것"},
-  {id:"done", label:"외운 것"},
-  ...(BOOKS.length>1 ? BOOKS.map(b=>({id:"B:"+b, label:b})) : [])
-];
-let filter="all", query="", hide=false, mode="list", ci=0, revealed=false;
-
 const esc = t => t.replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const mark = t => esc(t).replace(/\*\*(.+?)\*\*/g, "<mark>$1</mark>");
 const plain = t => t.replace(/\*\*/g,"");
-
 /* 마이크·프린터와 같은 굵기·같은 결의 선 아이콘 */
 const SVG = (p)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 const ICON_CHECK = SVG(`<path d="M4.5 12.8l4.6 4.6L19.6 6.9"/>`);
 const ICON_TICKET = SVG(`<path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2 2.4 2.4 0 0 0 0 6 2 2 0 0 1-2 2H5a2 2 0 0 1-2-2 2.4 2.4 0 0 0 0-6Z"/><path d="M9.5 7.6v8.8"/>`);
+const ICON_ALL  = SVG(`<path d="M4 7.5h16M4 12h16M4 16.5h16"/>`);
+const ICON_TODO = SVG(`<circle cx="12" cy="12" r="7.6"/>`);
+const ICON_DONE = SVG(`<path d="M5 12.6l4.5 4.5L19.2 7.2"/>`);
 const ICON_PLANE = SVG(`<path d="M3 13.2 20.6 4.4 12.6 21l-2.5-6.4z"/><path d="M10.1 14.6 20.6 4.4"/>`);
 const ICON_SOUND = SVG(`<path d="M4 9.3h3.3L12 5.4v13.2L7.3 14.7H4a1 1 0 0 1-1-1v-3.4a1 1 0 0 1 1-1Z"/>
   <path d="M15.6 9.4a3.7 3.7 0 0 1 0 5.2"/><path d="M18.2 6.8a7.4 7.4 0 0 1 0 10.4"/>`);
+
+const BOOKS = [...new Set(WORDS.map(d=>d.b).filter(Boolean))];
+const FILTERS = [
+  {id:"all",  label:"전체",      ic:ICON_ALL},
+  {id:"todo", label:"안 외운 것", ic:ICON_TODO},
+  {id:"done", label:"외운 것",    ic:ICON_DONE},
+  ...(BOOKS.length>1 ? BOOKS.map(b=>({id:"B:"+b, label:b, ic:""})) : [])
+];
+let filter="all", query="", hide=false, mode="list", ci=0, revealed=false;
+
+
 
 function visible(){
   const q = query.trim().toLowerCase();
@@ -696,7 +702,7 @@ function renderList(){
       
       <div class="side">
         <button class="mini ${on?"on":""}" data-done="${esc(key(d))}"
-                aria-label="${on?"외움 해제":"외움 표시"}">${ICON_CHECK}</button>
+                aria-label="${on?"외움 해제":"외움 표시"}">${on?ICON_CHECK:ICON_TODO}</button>
         <button class="mini" data-say="${esc(d.w)}" aria-label="발음 듣기">${ICON_SOUND}</button>
       </div>
     </article>`;
@@ -754,7 +760,7 @@ function render(){
 /* ---------- 이벤트 ---------- */
 const chips = document.getElementById("chips");
 chips.innerHTML = FILTERS.map(f=>
-  `<button class="chip" data-f="${f.id}" aria-pressed="${f.id==="all"}">${f.label}</button>`).join("");
+  `<button class="chip" data-f="${f.id}" aria-pressed="${f.id==="all"}">${f.ic||""}${f.label}</button>`).join("");
 chips.addEventListener("click", e=>{
   const b=e.target.closest("[data-f]"); if(!b) return;
   filter=b.dataset.f; ci=0; revealed=false;
