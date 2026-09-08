@@ -299,16 +299,47 @@ main{padding:12px 12px 90px;max-width:640px;margin:0 auto}
   position:fixed;left:0;right:0;bottom:0;z-index:20;
   background:rgba(255,255,255,.94);backdrop-filter:blur(8px);
   border-top:1px solid var(--rule);
-  display:flex;gap:8px;padding:9px 12px calc(9px + env(safe-area-inset-bottom));
+  display:flex;gap:5px;padding:9px 9px calc(9px + env(safe-area-inset-bottom));
   max-width:640px;margin:0 auto;
 }
 .bar button{
   flex:1;border:1px solid var(--rule);background:#fff;border-radius:10px;
-  padding:11px 1px;font-size:12.5px;letter-spacing:-.02em;
+  padding:11px 0;font-size:11.5px;letter-spacing:-.03em;
 }
 .bar .dot{margin-left:2px}
 .bar button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
 body.makemode .tools,body.makemode .chips{display:none}
+
+/* ---------- 교재 몰아보기 ---------- */
+#reader{display:none;padding:14px 12px 100px;max-width:640px;margin:0 auto}
+#reader.on{display:block}
+.rd-key{display:flex;flex-wrap:wrap;align-items:center;gap:5px 14px;
+  font-size:12px;color:var(--ink-soft);margin:0 3px 12px}
+.rd-key i{display:inline-block;width:11px;height:11px;border-radius:3px;
+  margin-right:5px;vertical-align:-1px}
+.rd-key .y{background:var(--mark)}
+.rd-key .g{background:#CDEBD8}
+.rd-books{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.rd-books button{border:1px solid var(--rule);background:#fff;border-radius:999px;
+  padding:7px 13px;font-size:12.5px;color:var(--ink)}
+.rd-books button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.rd-les{border:1px solid var(--rule);border-radius:13px;background:#fff;margin:0 0 10px;overflow:hidden}
+.rd-hd{display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  border:0;background:#fff;padding:13px 14px;font-size:14.5px;color:var(--ink)}
+.rd-hd b{font-weight:700}
+.rd-hd .pg{margin-left:auto;font-size:11.5px;color:var(--ink-soft);white-space:nowrap}
+.rd-hd .ar{font-size:11px;color:var(--ink-soft);margin-left:2px}
+.rd-body{border-top:1px solid var(--rule);padding:12px 14px 14px}
+.rd-s{font-size:15.5px;line-height:1.8;margin:0 0 3px;letter-spacing:-.01em}
+.rd-s .hl{background:var(--mark);border-radius:4px;padding:0 2px;font-weight:600;cursor:pointer}
+.rd-s .hl.done{background:#CDEBD8}
+.rd-tip{display:inline-block;margin:3px 0 7px;font-size:12.5px;
+  background:var(--ink);color:#fff;border-radius:8px;padding:5px 10px}
+.rd-tip .en{opacity:.7;margin-right:6px}
+.rd-play{border:1px solid var(--rule);background:#fff;border-radius:9px;
+  padding:6px 11px;font-size:12px;color:var(--ink);margin:10px 0 0}
+.rd-empty{font-size:13px;color:var(--ink-soft);padding:20px 4px}
+body.makemode .tools{display:none}
 
 /* ---------- 인쇄(A4) ---------- */
 #print{display:none}
@@ -406,6 +437,8 @@ body.makemode .tools,body.makemode .chips{display:none}
   <div id="dexGrid"></div>
 </section>
 
+<section id="reader"></section>
+
 <section id="settings"></section>
 
 <div id="cityModal" hidden><div class="cm-box" id="cmBox"></div></div>
@@ -414,6 +447,7 @@ body.makemode .tools,body.makemode .chips{display:none}
   <button id="mList" aria-pressed="true">목록</button>
   <button id="mCard" aria-pressed="false">카드</button>
   <button id="mMake" aria-pressed="false">문장</button>
+  <button id="mRead" aria-pressed="false">본문</button>
   <button id="mDex"  aria-pressed="false">Passport<i class="dot" id="dexDot" hidden></i></button>
   <button id="mSet"  aria-pressed="false">설정</button>
 </nav>
@@ -798,7 +832,605 @@ const WORDS = [
   {id:"pick", w:"pick", m:"고르다", s:"They **pick** the best dancer.", b:"Seed2(A2)", l:"Lesson 8", p:"97"},
   {id:"best", w:"best", m:"가장 좋은", s:"They pick the **best** dancer.", b:"Seed2(A2)", l:"Lesson 8", p:"97"},
   {id:"dancer", w:"dancer", m:"춤추는 사람", s:"They pick the best **dancer**.", b:"Seed2(A2)", l:"Lesson 8", p:"97"},
-  {id:"funny", w:"funny", m:"웃기는", s:"The bird of paradise’s dance is colorful and **funny**.", b:"Seed2(A2)", l:"Lesson 8", p:"97"}
+  {id:"funny", w:"funny", m:"웃기는", s:"The bird of paradise’s dance is colorful and **funny**.", b:"Seed2(A2)", l:"Lesson 8", p:"97"},
+
+  /* ================= Seed2(A3) ================= */
+  {id:"hide-and-seek", w:"hide-and-seek", m:"숨바꼭질", s:"Igor is playing **hide-and-seek** with the fairies and elves.", b:"Seed2(A3)", l:"Lesson 1", p:"8"},
+  {id:"fairy", w:"fairy", m:"요정", s:"Igor is playing hide-and-seek with the **fairies** and elves.", b:"Seed2(A3)", l:"Lesson 1", p:"8"},
+  {id:"elf", w:"elf", m:"꼬마 요정", s:"Igor is playing hide-and-seek with the fairies and **elves**.", b:"Seed2(A3)", l:"Lesson 1", p:"8"},
+  {id:"stand", w:"stand", m:"서다", s:"He **stands** behind a tree, but an elf finds him.", b:"Seed2(A3)", l:"Lesson 1", p:"8"},
+  {id:"behind", w:"behind", m:"~ 뒤에", s:"He stands **behind** a tree, but an elf finds him.", b:"Seed2(A3)", l:"Lesson 1", p:"8"},
+  {id:"tree", w:"tree", m:"나무", s:"He stands behind a **tree**, but an elf finds him.", b:"Seed2(A3)", l:"Lesson 1", p:"8"},
+  {id:"sit", w:"sit", m:"앉다", s:"He **sits** behind a rock, but a fairy finds him.", b:"Seed2(A3)", l:"Lesson 1", p:"8"},
+  {id:"rock", w:"rock", m:"바위", s:"He sits behind a **rock**, but a fairy finds him.", b:"Seed2(A3)", l:"Lesson 1", p:"8"},
+  {id:"game", w:"game", m:"놀이, 게임", s:"“This **game** isn’t for giants,” he says.", b:"Seed2(A3)", l:"Lesson 1", p:"8"},
+  {id:"giant-2", w:"giant", m:"거인", s:"“This game isn’t for **giants**,” he says.", b:"Seed2(A3)", l:"Lesson 1", p:"8"},
+  {id:"ask-for-help", w:"ask for help", m:"도움을 청하다", s:"Igor **asks** a wizard **for help**.", b:"Seed2(A3)", l:"Lesson 1", p:"8"},
+  {id:"wizard", w:"wizard", m:"마법사", s:"Igor asks a **wizard** for help.", b:"Seed2(A3)", l:"Lesson 1", p:"8"},
+  {id:"potion", w:"potion", m:"마법의 물약", s:"“Try this **potion**,” says the wizard.", b:"Seed2(A3)", l:"Lesson 1", p:"8"},
+  {id:"next-time", w:"next time", m:"다음번에", s:"The **next time** the friends play, Igor drinks the potion and turns invisible!", b:"Seed2(A3)", l:"Lesson 1", p:"9"},
+  {id:"turn-2", w:"turn", m:"~로 변하다", s:"The next time the friends play, Igor drinks the potion and **turns** invisible!", b:"Seed2(A3)", l:"Lesson 1", p:"9"},
+  {id:"invisible", w:"invisible", m:"눈에 보이지 않는", s:"The next time the friends play, Igor drinks the potion and turns **invisible**!", b:"Seed2(A3)", l:"Lesson 1", p:"9"},
+  {id:"return", w:"return", m:"돌아가다", s:"Later, Igor **returns** to the wizard.", b:"Seed2(A3)", l:"Lesson 1", p:"9"},
+  {id:"please", w:"please", m:"제발", s:"“**Please** turn me back,” Igor says.", b:"Seed2(A3)", l:"Lesson 1", p:"9"},
+  {id:"turn-back", w:"turn back", m:"원래대로 되돌리다", s:"“Please **turn** me **back**,” Igor says.", b:"Seed2(A3)", l:"Lesson 1", p:"9"},
+  {id:"a-few", w:"a few", m:"몇몇의", s:"“Just wait **a few** months,” says the wizard.", b:"Seed2(A3)", l:"Lesson 1", p:"9"},
+  {id:"month", w:"month", m:"달, 개월", s:"“Just wait a few **months**,” says the wizard.", b:"Seed2(A3)", l:"Lesson 1", p:"9"},
+  {id:"just", w:"just", m:"막, 방금", s:"Mona **just** moved to Finland, and she doesn’t know anyone yet.", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"move-to", w:"move to", m:"~로 이사하다", s:"Mona just **moved to** Finland, and she doesn’t know anyone yet.", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"know", w:"know", m:"알다", s:"Mona just moved to Finland, and she doesn’t **know** anyone yet.", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"anyone", w:"anyone", m:"아무도", s:"Mona just moved to Finland, and she doesn’t know **anyone** yet.", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"one-day", w:"one day", m:"어느 날", s:"**One day**, Mona sees two girls jumping rope.", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"girl", w:"girl", m:"여자아이", s:"One day, Mona sees two **girls** jumping rope.", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"jump-rope", w:"jump rope", m:"줄넘기를 하다", s:"One day, Mona sees two girls **jumping rope**.", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"here", w:"here", m:"여기에", s:"“We don’t have that **here**,” says Essi.", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"face", w:"face", m:"~를 마주 보다", s:"“Stand **facing** each other,” Mona says.", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"each-other", w:"each other", m:"서로", s:"“Stand facing **each other**,” Mona says.", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"hold", w:"hold", m:"잡다", s:"“**Hold** one end of both ropes.”", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"end-2", w:"end", m:"끝부분", s:"“Hold one **end** of both ropes.”", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"both", w:"both", m:"둘 다의", s:"“Hold one end of **both** ropes.”", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"rope", w:"rope", m:"줄, 밧줄", s:"“Hold one end of both **ropes**.”", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"swing", w:"swing", m:"휘둘러 돌리다", s:"“Now, **swing** the ropes in circles in opposite directions.”", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"opposite", w:"opposite", m:"반대의", s:"“Now, swing the ropes in circles in **opposite** directions.”", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"direction", w:"direction", m:"방향", s:"“Now, swing the ropes in circles in opposite **directions**.”", b:"Seed2(A3)", l:"Lesson 2", p:"20"},
+  {id:"jump-in", w:"jump in", m:"뛰어들다", s:"Mona **jumps in**.", b:"Seed2(A3)", l:"Lesson 2", p:"21"},
+  {id:"spin", w:"spin", m:"빙글빙글 돌다", s:"She hops and **spins**.", b:"Seed2(A3)", l:"Lesson 2", p:"21"},
+  {id:"amazed", w:"amazed", m:"깜짝 놀란", s:"Essi and Aada look at each other, **amazed**.", b:"Seed2(A3)", l:"Lesson 2", p:"21"},
+  {id:"sure", w:"sure", m:"그럼, 물론이지", s:"“**Sure**!” says Mona.", b:"Seed2(A3)", l:"Lesson 2", p:"21"},
+  {id:"new", w:"new", m:"새로운", s:"And the **new** friends have fun all afternoon.", b:"Seed2(A3)", l:"Lesson 2", p:"21"},
+  {id:"afternoon", w:"afternoon", m:"오후", s:"And the new friends have fun all **afternoon**.", b:"Seed2(A3)", l:"Lesson 2", p:"21"},
+  {id:"dodgeball", w:"dodgeball", m:"피구", s:"Our class is playing **dodgeball**.", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"really", w:"really", m:"정말로", s:"I **really** want our team to win.", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"team", w:"team", m:"팀, 편", s:"I really want our **team** to win.", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"grip", w:"grip", m:"꽉 쥐다", s:"I **grip** the ball tightly.", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"tightly", w:"tightly", m:"꽉, 단단히", s:"I grip the ball **tightly**.", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"aim-at", w:"aim at", m:"~를 겨냥하다", s:"I **aim at** her and throw hard.", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"throw", w:"throw", m:"던지다", s:"I aim at her and **throw** hard.", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"hard-3", w:"hard", m:"세게", s:"I aim at her and throw **hard**.", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"loudly", w:"loudly", m:"큰 소리로", s:"I laugh **loudly** and yell, “Gotcha, slowpoke!”", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"yell", w:"yell", m:"소리 지르다", s:"I laugh loudly and **yell**, “Gotcha, slowpoke!”", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"gotcha", w:"gotcha", m:"잡았다", s:"I laugh loudly and yell, “**Gotcha**, slowpoke!”", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"slowpoke", w:"slowpoke", m:"느림보", s:"I laugh loudly and yell, “Gotcha, **slowpoke**!”", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"mean-2", w:"mean", m:"못된, 심술궂은", s:"“That’s **mean**, Sarah,” says Emily, holding her arm in pain.", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"arm", w:"arm", m:"팔", s:"“That’s mean, Sarah,” says Emily, holding her **arm** in pain.", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"pain", w:"pain", m:"아픔, 통증", s:"“That’s mean, Sarah,” says Emily, holding her arm in **pain**.", b:"Seed2(A3)", l:"Lesson 3", p:"32"},
+  {id:"run", w:"run", m:"달리다", s:"I **run** to Emily fast.", b:"Seed2(A3)", l:"Lesson 3", p:"33"},
+  {id:"fast-2", w:"fast", m:"빨리", s:"I run to Emily **fast**.", b:"Seed2(A3)", l:"Lesson 3", p:"33"},
+  {id:"sorry", w:"sorry", m:"미안한", s:"“**Sorry**,” I say, “I got too excited.”", b:"Seed2(A3)", l:"Lesson 3", p:"33"},
+  {id:"okay", w:"okay", m:"괜찮은", s:"“That’s **okay**,” says Emily.", b:"Seed2(A3)", l:"Lesson 3", p:"33"},
+  {id:"anyway", w:"anyway", m:"어쨌든", s:"“**Anyway**, you play well.”", b:"Seed2(A3)", l:"Lesson 3", p:"33"},
+  {id:"well", w:"well", m:"잘", s:"“Anyway, you play **well**.”", b:"Seed2(A3)", l:"Lesson 3", p:"33"},
+  {id:"thanks", w:"thanks", m:"고마워", s:"“**Thanks**,” I say.", b:"Seed2(A3)", l:"Lesson 3", p:"33"},
+  {id:"from-now-on", w:"from now on", m:"이제부터", s:"“**From now on**, I won’t be mean even if I’m trying to win.”", b:"Seed2(A3)", l:"Lesson 3", p:"33"},
+  {id:"even-if", w:"even if", m:"비록 ~하더라도", s:"“From now on, I won’t be mean **even if** I’m trying to win.”", b:"Seed2(A3)", l:"Lesson 3", p:"33"},
+  {id:"try-to", w:"try to", m:"~하려고 애쓰다", s:"“From now on, I won’t be mean even if I’m **trying to** win.”", b:"Seed2(A3)", l:"Lesson 3", p:"33"},
+  {id:"playground", w:"playground", m:"놀이터", s:"Imagine a **playground** high in the trees.", b:"Seed2(A3)", l:"Lesson 4", p:"44"},
+  {id:"high", w:"high", m:"높은 곳에", s:"Imagine a playground **high** in the trees.", b:"Seed2(A3)", l:"Lesson 4", p:"44"},
+  {id:"ladder", w:"ladder", m:"사다리", s:"It has **ladders**, bridges, and ziplines.", b:"Seed2(A3)", l:"Lesson 4", p:"44"},
+  {id:"bridge", w:"bridge", m:"다리", s:"It has ladders, **bridges**, and ziplines.", b:"Seed2(A3)", l:"Lesson 4", p:"44"},
+  {id:"zipline", w:"zipline", m:"짚라인", s:"It has ladders, bridges, and **ziplines**.", b:"Seed2(A3)", l:"Lesson 4", p:"44"},
+  {id:"rope-course", w:"rope course", m:"로프 코스", s:"This is a **rope course**.", b:"Seed2(A3)", l:"Lesson 4", p:"44"},
+  {id:"great", w:"great", m:"아주 좋은", s:"It’s a **great** place to challenge yourself.", b:"Seed2(A3)", l:"Lesson 4", p:"44"},
+  {id:"challenge", w:"challenge", m:"도전하다", s:"It’s a great place to **challenge** yourself.", b:"Seed2(A3)", l:"Lesson 4", p:"44"},
+  {id:"workout", w:"workout", m:"운동", s:"A rope course is a **workout** for your body.", b:"Seed2(A3)", l:"Lesson 4", p:"44"},
+  {id:"body", w:"body", m:"몸", s:"A rope course is a workout for your **body**.", b:"Seed2(A3)", l:"Lesson 4", p:"44"},
+  {id:"climb", w:"climb", m:"오르다", s:"You can get stronger by **climbing** around.", b:"Seed2(A3)", l:"Lesson 4", p:"44"},
+  {id:"around-2", w:"around", m:"여기저기", s:"You can get stronger by climbing **around**.", b:"Seed2(A3)", l:"Lesson 4", p:"44"},
+  {id:"balance", w:"balance", m:"균형을 잡다", s:"You can practice **balancing** on the wobbly bridges.", b:"Seed2(A3)", l:"Lesson 4", p:"44"},
+  {id:"wobbly", w:"wobbly", m:"흔들거리는", s:"You can practice balancing on the **wobbly** bridges.", b:"Seed2(A3)", l:"Lesson 4", p:"44"},
+  {id:"develop", w:"develop", m:"발달시키다", s:"A rope course **develops** your mind, too.", b:"Seed2(A3)", l:"Lesson 4", p:"45"},
+  {id:"mind", w:"mind", m:"마음, 생각하는 힘", s:"A rope course develops your **mind**, too.", b:"Seed2(A3)", l:"Lesson 4", p:"45"},
+  {id:"must", w:"must", m:"반드시 ~해야 한다", s:"You **must** focus.", b:"Seed2(A3)", l:"Lesson 4", p:"45"},
+  {id:"focus", w:"focus", m:"집중하다", s:"You must **focus**.", b:"Seed2(A3)", l:"Lesson 4", p:"45"},
+  {id:"brave", w:"brave", m:"용감한", s:"When you climb high, you learn to be **brave**, too.", b:"Seed2(A3)", l:"Lesson 4", p:"45"},
+  {id:"many", w:"many", m:"많은", s:"There are **many** reasons to try a rope course.", b:"Seed2(A3)", l:"Lesson 4", p:"45"},
+  {id:"reason", w:"reason", m:"이유", s:"There are many **reasons** to try a rope course.", b:"Seed2(A3)", l:"Lesson 4", p:"45"},
+  {id:"come-down", w:"come down", m:"내려오다", s:"“What **comes down** but never goes up?”", b:"Seed2(A3)", l:"Lesson 5", p:"60"},
+  {id:"go-up", w:"go up", m:"올라가다", s:"“What comes down but never **goes up**?”", b:"Seed2(A3)", l:"Lesson 5", p:"60"},
+  {id:"give", w:"give", m:"주다", s:"Ms. Kennedy **gives** her class a riddle to solve.", b:"Seed2(A3)", l:"Lesson 5", p:"60"},
+  {id:"riddle", w:"riddle", m:"수수께끼", s:"Ms. Kennedy gives her class a **riddle** to solve.", b:"Seed2(A3)", l:"Lesson 5", p:"60"},
+  {id:"solve", w:"solve", m:"풀다", s:"Ms. Kennedy gives her class a riddle to **solve**.", b:"Seed2(A3)", l:"Lesson 5", p:"60"},
+  {id:"answer", w:"answer", m:"답", s:"“To find the **answer**, you need to complete a puzzle.”", b:"Seed2(A3)", l:"Lesson 5", p:"60"},
+  {id:"complete", w:"complete", m:"완성하다", s:"“To find the answer, you need to **complete** a puzzle.”", b:"Seed2(A3)", l:"Lesson 5", p:"60"},
+  {id:"puzzle", w:"puzzle", m:"퍼즐", s:"“To find the answer, you need to complete a **puzzle**.”", b:"Seed2(A3)", l:"Lesson 5", p:"60"},
+  {id:"hint", w:"hint", m:"힌트", s:"“When the puzzle is finished, you will find a **hint**,” Ms. Kennedy explains.", b:"Seed2(A3)", l:"Lesson 5", p:"60"},
+  {id:"student", w:"student", m:"학생", s:"The **students** are very excited.", b:"Seed2(A3)", l:"Lesson 5", p:"60"},
+  {id:"excited", w:"excited", m:"신이 난", s:"The students are very **excited**.", b:"Seed2(A3)", l:"Lesson 5", p:"60"},
+  {id:"divide-into", w:"divide into", m:"~로 나누다", s:"Ms. Kennedy **divides** the students **into** four groups.", b:"Seed2(A3)", l:"Lesson 5", p:"60"},
+  {id:"group", w:"group", m:"모둠, 무리", s:"Ms. Kennedy divides the students into four **groups**.", b:"Seed2(A3)", l:"Lesson 5", p:"60"},
+  {id:"each", w:"each", m:"각각의", s:"She gives **each** group a puzzle.", b:"Seed2(A3)", l:"Lesson 5", p:"60"},
+  {id:"give-up", w:"give up", m:"포기하다", s:"It’s not easy, but they don’t **give up**.", b:"Seed2(A3)", l:"Lesson 5", p:"61"},
+  {id:"work-together", w:"work together", m:"함께 힘을 모으다", s:"Everyone **works together** to finish the puzzle.", b:"Seed2(A3)", l:"Lesson 5", p:"61"},
+  {id:"letter", w:"letter", m:"글자", s:"“Our hint is the **letter** R!” Group One says.", b:"Seed2(A3)", l:"Lesson 5", p:"61"},
+  {id:"rain", w:"rain", m:"비", s:"“**Rain**!” the students shout.", b:"Seed2(A3)", l:"Lesson 5", p:"61"},
+  {id:"congratulations", w:"congratulations", m:"축하해", s:"“**Congratulations**, you figured it out!” she smiles.", b:"Seed2(A3)", l:"Lesson 5", p:"61"},
+  {id:"figure-out", w:"figure out", m:"알아내다", s:"“Congratulations, you **figured** it **out**!” she smiles.", b:"Seed2(A3)", l:"Lesson 5", p:"61"},
+  {id:"soccer", w:"soccer", m:"축구", s:"Finally, the **soccer** tournament comes.", b:"Seed2(A3)", l:"Lesson 6", p:"72"},
+  {id:"tournament", w:"tournament", m:"토너먼트, 시합", s:"Finally, the soccer **tournament** comes.", b:"Seed2(A3)", l:"Lesson 6", p:"72"},
+  {id:"come", w:"come", m:"다가오다", s:"Finally, the soccer tournament **comes**.", b:"Seed2(A3)", l:"Lesson 6", p:"72"},
+  {id:"frown", w:"frown", m:"얼굴을 찡그리다", s:"“We can’t win,” Sadia says, **frowning**.", b:"Seed2(A3)", l:"Lesson 6", p:"72"},
+  {id:"terrible-2", w:"terrible", m:"형편없는", s:"“We’re **terrible**.”", b:"Seed2(A3)", l:"Lesson 6", p:"72"},
+  {id:"hang-head", w:"hang one’s head", m:"고개를 푹 숙이다", s:"The other kids **hang their heads**.", b:"Seed2(A3)", l:"Lesson 6", p:"72"},
+  {id:"that-s-why", w:"that’s why", m:"그래서 ~이다", s:"“**That’s why** we practice,” Ms. Lee smiles.", b:"Seed2(A3)", l:"Lesson 6", p:"72"},
+  {id:"every-day", w:"every day", m:"날마다", s:"They practice hard **every day**.", b:"Seed2(A3)", l:"Lesson 6", p:"72"},
+  {id:"pass", w:"pass", m:"패스하다, 건네주다", s:"They learn to **pass** the ball and cooperate.", b:"Seed2(A3)", l:"Lesson 6", p:"72"},
+  {id:"cooperate", w:"cooperate", m:"협동하다", s:"They learn to pass the ball and **cooperate**.", b:"Seed2(A3)", l:"Lesson 6", p:"72"},
+  {id:"finally-2", w:"finally", m:"마침내", s:"**Finally**, the soccer tournament comes.", b:"Seed2(A3)", l:"Lesson 6", p:"72"},
+  {id:"star-player", w:"star player", m:"스타 선수", s:"But the other team has a **star player**, and he’s too good.", b:"Seed2(A3)", l:"Lesson 6", p:"73"},
+  {id:"score", w:"score", m:"득점하다", s:"He **scores** all his team’s goals, and they win.", b:"Seed2(A3)", l:"Lesson 6", p:"73"},
+  {id:"goal", w:"goal", m:"골, 득점", s:"He scores all his team’s **goals**, and they win.", b:"Seed2(A3)", l:"Lesson 6", p:"73"},
+  {id:"lose", w:"lose", m:"지다", s:"“We **lost**!” Sadia cries.", b:"Seed2(A3)", l:"Lesson 6", p:"73"},
+  {id:"score-2", w:"score", m:"점수", s:"“The **score** doesn’t matter, Sadia,” Ms. Lee says.", b:"Seed2(A3)", l:"Lesson 6", p:"73"},
+  {id:"matter", w:"matter", m:"중요하다", s:"“The score doesn’t **matter**, Sadia,” Ms. Lee says.", b:"Seed2(A3)", l:"Lesson 6", p:"73"},
+  {id:"hard-work", w:"hard work", m:"노력", s:"“More important things are **hard work** and teamwork.”", b:"Seed2(A3)", l:"Lesson 6", p:"73"},
+  {id:"teamwork", w:"teamwork", m:"팀워크, 협동", s:"“More important things are hard work and **teamwork**.”", b:"Seed2(A3)", l:"Lesson 6", p:"73"},
+  {id:"real", w:"real", m:"진짜의", s:"“You’re the **real** winners.”", b:"Seed2(A3)", l:"Lesson 6", p:"73"},
+  {id:"winner", w:"winner", m:"이긴 사람", s:"“You’re the real **winners**.”", b:"Seed2(A3)", l:"Lesson 6", p:"73"},
+  {id:"music", w:"music", m:"음악", s:"Mr. Farrar, the **music** teacher, hears terrible noises.", b:"Seed2(A3)", l:"Lesson 7", p:"84"},
+  {id:"noise", w:"noise", m:"시끄러운 소리", s:"Mr. Farrar, the music teacher, hears terrible **noises**.", b:"Seed2(A3)", l:"Lesson 7", p:"84"},
+  {id:"band-room", w:"band room", m:"밴드 연습실", s:"They are coming from the **band room**.", b:"Seed2(A3)", l:"Lesson 7", p:"84"},
+  {id:"go-on", w:"go on", m:"(일이) 벌어지다", s:"“What’s **going on** here?” he asks.", b:"Seed2(A3)", l:"Lesson 7", p:"84"},
+  {id:"listen", w:"listen", m:"귀 기울여 듣다", s:"“Jesse won’t **listen**!” Valentina complains.", b:"Seed2(A3)", l:"Lesson 7", p:"84"},
+  {id:"complain", w:"complain", m:"불평하다", s:"“Jesse won’t listen!” Valentina **complains**.", b:"Seed2(A3)", l:"Lesson 7", p:"84"},
+  {id:"blame", w:"blame", m:"~를 탓하다", s:"Jesse **blames** Valentina.", b:"Seed2(A3)", l:"Lesson 7", p:"84"},
+  {id:"point", w:"point", m:"요점, 목적", s:"“The **point** of this group composition assignment is cooperating.”", b:"Seed2(A3)", l:"Lesson 7", p:"85"},
+  {id:"composition", w:"composition", m:"작곡", s:"“The point of this group **composition** assignment is cooperating.”", b:"Seed2(A3)", l:"Lesson 7", p:"85"},
+  {id:"assignment", w:"assignment", m:"과제", s:"“The point of this group composition **assignment** is cooperating.”", b:"Seed2(A3)", l:"Lesson 7", p:"85"},
+  {id:"shame", w:"shame", m:"안타까운 일", s:"“This is really a **shame**.”", b:"Seed2(A3)", l:"Lesson 7", p:"85"},
+  {id:"talented", w:"talented", m:"재능 있는", s:"“You’re our most **talented** musicians.”", b:"Seed2(A3)", l:"Lesson 7", p:"85"},
+  {id:"musician", w:"musician", m:"음악가", s:"“You’re our most talented **musicians**.”", b:"Seed2(A3)", l:"Lesson 7", p:"85"},
+  {id:"seem", w:"seem", m:"~인 것 같다", s:"“But you can’t **seem** to work together.”", b:"Seed2(A3)", l:"Lesson 7", p:"85"},
+  {id:"walk-out", w:"walk out", m:"걸어 나가다", s:"He **walks out**, and the kids are left to think.", b:"Seed2(A3)", l:"Lesson 7", p:"85"},
+  {id:"sound", w:"sound", m:"소리", s:"Soon, Mr. Farrar hears different **sounds**.", b:"Seed2(A3)", l:"Lesson 7", p:"85"},
+  {id:"this-time", w:"this time", m:"이번에는", s:"**This time**, it’s music—in perfect harmony.", b:"Seed2(A3)", l:"Lesson 7", p:"85"},
+  {id:"perfect", w:"perfect", m:"완벽한", s:"This time, it’s music—in **perfect** harmony.", b:"Seed2(A3)", l:"Lesson 7", p:"85"},
+  {id:"harmony", w:"harmony", m:"화음, 조화", s:"This time, it’s music—in perfect **harmony**.", b:"Seed2(A3)", l:"Lesson 7", p:"85"},
+  {id:"animal", w:"animal", m:"동물", s:"Many **animals** use teamwork.", b:"Seed2(A3)", l:"Lesson 8", p:"96"},
+  {id:"use", w:"use", m:"사용하다", s:"Many animals **use** teamwork.", b:"Seed2(A3)", l:"Lesson 8", p:"96"},
+  {id:"killer-whale", w:"killer whale", m:"범고래", s:"**Killer whales** are one example.", b:"Seed2(A3)", l:"Lesson 8", p:"96"},
+  {id:"example", w:"example", m:"예, 보기", s:"Killer whales are one **example**.", b:"Seed2(A3)", l:"Lesson 8", p:"96"},
+  {id:"great-at", w:"great at", m:"~를 아주 잘하는", s:"They are **great at** hunting in groups.", b:"Seed2(A3)", l:"Lesson 8", p:"96"},
+  {id:"hunt", w:"hunt", m:"사냥하다", s:"They are great at **hunting** in groups.", b:"Seed2(A3)", l:"Lesson 8", p:"96"},
+  {id:"whale", w:"whale", m:"고래", s:"When a **whale** finds a seal, it calls the others.", b:"Seed2(A3)", l:"Lesson 8", p:"96"},
+  {id:"seal", w:"seal", m:"물개, 바다표범", s:"Killer whales hunt **seals** in groups near the South Pole.", b:"Seed2(A3)", l:"Lesson 8", p:"96"},
+  {id:"near", w:"near", m:"~ 가까이에", s:"Killer whales hunt seals in groups **near** the South Pole.", b:"Seed2(A3)", l:"Lesson 8", p:"96"},
+  {id:"split-up", w:"split up", m:"흩어지다", s:"The group **splits up** to find seals.", b:"Seed2(A3)", l:"Lesson 8", p:"96"},
+  {id:"rest", w:"rest", m:"쉬다", s:"Seals **rest** on floating ice blocks.", b:"Seed2(A3)", l:"Lesson 8", p:"96"},
+  {id:"floating", w:"floating", m:"떠 있는", s:"Seals rest on **floating** ice blocks.", b:"Seed2(A3)", l:"Lesson 8", p:"96"},
+  {id:"ice-block", w:"ice block", m:"얼음 덩어리", s:"Seals rest on floating **ice blocks**.", b:"Seed2(A3)", l:"Lesson 8", p:"96"},
+  {id:"together", w:"together", m:"함께", s:"**Together**, the group quickly swims toward the ice block.", b:"Seed2(A3)", l:"Lesson 8", p:"97"},
+  {id:"quickly", w:"quickly", m:"빠르게", s:"Together, the group **quickly** swims toward the ice block.", b:"Seed2(A3)", l:"Lesson 8", p:"97"},
+  {id:"swim", w:"swim", m:"헤엄치다", s:"Together, the group quickly **swims** toward the ice block.", b:"Seed2(A3)", l:"Lesson 8", p:"97"},
+  {id:"toward", w:"toward", m:"~쪽으로", s:"Together, the group quickly swims **toward** the ice block.", b:"Seed2(A3)", l:"Lesson 8", p:"97"},
+  {id:"fall-into", w:"fall into", m:"~ 속으로 빠지다", s:"The seal **falls into** the water.", b:"Seed2(A3)", l:"Lesson 8", p:"97"},
+  {id:"water", w:"water", m:"물", s:"The seal falls into the **water**.", b:"Seed2(A3)", l:"Lesson 8", p:"97"},
+  {id:"catch", w:"catch", m:"붙잡다", s:"The killer whales **catch** the seal.", b:"Seed2(A3)", l:"Lesson 8", p:"97"},
+  {id:"share", w:"share", m:"나누다", s:"They **share** the meal.", b:"Seed2(A3)", l:"Lesson 8", p:"97"},
+  {id:"meal", w:"meal", m:"식사, 먹이", s:"They share the **meal**.", b:"Seed2(A3)", l:"Lesson 8", p:"97"},
+
+  /* ================= Seed2(B1) ================= */
+  {id:"ad", w:"ad", m:"광고", s:"Rakshanda sees an **ad** for the City Art Museum.", b:"Seed2(B1)", l:"Lesson 1", p:"8"},
+  {id:"art", w:"art", m:"미술", s:"Rakshanda sees an ad for the City **Art** Museum.", b:"Seed2(B1)", l:"Lesson 1", p:"8"},
+  {id:"museum", w:"museum", m:"박물관", s:"Rakshanda sees an ad for the City Art **Museum**.", b:"Seed2(B1)", l:"Lesson 1", p:"8"},
+  {id:"look", w:"look", m:"봐, 보다", s:"“Mom, **look**!” she says.", b:"Seed2(B1)", l:"Lesson 1", p:"8"},
+  {id:"date", w:"date", m:"날짜", s:"Mom checks the **dates**, frowning.", b:"Seed2(B1)", l:"Lesson 1", p:"8"},
+  {id:"uncle", w:"uncle", m:"삼촌", s:"“We have to be at your **uncle**’s farm then.”", b:"Seed2(B1)", l:"Lesson 1", p:"8"},
+  {id:"farm", w:"farm", m:"농장", s:"“We have to be at your uncle’s **farm** then.”", b:"Seed2(B1)", l:"Lesson 1", p:"8"},
+  {id:"angrily", w:"angrily", m:"화가 나서", s:"Rakshanda frowns **angrily**.", b:"Seed2(B1)", l:"Lesson 1", p:"8"},
+  {id:"country", w:"country", m:"시골", s:"“It’s out in the **country**!”", b:"Seed2(B1)", l:"Lesson 1", p:"8"},
+  {id:"beautiful", w:"beautiful", m:"아름다운", s:"“It’s **beautiful** there,” Mom says.", b:"Seed2(B1)", l:"Lesson 1", p:"9"},
+  {id:"dirty", w:"dirty", m:"더러운", s:"“It’s boring and hot and **dirty**.”", b:"Seed2(B1)", l:"Lesson 1", p:"9"},
+  {id:"bug", w:"bug", m:"벌레", s:"“And there are **bugs** everywhere!”", b:"Seed2(B1)", l:"Lesson 1", p:"9"},
+  {id:"everywhere", w:"everywhere", m:"곳곳에", s:"“And there are bugs **everywhere**!”", b:"Seed2(B1)", l:"Lesson 1", p:"9"},
+  {id:"daughter", w:"daughter", m:"딸", s:"Mom frowns at her **daughter**.", b:"Seed2(B1)", l:"Lesson 1", p:"9"},
+  {id:"promise", w:"promise", m:"약속하다", s:"“We **promised** Uncle Ravi,” she says.", b:"Seed2(B1)", l:"Lesson 1", p:"9"},
+  {id:"garden", w:"garden", m:"정원, 텃밭", s:"“He needs our help in his **garden**.”", b:"Seed2(B1)", l:"Lesson 1", p:"9"},
+  {id:"young-lady", w:"young lady", m:"아가씨", s:"“So, you’re going, **young lady**, and that’s final.”", b:"Seed2(B1)", l:"Lesson 1", p:"9"},
+  {id:"that-s-final", w:"that’s final", m:"그걸로 끝이야", s:"“So, you’re going, young lady, and **that’s final**.”", b:"Seed2(B1)", l:"Lesson 1", p:"9"},
+  {id:"dig-up", w:"dig up", m:"파내다", s:"Uncle Ravi **digs up** weeds in the garden with a hoe.", b:"Seed2(B1)", l:"Lesson 2", p:"20"},
+  {id:"weed", w:"weed", m:"잡초", s:"Uncle Ravi digs up **weeds** in the garden with a hoe.", b:"Seed2(B1)", l:"Lesson 2", p:"20"},
+  {id:"hoe", w:"hoe", m:"괭이", s:"Uncle Ravi digs up weeds in the garden with a **hoe**.", b:"Seed2(B1)", l:"Lesson 2", p:"20"},
+  {id:"hand", w:"hand", m:"건네주다", s:"Then, he **hands** Rakshanda the hoe.", b:"Seed2(B1)", l:"Lesson 2", p:"20"},
+  {id:"should", w:"should", m:"~할 것이다", s:"“It **should** only take an hour.”", b:"Seed2(B1)", l:"Lesson 2", p:"20"},
+  {id:"only", w:"only", m:"겨우, 단지", s:"“It should **only** take an hour.”", b:"Seed2(B1)", l:"Lesson 2", p:"20"},
+  {id:"whole", w:"whole", m:"꼬박, 통째의", s:"“A **whole** hour!” Rakshanda says.", b:"Seed2(B1)", l:"Lesson 2", p:"20"},
+  {id:"help", w:"help", m:"돕다", s:"“Are you here to **help** or not?” Uncle Ravi asks.", b:"Seed2(B1)", l:"Lesson 2", p:"20"},
+  {id:"dig", w:"dig", m:"땅을 파다", s:"Rakshanda **digs** angrily as he leaves.", b:"Seed2(B1)", l:"Lesson 2", p:"20"},
+  {id:"leave-2", w:"leave", m:"떠나다", s:"Rakshanda digs angrily as he **leaves**.", b:"Seed2(B1)", l:"Lesson 2", p:"20"},
+  {id:"easel", w:"easel", m:"이젤", s:"She finishes and finds him at a painting **easel**.", b:"Seed2(B1)", l:"Lesson 2", p:"21"},
+  {id:"canvas", w:"canvas", m:"캔버스", s:"She sees the garden on his **canvas**.", b:"Seed2(B1)", l:"Lesson 2", p:"21"},
+  {id:"beauty", w:"beauty", m:"아름다움", s:"She sees its **beauty** for the first time.", b:"Seed2(B1)", l:"Lesson 2", p:"21"},
+  {id:"for-the-first-time", w:"for the first time", m:"처음으로", s:"She sees its beauty **for the first time**.", b:"Seed2(B1)", l:"Lesson 2", p:"21"},
+  {id:"paint", w:"paint", m:"그림을 그리다", s:"“Can you teach me to **paint**?” she asks, reaching for a brush.", b:"Seed2(B1)", l:"Lesson 2", p:"21"},
+  {id:"reach-for", w:"reach for", m:"~를 향해 손을 뻗다", s:"“Can you teach me to paint?” she asks, **reaching for** a brush.", b:"Seed2(B1)", l:"Lesson 2", p:"21"},
+  {id:"brush", w:"brush", m:"붓", s:"“Can you teach me to paint?” she asks, reaching for a **brush**.", b:"Seed2(B1)", l:"Lesson 2", p:"21"},
+  {id:"list", w:"list", m:"목록", s:"Rakshanda hands Mom a **list**.", b:"Seed2(B1)", l:"Lesson 3", p:"32"},
+  {id:"look-over", w:"look over", m:"훑어보다", s:"Mom **looks** it **over**, surprised.", b:"Seed2(B1)", l:"Lesson 3", p:"32"},
+  {id:"surprised", w:"surprised", m:"놀란", s:"Mom looks it over, **surprised**.", b:"Seed2(B1)", l:"Lesson 3", p:"32"},
+  {id:"dirt", w:"dirt", m:"흙", s:"“Why do you want **dirt**, seeds, and worms?”", b:"Seed2(B1)", l:"Lesson 3", p:"32"},
+  {id:"seed", w:"seed", m:"씨앗", s:"“Why do you want dirt, **seeds**, and worms?”", b:"Seed2(B1)", l:"Lesson 3", p:"32"},
+  {id:"worm", w:"worm", m:"지렁이", s:"“Why do you want dirt, seeds, and **worms**?”", b:"Seed2(B1)", l:"Lesson 3", p:"32"},
+  {id:"balcony", w:"balcony", m:"발코니", s:"“It’s all for my **balcony** garden,” Rakshanda says.", b:"Seed2(B1)", l:"Lesson 3", p:"32"},
+  {id:"several", w:"several", m:"여러 개의", s:"Rakshanda has **several** containers of dirt.", b:"Seed2(B1)", l:"Lesson 3", p:"33"},
+  {id:"container", w:"container", m:"통, 그릇", s:"Rakshanda has several **containers** of dirt.", b:"Seed2(B1)", l:"Lesson 3", p:"33"},
+  {id:"little", w:"little", m:"작은", s:"Each one has **little** sprouts growing in it.", b:"Seed2(B1)", l:"Lesson 3", p:"33"},
+  {id:"sprout", w:"sprout", m:"새싹", s:"Each one has little **sprouts** growing in it.", b:"Seed2(B1)", l:"Lesson 3", p:"33"},
+  {id:"grow", w:"grow", m:"자라다", s:"Each one has little sprouts **growing** in it.", b:"Seed2(B1)", l:"Lesson 3", p:"33"},
+  {id:"reach-into", w:"reach into", m:"~ 안으로 손을 넣다", s:"Rakshanda **reaches into** a box.", b:"Seed2(B1)", l:"Lesson 3", p:"33"},
+  {id:"pull-out", w:"pull out", m:"꺼내다", s:"She **pulls out** a handful of wriggling worms.", b:"Seed2(B1)", l:"Lesson 3", p:"33"},
+  {id:"handful", w:"handful", m:"한 줌", s:"She pulls out a **handful** of wriggling worms.", b:"Seed2(B1)", l:"Lesson 3", p:"33"},
+  {id:"wriggling", w:"wriggling", m:"꿈틀거리는", s:"She pulls out a handful of **wriggling** worms.", b:"Seed2(B1)", l:"Lesson 3", p:"33"},
+  {id:"fertilizer", w:"fertilizer", m:"거름, 비료", s:"“I see you have your **fertilizer**,” he says.", b:"Seed2(B1)", l:"Lesson 3", p:"33"},
+  {id:"nature", w:"nature", m:"자연", s:"Do you know what “**nature** schools” are?", b:"Seed2(B1)", l:"Lesson 4", p:"44"},
+  {id:"countryside", w:"countryside", m:"시골 지역", s:"Nature schools are special schools in the **countryside**.", b:"Seed2(B1)", l:"Lesson 4", p:"44"},
+  {id:"outdoor", w:"outdoor", m:"야외의", s:"They have many **outdoor** and creative classes.", b:"Seed2(B1)", l:"Lesson 4", p:"44"},
+  {id:"creative", w:"creative", m:"창의적인", s:"They have many outdoor and **creative** classes.", b:"Seed2(B1)", l:"Lesson 4", p:"44"},
+  {id:"benefit", w:"benefit", m:"~에게 이롭다", s:"Nature schools **benefit** students in a couple of ways.", b:"Seed2(B1)", l:"Lesson 4", p:"44"},
+  {id:"a-couple-of", w:"a couple of", m:"두어 가지의", s:"Nature schools benefit students in **a couple of** ways.", b:"Seed2(B1)", l:"Lesson 4", p:"44"},
+  {id:"respect", w:"respect", m:"존중하다", s:"Nature schools teach students to **respect** nature.", b:"Seed2(B1)", l:"Lesson 4", p:"44"},
+  {id:"program", w:"program", m:"프로그램", s:"They have special **programs**.", b:"Seed2(B1)", l:"Lesson 4", p:"44"},
+  {id:"grow-2", w:"grow", m:"기르다", s:"Students learn how to **grow** fruits and vegetables.", b:"Seed2(B1)", l:"Lesson 4", p:"44"},
+  {id:"fruit", w:"fruit", m:"과일", s:"Students learn how to grow **fruits** and vegetables.", b:"Seed2(B1)", l:"Lesson 4", p:"44"},
+  {id:"vegetable", w:"vegetable", m:"채소", s:"Students learn how to grow fruits and **vegetables**.", b:"Seed2(B1)", l:"Lesson 4", p:"44"},
+  {id:"feed", w:"feed", m:"먹이를 주다", s:"They also **feed** and care for animals.", b:"Seed2(B1)", l:"Lesson 4", p:"44"},
+  {id:"care-for", w:"care for", m:"~를 돌보다", s:"They also feed and **care for** animals.", b:"Seed2(B1)", l:"Lesson 4", p:"44"},
+  {id:"less", w:"less", m:"덜", s:"Nature schools are also **less** stressful.", b:"Seed2(B1)", l:"Lesson 4", p:"45"},
+  {id:"stressful", w:"stressful", m:"스트레스를 주는", s:"Nature schools are also less **stressful**.", b:"Seed2(B1)", l:"Lesson 4", p:"45"},
+  {id:"focus-on", w:"focus on", m:"~에 중점을 두다", s:"Classes **focus on** creativity instead of grades.", b:"Seed2(B1)", l:"Lesson 4", p:"45"},
+  {id:"creativity", w:"creativity", m:"창의력", s:"Classes focus on **creativity** instead of grades.", b:"Seed2(B1)", l:"Lesson 4", p:"45"},
+  {id:"instead-of", w:"instead of", m:"~ 대신에", s:"Classes focus on creativity **instead of** grades.", b:"Seed2(B1)", l:"Lesson 4", p:"45"},
+  {id:"grade", w:"grade", m:"성적", s:"Classes focus on creativity instead of **grades**.", b:"Seed2(B1)", l:"Lesson 4", p:"45"},
+  {id:"theater", w:"theater", m:"연극", s:"Students take creative classes, like **theater**.", b:"Seed2(B1)", l:"Lesson 4", p:"45"},
+  {id:"cook", w:"cook", m:"요리하다", s:"They also learn how to **cook** and make clothes.", b:"Seed2(B1)", l:"Lesson 4", p:"45"},
+  {id:"clothes", w:"clothes", m:"옷", s:"They also learn how to cook and make **clothes**.", b:"Seed2(B1)", l:"Lesson 4", p:"45"},
+  {id:"would-you-like-to", w:"would you like to", m:"~하고 싶으세요", s:"**Would you like to** go to a nature school?", b:"Seed2(B1)", l:"Lesson 4", p:"45"},
+  {id:"cloud", w:"cloud", m:"구름", s:"The City in the **Clouds**", b:"Seed2(B1)", l:"Lesson 5", p:"60"},
+  {id:"lost", w:"lost", m:"사라진", s:"Hiram Bingham hears about a **lost** city.", b:"Seed2(B1)", l:"Lesson 5", p:"60"},
+  {id:"city", w:"city", m:"도시", s:"Hiram Bingham hears about a lost **city**.", b:"Seed2(B1)", l:"Lesson 5", p:"60"},
+  {id:"mountain", w:"mountain", m:"산", s:"Hiram and his guide climb into the Andes **Mountains**.", b:"Seed2(B1)", l:"Lesson 5", p:"60"},
+  {id:"cut-through", w:"cut through", m:"~를 헤치고 나아가다", s:"They **cut through** the thick jungle.", b:"Seed2(B1)", l:"Lesson 5", p:"60"},
+  {id:"thick", w:"thick", m:"빽빽한", s:"They cut through the **thick** jungle.", b:"Seed2(B1)", l:"Lesson 5", p:"60"},
+  {id:"reach", w:"reach", m:"~에 다다르다", s:"Finally, they **reach** the mountaintop.", b:"Seed2(B1)", l:"Lesson 5", p:"61"},
+  {id:"mountaintop", w:"mountaintop", m:"산꼭대기", s:"Finally, they reach the **mountaintop**.", b:"Seed2(B1)", l:"Lesson 5", p:"61"},
+  {id:"discover", w:"discover", m:"발견하다", s:"They **discover** some old ruins.", b:"Seed2(B1)", l:"Lesson 5", p:"61"},
+  {id:"ruins", w:"ruins", m:"유적", s:"They discover some old **ruins**.", b:"Seed2(B1)", l:"Lesson 5", p:"61"},
+  {id:"made-of", w:"made of", m:"~로 만들어진", s:"Hiram sees buildings **made of** large stones.", b:"Seed2(B1)", l:"Lesson 5", p:"61"},
+  {id:"stone", w:"stone", m:"돌", s:"Hiram sees buildings made of large **stones**.", b:"Seed2(B1)", l:"Lesson 5", p:"61"},
+  {id:"fit-together", w:"fit together", m:"딱 들어맞다", s:"He is amazed because the stones **fit together** perfectly.", b:"Seed2(B1)", l:"Lesson 5", p:"61"},
+  {id:"perfectly", w:"perfectly", m:"완벽하게", s:"He is amazed because the stones fit together **perfectly**.", b:"Seed2(B1)", l:"Lesson 5", p:"61"},
+  {id:"wonder", w:"wonder", m:"궁금해하다", s:"“How did people bring all these stones up here?” he **wonders**.", b:"Seed2(B1)", l:"Lesson 5", p:"61"},
+  {id:"come-back", w:"come back", m:"돌아오다", s:"Hiram leaves, but he will **come back**.", b:"Seed2(B1)", l:"Lesson 5", p:"61"},
+  {id:"unlock", w:"unlock", m:"(비밀을) 풀다", s:"He wants to **unlock** Machu Picchu’s secrets.", b:"Seed2(B1)", l:"Lesson 5", p:"61"},
+  {id:"secret", w:"secret", m:"비밀", s:"He wants to unlock Machu Picchu’s **secrets**.", b:"Seed2(B1)", l:"Lesson 5", p:"61"},
+  {id:"unforgettable", w:"unforgettable", m:"잊을 수 없는", s:"Danny’s **Unforgettable** Tour", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"bus", w:"bus", m:"버스", s:"Danny is on a **bus** tour with his family.", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"be-over", w:"be over", m:"끝나다", s:"“When will this **be over**?” he grumbles.", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"grumble", w:"grumble", m:"투덜거리다", s:"“When will this be over?” he **grumbles**.", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"pyramid", w:"pyramid", m:"피라미드", s:"“The **Pyramids** of Giza,” the driver announces.", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"driver", w:"driver", m:"운전기사", s:"“The Pyramids of Giza,” the **driver** announces.", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"announce", w:"announce", m:"알리다", s:"“The Pyramids of Giza,” the driver **announces**.", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"look-out", w:"look out", m:"~ 밖을 내다보다", s:"Danny **looks out** the window.", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"window", w:"window", m:"창문", s:"Danny looks out the **window**.", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"drop-open", w:"drop open", m:"떡 벌어지다", s:"His mouth **drops open**.", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"amazing", w:"amazing", m:"놀라운", s:"“**Amazing**!” he says.", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"tall", w:"tall", m:"높은, 키가 큰", s:"“How **tall** are they?”", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"main", w:"main", m:"가장 큰, 주된", s:"“The **main** pyramid is as tall as a forty-story building,” the driver answers.", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"as-tall-as", w:"as tall as", m:"~만큼 높은", s:"“The main pyramid is **as tall as** a forty-story building,” the driver answers.", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"story", w:"story", m:"(건물의) 층", s:"“The main pyramid is as tall as a forty-**story** building,” the driver answers.", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"answer-2", w:"answer", m:"대답하다", s:"“The main pyramid is as tall as a forty-story building,” the driver **answers**.", b:"Seed2(B1)", l:"Lesson 6", p:"72"},
+  {id:"hurry-off", w:"hurry off", m:"서둘러 내리다", s:"Danny **hurries off** the bus.", b:"Seed2(B1)", l:"Lesson 6", p:"73"},
+  {id:"wide", w:"wide", m:"크게, 활짝", s:"His eyes open **wide**.", b:"Seed2(B1)", l:"Lesson 6", p:"73"},
+  {id:"block", w:"block", m:"덩어리", s:"The pyramids are made of stone **blocks**.", b:"Seed2(B1)", l:"Lesson 6", p:"73"},
+  {id:"stack-up", w:"stack up", m:"차곡차곡 쌓다", s:"They are **stacked up** to the sky.", b:"Seed2(B1)", l:"Lesson 6", p:"73"},
+  {id:"sky", w:"sky", m:"하늘", s:"They are stacked up to the **sky**.", b:"Seed2(B1)", l:"Lesson 6", p:"73"},
+  {id:"trip-2", w:"trip", m:"여행", s:"“When is our next **trip** to the pyramids?” Danny asks.", b:"Seed2(B1)", l:"Lesson 6", p:"73"},
+  {id:"temple", w:"temple", m:"사원", s:"Lost in the **Temple**", b:"Seed2(B1)", l:"Lesson 7", p:"84"},
+  {id:"visit", w:"visit", m:"방문", s:"It’s the Parker family’s first **visit** to Angkor Wat in Cambodia.", b:"Seed2(B1)", l:"Lesson 7", p:"84"},
+  {id:"pass-through", w:"pass through", m:"~를 통과해 지나가다", s:"They **pass through** a stone gate.", b:"Seed2(B1)", l:"Lesson 7", p:"84"},
+  {id:"gate", w:"gate", m:"문", s:"They pass through a stone **gate**.", b:"Seed2(B1)", l:"Lesson 7", p:"84"},
+  {id:"face-2", w:"face", m:"얼굴", s:"Giant stone **faces** smile down at them.", b:"Seed2(B1)", l:"Lesson 7", p:"84"},
+  {id:"old", w:"old", m:"오래된", s:"“This place looks **old**,” says Leah.", b:"Seed2(B1)", l:"Lesson 7", p:"84"},
+  {id:"king", w:"king", m:"왕", s:"“A **king** built it 900 years ago,” says Dad.", b:"Seed2(B1)", l:"Lesson 7", p:"84"},
+  {id:"build", w:"build", m:"짓다", s:"“A king **built** it 900 years ago,” says Dad.", b:"Seed2(B1)", l:"Lesson 7", p:"84"},
+  {id:"years-ago", w:"years ago", m:"~년 전에", s:"“A king built it 900 **years ago**,” says Dad.", b:"Seed2(B1)", l:"Lesson 7", p:"84"},
+  {id:"inside", w:"inside", m:"안에", s:"**Inside**, they see five tall, pointed towers.", b:"Seed2(B1)", l:"Lesson 7", p:"85"},
+  {id:"pointed", w:"pointed", m:"뾰족한", s:"Inside, they see five tall, **pointed** towers.", b:"Seed2(B1)", l:"Lesson 7", p:"85"},
+  {id:"tower", w:"tower", m:"탑", s:"Inside, they see five tall, pointed **towers**.", b:"Seed2(B1)", l:"Lesson 7", p:"85"},
+  {id:"admire", w:"admire", m:"감탄하며 바라보다", s:"They **admire** the beautiful carvings and sculptures.", b:"Seed2(B1)", l:"Lesson 7", p:"85"},
+  {id:"carving", w:"carving", m:"조각, 새김", s:"They admire the beautiful **carvings** and sculptures.", b:"Seed2(B1)", l:"Lesson 7", p:"85"},
+  {id:"sculpture", w:"sculpture", m:"조각상", s:"They admire the beautiful carvings and **sculptures**.", b:"Seed2(B1)", l:"Lesson 7", p:"85"},
+  {id:"hall", w:"hall", m:"복도", s:"But the **halls** are like a maze.", b:"Seed2(B1)", l:"Lesson 7", p:"85"},
+  {id:"maze", w:"maze", m:"미로", s:"But the halls are like a **maze**.", b:"Seed2(B1)", l:"Lesson 7", p:"85"},
+  {id:"young", w:"young", m:"어린", s:"Then, Leah sees a **young** monk in orange robes.", b:"Seed2(B1)", l:"Lesson 7", p:"85"},
+  {id:"monk", w:"monk", m:"스님, 수도승", s:"Then, Leah sees a young **monk** in orange robes.", b:"Seed2(B1)", l:"Lesson 7", p:"85"},
+  {id:"robe", w:"robe", m:"긴 겉옷", s:"Then, Leah sees a young monk in orange **robes**.", b:"Seed2(B1)", l:"Lesson 7", p:"85"},
+  {id:"world", w:"world", m:"세계", s:"“This is the **world**’s largest temple,” he says.", b:"Seed2(B1)", l:"Lesson 7", p:"85"},
+  {id:"largest", w:"largest", m:"가장 큰", s:"“This is the world’s **largest** temple,” he says.", b:"Seed2(B1)", l:"Lesson 7", p:"85"},
+  {id:"get-lost", w:"get lost", m:"길을 잃다", s:"“Lots of people **get lost**. I’m lost, too!”", b:"Seed2(B1)", l:"Lesson 7", p:"85"},
+  {id:"mystery", w:"mystery", m:"수수께끼, 신비", s:"Circles of **Mystery**", b:"Seed2(B1)", l:"Lesson 8", p:"96"},
+  {id:"famous", w:"famous", m:"유명한", s:"Stonehenge is a **famous** group of stones in England.", b:"Seed2(B1)", l:"Lesson 8", p:"96"},
+  {id:"inner", w:"inner", m:"안쪽의", s:"The stones in the **inner** circle are smaller.", b:"Seed2(B1)", l:"Lesson 8", p:"96"},
+  {id:"outer", w:"outer", m:"바깥쪽의", s:"The **outer** circle has huge rocks.", b:"Seed2(B1)", l:"Lesson 8", p:"96"},
+  {id:"meter", w:"meter", m:"미터", s:"They are four **meters** tall and two meters wide.", b:"Seed2(B1)", l:"Lesson 8", p:"96"},
+  {id:"about", w:"about", m:"약, 대략", s:"Stonehenge is **about** 5,000 years old.", b:"Seed2(B1)", l:"Lesson 8", p:"97"},
+  {id:"years-old", w:"years old", m:"~년 된", s:"Stonehenge is about 5,000 **years old**.", b:"Seed2(B1)", l:"Lesson 8", p:"97"},
+  {id:"much", w:"much", m:"많이", s:"But we don’t know **much** about its purpose.", b:"Seed2(B1)", l:"Lesson 8", p:"97"},
+  {id:"purpose", w:"purpose", m:"쓰임새, 목적", s:"But we don’t know much about its **purpose**.", b:"Seed2(B1)", l:"Lesson 8", p:"97"},
+  {id:"ceremony", w:"ceremony", m:"의식, 행사", s:"Some people think it was a place for special **ceremonies**.", b:"Seed2(B1)", l:"Lesson 8", p:"97"},
+  {id:"others-2", w:"others", m:"다른 사람들", s:"**Others** believe it was a calendar to watch the sun and stars.", b:"Seed2(B1)", l:"Lesson 8", p:"97"},
+  {id:"believe", w:"believe", m:"믿다", s:"Others **believe** it was a calendar to watch the sun and stars.", b:"Seed2(B1)", l:"Lesson 8", p:"97"},
+  {id:"calendar", w:"calendar", m:"달력", s:"Others believe it was a **calendar** to watch the sun and stars.", b:"Seed2(B1)", l:"Lesson 8", p:"97"},
+  {id:"sun", w:"sun", m:"해", s:"Others believe it was a calendar to watch the **sun** and stars.", b:"Seed2(B1)", l:"Lesson 8", p:"97"},
+  {id:"star", w:"star", m:"별", s:"Others believe it was a calendar to watch the sun and **stars**.", b:"Seed2(B1)", l:"Lesson 8", p:"97"},
+  {id:"visit-2", w:"visit", m:"방문하다", s:"Today, many people **visit** Stonehenge.", b:"Seed2(B1)", l:"Lesson 8", p:"97"},
+  {id:"long-ago", w:"long ago", m:"아주 오래전에", s:"It makes them wonder about people who lived **long ago**.", b:"Seed2(B1)", l:"Lesson 8", p:"97"},
+
+  /* ================= Seed2(B2) ================= */
+  {id:"spring", w:"spring", m:"봄", s:"Maybe **Spring** Is Alright", b:"Seed2(B2)", l:"Lesson 1", p:"8"},
+  {id:"alright", w:"alright", m:"괜찮은", s:"Maybe Spring Is **Alright**", b:"Seed2(B2)", l:"Lesson 1", p:"8"},
+  {id:"winter", w:"winter", m:"겨울", s:"**Winter** is gone, and she will miss it.", b:"Seed2(B2)", l:"Lesson 1", p:"8"},
+  {id:"gone", w:"gone", m:"가 버린", s:"Winter is **gone**, and she will miss it.", b:"Seed2(B2)", l:"Lesson 1", p:"8"},
+  {id:"miss", w:"miss", m:"그리워하다", s:"Winter is gone, and she will **miss** it.", b:"Seed2(B2)", l:"Lesson 1", p:"8"},
+  {id:"snowman", w:"snowman", m:"눈사람", s:"The **snowman** she built is now just a puddle.", b:"Seed2(B2)", l:"Lesson 1", p:"8"},
+  {id:"puddle", w:"puddle", m:"물웅덩이", s:"The snowman she built is now just a **puddle**.", b:"Seed2(B2)", l:"Lesson 1", p:"8"},
+  {id:"sled", w:"sled", m:"썰매를 타다", s:"She can’t **sled** on the big hill anymore, and the skating rink is closed.", b:"Seed2(B2)", l:"Lesson 1", p:"8"},
+  {id:"hill", w:"hill", m:"언덕", s:"She can’t sled on the big **hill** anymore, and the skating rink is closed.", b:"Seed2(B2)", l:"Lesson 1", p:"8"},
+  {id:"anymore", w:"anymore", m:"더 이상", s:"She can’t sled on the big hill **anymore**, and the skating rink is closed.", b:"Seed2(B2)", l:"Lesson 1", p:"8"},
+  {id:"skating-rink", w:"skating rink", m:"스케이트장", s:"She can’t sled on the big hill anymore, and the **skating rink** is closed.", b:"Seed2(B2)", l:"Lesson 1", p:"8"},
+  {id:"closed", w:"closed", m:"문을 닫은", s:"She can’t sled on the big hill anymore, and the skating rink is **closed**.", b:"Seed2(B2)", l:"Lesson 1", p:"8"},
+  {id:"upset", w:"upset", m:"속상한", s:"Stephanie’s mom sees that Stephanie is **upset**.", b:"Seed2(B2)", l:"Lesson 1", p:"9"},
+  {id:"take-for-a-walk", w:"take ~ for a walk", m:"~를 데리고 산책하다", s:"Her mom **takes** her **for a walk** in the park.", b:"Seed2(B2)", l:"Lesson 1", p:"9"},
+  {id:"park", w:"park", m:"공원", s:"Her mom takes her for a walk in the **park**.", b:"Seed2(B2)", l:"Lesson 1", p:"9"},
+  {id:"flower", w:"flower", m:"꽃", s:"They see beautiful **flowers** starting to bloom.", b:"Seed2(B2)", l:"Lesson 1", p:"9"},
+  {id:"bloom", w:"bloom", m:"꽃이 피다", s:"They see beautiful flowers starting to **bloom**.", b:"Seed2(B2)", l:"Lesson 1", p:"9"},
+  {id:"chirp", w:"chirp", m:"짹짹 울다", s:"They hear baby birds **chirping** in the trees.", b:"Seed2(B2)", l:"Lesson 1", p:"9"},
+  {id:"life", w:"life", m:"생명", s:"“Look at all the new **life**,” her mom says with a smile.", b:"Seed2(B2)", l:"Lesson 1", p:"9"},
+  {id:"magical", w:"magical", m:"마법 같은", s:"“Winter is a lot of fun, but isn’t spring **magical**?”", b:"Seed2(B2)", l:"Lesson 1", p:"9"},
+  {id:"look-around", w:"look around", m:"둘러보다", s:"Stephanie **looks around**.", b:"Seed2(B2)", l:"Lesson 1", p:"9"},
+  {id:"before-2", w:"before", m:"예전에는", s:"“I never noticed **before**,” she says, “but spring is pretty great.”", b:"Seed2(B2)", l:"Lesson 1", p:"9"},
+  {id:"be-off-to", w:"be off to", m:"~하러 가다", s:"We’**re Off to** See the Tulips", b:"Seed2(B2)", l:"Lesson 2", p:"20"},
+  {id:"tulip", w:"tulip", m:"튤립", s:"We’re Off to See the **Tulips**", b:"Seed2(B2)", l:"Lesson 2", p:"20"},
+  {id:"happily", w:"happily", m:"기쁘게", s:"“We’re here!” Mom says **happily**.", b:"Seed2(B2)", l:"Lesson 2", p:"20"},
+  {id:"get-out-of", w:"get out of", m:"~에서 나오다", s:"Dad **gets out of** the car, frowning.", b:"Seed2(B2)", l:"Lesson 2", p:"20"},
+  {id:"car", w:"car", m:"자동차", s:"Dad gets out of the **car**, frowning.", b:"Seed2(B2)", l:"Lesson 2", p:"20"},
+  {id:"festival", w:"festival", m:"축제", s:"“It’s the world’s largest tulip **festival**!” Mom explains.", b:"Seed2(B2)", l:"Lesson 2", p:"20"},
+  {id:"million", w:"million", m:"백만", s:"“With a **million** flowers!”", b:"Seed2(B2)", l:"Lesson 2", p:"20"},
+  {id:"stay-home", w:"stay home", m:"집에 있다", s:"“That’s a million reasons to **stay home**!” Dad answers.", b:"Seed2(B2)", l:"Lesson 2", p:"20"},
+  {id:"woman", w:"woman", m:"여자", s:"An old **woman** smiles.", b:"Seed2(B2)", l:"Lesson 2", p:"21"},
+  {id:"gift", w:"gift", m:"선물", s:"“The first tulips in this city were a **gift** from the Dutch royal family.”", b:"Seed2(B2)", l:"Lesson 2", p:"21"},
+  {id:"royal-family", w:"royal family", m:"왕실 가족", s:"“The first tulips in this city were a gift from the Dutch **royal family**.”", b:"Seed2(B2)", l:"Lesson 2", p:"21"},
+  {id:"widen", w:"widen", m:"커지다", s:"Dad sees Mom’s eyes **widen**.", b:"Seed2(B2)", l:"Lesson 2", p:"21"},
+  {id:"buy", w:"buy", m:"사다", s:"He stops frowning and **buys** red tulips for her.", b:"Seed2(B2)", l:"Lesson 2", p:"21"},
+  {id:"after-all", w:"after all", m:"결국에는", s:"“Looks like you found a reason to be here **after all**,” she says.", b:"Seed2(B2)", l:"Lesson 2", p:"21"},
+  {id:"love", w:"love", m:"사랑", s:"“Red tulips mean **love**.”", b:"Seed2(B2)", l:"Lesson 2", p:"21"},
+  {id:"beach", w:"beach", m:"해변", s:"Sean’s family are at the **beach**.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"rub", w:"rub", m:"문질러 바르다", s:"His mom **rubs** sunscreen on his shoulders.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"sunscreen", w:"sunscreen", m:"자외선 차단제", s:"His mom rubs **sunscreen** on his shoulders.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"shoulder", w:"shoulder", m:"어깨", s:"His mom rubs sunscreen on his **shoulders**.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"hold-still", w:"hold still", m:"가만히 있다", s:"“**Hold still**!” she says.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"slimy", w:"slimy", m:"끈적끈적한", s:"“It’s **slimy**!” Sean complains.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"put-on", w:"put on", m:"착용하다, 바르다", s:"He **puts on** his sunglasses and runs off to build a sandcastle.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"sunglasses", w:"sunglasses", m:"선글라스", s:"He puts on his **sunglasses** and runs off to build a sandcastle.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"run-off", w:"run off", m:"뛰어가 버리다", s:"He puts on his sunglasses and **runs off** to build a sandcastle.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"sandcastle", w:"sandcastle", m:"모래성", s:"He puts on his sunglasses and runs off to build a **sandcastle**.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"pick-up", w:"pick up", m:"집어 들다", s:"Sean **picks up** the tube, but his mom is busy.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"tube", w:"tube", m:"튜브", s:"Sean picks up the **tube**, but his mom is busy.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"busy", w:"busy", m:"바쁜", s:"Sean picks up the tube, but his mom is **busy**.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"look-after", w:"look after", m:"~를 돌보다", s:"She’s **looking after** Sean’s baby sister.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"sister", w:"sister", m:"여동생, 누나", s:"She’s looking after Sean’s baby **sister**.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"pay-attention-to", w:"pay attention to", m:"~에 주의를 기울이다", s:"She isn’t **paying attention to** Sean.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"sneak-away", w:"sneak away", m:"몰래 빠져나가다", s:"So, he **sneaks away**.", b:"Seed2(B2)", l:"Lesson 3", p:"32"},
+  {id:"change", w:"change", m:"옷을 갈아입다", s:"It’s time to leave, so Sean comes back to **change**.", b:"Seed2(B2)", l:"Lesson 3", p:"33"},
+  {id:"tomato", w:"tomato", m:"토마토", s:"“You’re as red as a **tomato**!” his mom exclaims.", b:"Seed2(B2)", l:"Lesson 3", p:"33"},
+  {id:"exclaim", w:"exclaim", m:"외치다", s:"“You’re as red as a tomato!” his mom **exclaims**.", b:"Seed2(B2)", l:"Lesson 3", p:"33"},
+  {id:"skin", w:"skin", m:"피부", s:"Sean’s **skin** is red and sore, except around his eyes.", b:"Seed2(B2)", l:"Lesson 3", p:"33"},
+  {id:"sore", w:"sore", m:"쓰라린", s:"Sean’s skin is red and **sore**, except around his eyes.", b:"Seed2(B2)", l:"Lesson 3", p:"33"},
+  {id:"except", w:"except", m:"~를 빼고", s:"Sean’s skin is red and sore, **except** around his eyes.", b:"Seed2(B2)", l:"Lesson 3", p:"33"},
+  {id:"leaf", w:"leaf", m:"잎", s:"Do you know why **leaves** fall to the ground in fall?", b:"Seed2(B2)", l:"Lesson 4", p:"44"},
+  {id:"fall-3", w:"fall", m:"떨어지다", s:"Do you know why leaves **fall** to the ground in fall?", b:"Seed2(B2)", l:"Lesson 4", p:"44"},
+  {id:"ground", w:"ground", m:"땅", s:"Do you know why leaves fall to the **ground** in fall?", b:"Seed2(B2)", l:"Lesson 4", p:"44"},
+  {id:"fall-4", w:"fall", m:"가을", s:"Do you know why leaves fall to the ground in **fall**?", b:"Seed2(B2)", l:"Lesson 4", p:"44"},
+  {id:"lose-2", w:"lose", m:"잃다", s:"Trees **lose** their leaves to save water and energy during winter.", b:"Seed2(B2)", l:"Lesson 4", p:"44"},
+  {id:"save", w:"save", m:"아끼다", s:"Trees lose their leaves to **save** water and energy during winter.", b:"Seed2(B2)", l:"Lesson 4", p:"44"},
+  {id:"energy", w:"energy", m:"에너지", s:"Trees lose their leaves to save water and **energy** during winter.", b:"Seed2(B2)", l:"Lesson 4", p:"44"},
+  {id:"during", w:"during", m:"~ 동안", s:"Trees lose their leaves to save water and energy **during** winter.", b:"Seed2(B2)", l:"Lesson 4", p:"44"},
+  {id:"turn-into", w:"turn ~ into", m:"~를 …로 바꾸다", s:"Leaves **turn** sunlight **into** food for the tree.", b:"Seed2(B2)", l:"Lesson 4", p:"45"},
+  {id:"sunlight", w:"sunlight", m:"햇빛", s:"Leaves turn **sunlight** into food for the tree.", b:"Seed2(B2)", l:"Lesson 4", p:"45"},
+  {id:"food", w:"food", m:"양식, 먹이", s:"Leaves turn sunlight into **food** for the tree.", b:"Seed2(B2)", l:"Lesson 4", p:"45"},
+  {id:"alive", w:"alive", m:"살아 있는", s:"Keeping leaves **alive** takes energy.", b:"Seed2(B2)", l:"Lesson 4", p:"45"},
+  {id:"store-up", w:"store up", m:"저장해 두다", s:"Instead, in winter, they use food they **stored up**.", b:"Seed2(B2)", l:"Lesson 4", p:"45"},
+  {id:"understand", w:"understand", m:"이해하다", s:"Now, you **understand** why trees lose their leaves in fall.", b:"Seed2(B2)", l:"Lesson 4", p:"45"},
+  {id:"wind", w:"wind", m:"바람", s:"Waiting for **Wind**", b:"Seed2(B2)", l:"Lesson 5", p:"60"},
+  {id:"as-fast-as", w:"as fast as", m:"~만큼 빨리", s:"Kate and Sid run **as fast as** they can.", b:"Seed2(B2)", l:"Lesson 5", p:"60"},
+  {id:"kite", w:"kite", m:"연", s:"Sid holds the **kite**, and Kate holds the line.", b:"Seed2(B2)", l:"Lesson 5", p:"60"},
+  {id:"line", w:"line", m:"줄", s:"Sid holds the kite, and Kate holds the **line**.", b:"Seed2(B2)", l:"Lesson 5", p:"60"},
+  {id:"let-go", w:"let go", m:"놓아주다", s:"“Okay, **let** it **go**!” she shouts.", b:"Seed2(B2)", l:"Lesson 5", p:"60"},
+  {id:"flutter", w:"flutter", m:"팔랑거리다", s:"The kite **flutters** and falls to the ground.", b:"Seed2(B2)", l:"Lesson 5", p:"60"},
+  {id:"broken", w:"broken", m:"고장 난", s:"Sid frowns. “Is our kite **broken**?”", b:"Seed2(B2)", l:"Lesson 5", p:"60"},
+  {id:"windy", w:"windy", m:"바람이 부는", s:"“Kate, wake up!” he shouts. “It’s **windy** today!”", b:"Seed2(B2)", l:"Lesson 5", p:"61"},
+  {id:"float", w:"float", m:"떠오르다", s:"The kite **floats** into the wind.", b:"Seed2(B2)", l:"Lesson 5", p:"61"},
+  {id:"better", w:"better", m:"더 잘", s:"“See, it works **better** on a windy day,” Kate says.", b:"Seed2(B2)", l:"Lesson 5", p:"61"},
+  {id:"nod", w:"nod", m:"고개를 끄덕이다", s:"Sid **nods**, smiling.", b:"Seed2(B2)", l:"Lesson 5", p:"61"},
+  {id:"pinwheel", w:"pinwheel", m:"바람개비", s:"**Pinwheels** are great toys for a windy day.", b:"Seed2(B2)", l:"Lesson 6", p:"72"},
+  {id:"toy", w:"toy", m:"장난감", s:"Pinwheels are great **toys** for a windy day.", b:"Seed2(B2)", l:"Lesson 6", p:"72"},
+  {id:"x-shaped", w:"X-shaped", m:"X자 모양의", s:"Now, your square has an **X-shaped** fold.", b:"Seed2(B2)", l:"Lesson 6", p:"72"},
+  {id:"cut", w:"cut", m:"자르다", s:"Next, **cut** along the fold lines toward the center.", b:"Seed2(B2)", l:"Lesson 6", p:"73"},
+  {id:"cut-along", w:"cut along", m:"~를 따라 자르다", s:"Next, **cut along** the fold lines toward the center.", b:"Seed2(B2)", l:"Lesson 6", p:"73"},
+  {id:"fold-line", w:"fold line", m:"접은 선", s:"Next, cut along the **fold lines** toward the center.", b:"Seed2(B2)", l:"Lesson 6", p:"73"},
+  {id:"centimeter", w:"centimeter", m:"센티미터", s:"Stop cutting when you get about three **centimeters** from the center.", b:"Seed2(B2)", l:"Lesson 6", p:"73"},
+  {id:"join", w:"join", m:"이어 붙이다", s:"Now, there are four triangles **joined** at the center.", b:"Seed2(B2)", l:"Lesson 6", p:"73"},
+  {id:"right-hand", w:"right-hand", m:"오른쪽의", s:"Bring the **right-hand** corner of each triangle to the center.", b:"Seed2(B2)", l:"Lesson 6", p:"73"},
+  {id:"push", w:"push", m:"밀어 넣다", s:"**Push** a pin through all four corners.", b:"Seed2(B2)", l:"Lesson 6", p:"73"},
+  {id:"pin", w:"pin", m:"핀", s:"Push a **pin** through all four corners.", b:"Seed2(B2)", l:"Lesson 6", p:"73"},
+  {id:"last", w:"last", m:"마지막으로", s:"**Last**, push the pin into a stick.", b:"Seed2(B2)", l:"Lesson 6", p:"73"},
+  {id:"storm", w:"storm", m:"폭풍", s:"Why do some people drive into huge **storms**?", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"drive", w:"drive", m:"운전해서 가다", s:"Why do some people **drive** into huge storms?", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"crazy", w:"crazy", m:"제정신이 아닌", s:"They’re not **crazy**.", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"storm-chaser", w:"storm chaser", m:"폭풍 추적자", s:"They’re **storm chasers**.", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"get-close-to", w:"get close to", m:"~에 가까이 다가가다", s:"Many of them **get close to** tornadoes to learn about them.", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"tornado", w:"tornado", m:"토네이도", s:"Many of them get close to **tornadoes** to learn about them.", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"condition", w:"condition", m:"조건, 상태", s:"Some storm chasers study the **conditions** that cause tornadoes.", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"cause", w:"cause", m:"일으키다", s:"Some storm chasers study the conditions that **cause** tornadoes.", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"measure", w:"measure", m:"재다, 측정하다", s:"They **measure** wind speed, temperature, and air moisture.", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"speed", w:"speed", m:"속도", s:"They measure wind **speed**, temperature, and air moisture.", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"temperature", w:"temperature", m:"온도", s:"They measure wind speed, **temperature**, and air moisture.", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"air", w:"air", m:"공기", s:"They measure wind speed, temperature, and **air** moisture.", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"moisture", w:"moisture", m:"습기", s:"They measure wind speed, temperature, and air **moisture**.", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"information", w:"information", m:"정보", s:"This **information** helps scientists predict tornadoes.", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"scientist", w:"scientist", m:"과학자", s:"This information helps **scientists** predict tornadoes.", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"predict", w:"predict", m:"예측하다", s:"This information helps scientists **predict** tornadoes.", b:"Seed2(B2)", l:"Lesson 7", p:"84"},
+  {id:"form", w:"form", m:"생겨나다", s:"Knowing when tornadoes will **form** is important.", b:"Seed2(B2)", l:"Lesson 7", p:"85"},
+  {id:"damage", w:"damage", m:"피해", s:"Tornadoes can cause lots of **damage**.", b:"Seed2(B2)", l:"Lesson 7", p:"85"},
+  {id:"along", w:"along", m:"~를 따라", s:"They move quickly **along** the ground.", b:"Seed2(B2)", l:"Lesson 7", p:"85"},
+  {id:"path", w:"path", m:"지나가는 길", s:"As they do, they pick up things in their **path**: cars, trees, even houses!", b:"Seed2(B2)", l:"Lesson 7", p:"85"},
+  {id:"house", w:"house", m:"집", s:"As they do, they pick up things in their path: cars, trees, even **houses**!", b:"Seed2(B2)", l:"Lesson 7", p:"85"},
+  {id:"warn", w:"warn", m:"미리 알리다", s:"But **warning** people early gives them time to get to safety.", b:"Seed2(B2)", l:"Lesson 7", p:"85"},
+  {id:"safety", w:"safety", m:"안전한 곳", s:"But warning people early gives them time to get to **safety**.", b:"Seed2(B2)", l:"Lesson 7", p:"85"},
+  {id:"source", w:"source", m:"원천", s:"Wind is a great **source** of energy.", b:"Seed2(B2)", l:"Lesson 8", p:"96"},
+  {id:"planet", w:"planet", m:"행성", s:"It’s everywhere on our **planet**.", b:"Seed2(B2)", l:"Lesson 8", p:"96"},
+  {id:"pollution", w:"pollution", m:"오염", s:"And it doesn’t make any **pollution**.", b:"Seed2(B2)", l:"Lesson 8", p:"96"},
+  {id:"power", w:"power", m:"동력을 주다", s:"Wind energy can **power** many things.", b:"Seed2(B2)", l:"Lesson 8", p:"96"},
+  {id:"sail", w:"sail", m:"돛", s:"**Sails** on the boat catch gusts of wind.", b:"Seed2(B2)", l:"Lesson 8", p:"96"},
+  {id:"boat", w:"boat", m:"배", s:"Sails on the **boat** catch gusts of wind.", b:"Seed2(B2)", l:"Lesson 8", p:"96"},
+  {id:"gust", w:"gust", m:"한 줄기 세찬 바람", s:"Sails on the boat catch **gusts** of wind.", b:"Seed2(B2)", l:"Lesson 8", p:"96"},
+  {id:"home", w:"home", m:"집", s:"People also use wind to power **homes**.", b:"Seed2(B2)", l:"Lesson 8", p:"97"},
+  {id:"turbine", w:"turbine", m:"터빈", s:"Wind **turbines** use wind to make electricity.", b:"Seed2(B2)", l:"Lesson 8", p:"97"},
+  {id:"electricity", w:"electricity", m:"전기", s:"Wind turbines use wind to make **electricity**.", b:"Seed2(B2)", l:"Lesson 8", p:"97"},
+  {id:"blade", w:"blade", m:"날개", s:"Wind turbines have huge **blades**.", b:"Seed2(B2)", l:"Lesson 8", p:"97"},
+  {id:"spinning", w:"spinning", m:"돌아가는", s:"The **spinning** motion of the blades makes electricity.", b:"Seed2(B2)", l:"Lesson 8", p:"97"},
+  {id:"motion", w:"motion", m:"움직임", s:"The spinning **motion** of the blades makes electricity.", b:"Seed2(B2)", l:"Lesson 8", p:"97"},
+
+  /* ================= Seed2(B3) ================= */
+  {id:"zoo", w:"zoo", m:"동물원", s:"The Mustafa family visits the **zoo**.", b:"Seed2(B3)", l:"Lesson 1", p:"8"},
+  {id:"bush-baby", w:"bush baby", m:"부시베이비 (작은 원숭이)", s:"Azita wants to see **bush babies**.", b:"Seed2(B3)", l:"Lesson 1", p:"8"},
+  {id:"silly", w:"silly", m:"엉뚱한, 우스운", s:"“That’s **silly**,” says her brother, Amir.", b:"Seed2(B3)", l:"Lesson 1", p:"8"},
+  {id:"come-out", w:"come out", m:"나오다", s:"“Bush babies only **come out** at night, so they won’t be at a zoo.”", b:"Seed2(B3)", l:"Lesson 1", p:"8"},
+  {id:"actually", w:"actually", m:"사실은", s:"“**Actually**, you’re both right,” Dad says.", b:"Seed2(B3)", l:"Lesson 1", p:"8"},
+  {id:"right", w:"right", m:"맞는", s:"“Actually, you’re both **right**,” Dad says.", b:"Seed2(B3)", l:"Lesson 1", p:"8"},
+  {id:"follow", w:"follow", m:"따라가다", s:"The kids **follow** Dad to a zoo exhibit.", b:"Seed2(B3)", l:"Lesson 1", p:"9"},
+  {id:"exhibit", w:"exhibit", m:"전시관", s:"The kids follow Dad to a zoo **exhibit**.", b:"Seed2(B3)", l:"Lesson 1", p:"9"},
+  {id:"dark", w:"dark", m:"어두운", s:"It looks like a jungle and is very **dark**.", b:"Seed2(B3)", l:"Lesson 1", p:"9"},
+  {id:"turn-on", w:"turn on", m:"켜다", s:"“The zoo just **turns** the lights **on** for the bush babies at night.”", b:"Seed2(B3)", l:"Lesson 1", p:"9"},
+  {id:"dear", w:"dear", m:"친애하는", s:"**Dear** Ashley,", b:"Seed2(B3)", l:"Lesson 2", p:"20"},
+  {id:"as-soon-as", w:"as soon as", m:"~하자마자", s:"I couldn’t call **as soon as** I got home.", b:"Seed2(B3)", l:"Lesson 2", p:"20"},
+  {id:"time-zone", w:"time zone", m:"시간대", s:"The problem was the **time zones**.", b:"Seed2(B3)", l:"Lesson 2", p:"20"},
+  {id:"behind-2", w:"behind", m:"(시간이) ~보다 늦은", s:"You see, Miami is fourteen hours **behind** Seoul.", b:"Seed2(B3)", l:"Lesson 2", p:"20"},
+  {id:"of-course", w:"of course", m:"물론", s:"But that’s 9:30 at night in Miami, so **of course** I couldn’t call.", b:"Seed2(B3)", l:"Lesson 2", p:"20"},
+  {id:"certain", w:"certain", m:"특정한", s:"We can still talk at **certain** times.", b:"Seed2(B3)", l:"Lesson 2", p:"20"},
+  {id:"remember", w:"remember", m:"기억하다", s:"Just **remember** the time difference.", b:"Seed2(B3)", l:"Lesson 2", p:"20"},
+  {id:"difference", w:"difference", m:"차이", s:"Just remember the time **difference**.", b:"Seed2(B3)", l:"Lesson 2", p:"20"},
+  {id:"talk-soon", w:"talk soon", m:"또 연락하자", s:"**Talk soon**, Minji", b:"Seed2(B3)", l:"Lesson 2", p:"20"},
+  {id:"tv", w:"TV", m:"텔레비전", s:"Jane is watching **TV**.", b:"Seed2(B3)", l:"Lesson 3", p:"32"},
+  {id:"kitchen", w:"kitchen", m:"부엌", s:"She goes to the **kitchen**, turns on the light, and gets some milk.", b:"Seed2(B3)", l:"Lesson 3", p:"32"},
+  {id:"off", w:"off", m:"꺼진", s:"When she returns, the TV is **off**.", b:"Seed2(B3)", l:"Lesson 3", p:"32"},
+  {id:"press", w:"press", m:"누르다", s:"Jane **presses** the power button, but nothing happens.", b:"Seed2(B3)", l:"Lesson 3", p:"32"},
+  {id:"power-button", w:"power button", m:"전원 버튼", s:"Jane presses the **power button**, but nothing happens.", b:"Seed2(B3)", l:"Lesson 3", p:"32"},
+  {id:"nothing", w:"nothing", m:"아무것도 ~않다", s:"Jane presses the power button, but **nothing** happens.", b:"Seed2(B3)", l:"Lesson 3", p:"32"},
+  {id:"unplugged", w:"unplugged", m:"플러그가 뽑힌", s:"Now, the TV is **unplugged**, so she plugs it in again.", b:"Seed2(B3)", l:"Lesson 3", p:"32"},
+  {id:"plug-in", w:"plug in", m:"플러그를 꽂다", s:"Now, the TV is unplugged, so she **plugs** it **in** again.", b:"Seed2(B3)", l:"Lesson 3", p:"32"},
+  {id:"decide", w:"decide", m:"결정하다", s:"Then, she **decides** to go get some cookies.", b:"Seed2(B3)", l:"Lesson 3", p:"32"},
+  {id:"cookie", w:"cookie", m:"쿠키", s:"Then, she decides to go get some **cookies**.", b:"Seed2(B3)", l:"Lesson 3", p:"32"},
+  {id:"upstairs", w:"upstairs", m:"위층으로", s:"She runs **upstairs** to her parents’ room.", b:"Seed2(B3)", l:"Lesson 3", p:"32"},
+  {id:"ghost", w:"ghost", m:"유령", s:"“Mom! Dad! There’s a **ghost** downstairs!” Jane shouts.", b:"Seed2(B3)", l:"Lesson 3", p:"33"},
+  {id:"downstairs", w:"downstairs", m:"아래층에", s:"“Mom! Dad! There’s a ghost **downstairs**!” Jane shouts.", b:"Seed2(B3)", l:"Lesson 3", p:"33"},
+  {id:"confused", w:"confused", m:"어리둥절한", s:"Mom and Dad are **confused**.", b:"Seed2(B3)", l:"Lesson 3", p:"33"},
+  {id:"come-into", w:"come into", m:"~ 안으로 들어오다", s:"Jane’s brother, Jim, **comes into** the room, laughing.", b:"Seed2(B3)", l:"Lesson 3", p:"33"},
+  {id:"midnight", w:"midnight", m:"자정", s:"The **Midnight** Sun", b:"Seed2(B3)", l:"Lesson 4", p:"44"},
+  {id:"between", w:"between", m:"~ 사이에", s:"In most places, night comes **between** sunset and sunrise.", b:"Seed2(B3)", l:"Lesson 4", p:"44"},
+  {id:"sunset", w:"sunset", m:"해 질 녘", s:"In most places, night comes between **sunset** and sunrise.", b:"Seed2(B3)", l:"Lesson 4", p:"44"},
+  {id:"sunrise", w:"sunrise", m:"해 뜰 녘", s:"In most places, night comes between sunset and **sunrise**.", b:"Seed2(B3)", l:"Lesson 4", p:"44"},
+  {id:"usually", w:"usually", m:"보통", s:"**Usually**, it’s dark at night.", b:"Seed2(B3)", l:"Lesson 4", p:"44"},
+  {id:"country-2", w:"country", m:"나라", s:"Some **countries** experience the midnight sun.", b:"Seed2(B3)", l:"Lesson 4", p:"44"},
+  {id:"experience", w:"experience", m:"경험하다", s:"Some countries **experience** the midnight sun.", b:"Seed2(B3)", l:"Lesson 4", p:"44"},
+  {id:"visible", w:"visible", m:"눈에 보이는", s:"Then, the sun is **visible** at midnight.", b:"Seed2(B3)", l:"Lesson 4", p:"44"},
+  {id:"pole", w:"pole", m:"극", s:"The midnight sun happens when the **pole** is facing the sun.", b:"Seed2(B3)", l:"Lesson 4", p:"45"},
+  {id:"northern", w:"northern", m:"북쪽의", s:"In some places, like **northern** Norway, the sun doesn’t set for months.", b:"Seed2(B3)", l:"Lesson 4", p:"45"},
+  {id:"set", w:"set", m:"(해가) 지다", s:"In some places, like northern Norway, the sun doesn’t **set** for months.", b:"Seed2(B3)", l:"Lesson 4", p:"45"},
+  {id:"stay-up", w:"stay up", m:"계속 떠 있다", s:"It **stays up** for most of the summer.", b:"Seed2(B3)", l:"Lesson 4", p:"45"},
+  {id:"light-2", w:"light", m:"밝은", s:"For a few months, it is **light** outside 24 hours a day.", b:"Seed2(B3)", l:"Lesson 4", p:"45"},
+  {id:"camp", w:"camp", m:"캠핑하다", s:"One summer night, Brian and Lily are **camping** in their backyard.", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"backyard", w:"backyard", m:"뒷마당", s:"One summer night, Brian and Lily are camping in their **backyard**.", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"everything", w:"everything", m:"모든 것", s:"**Everything** is quiet until . . . Chirr-ip!", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"until", w:"until", m:"~할 때까지", s:"Everything is quiet **until** . . . Chirr-ip!", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"probably", w:"probably", m:"아마도", s:"“**Probably** just a cricket,” Lily replies.", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"cricket", w:"cricket", m:"귀뚜라미", s:"“Probably just a **cricket**,” Lily replies.", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"carefully", w:"carefully", m:"주의 깊게", s:"They listen **carefully**.", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"full-of", w:"full of", m:"~로 가득한", s:"The night is **full of** sounds.", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"dog", w:"dog", m:"개", s:"A **dog** barks, and an owl hoots.", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"bark", w:"bark", m:"짖다", s:"A dog **barks**, and an owl hoots.", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"owl", w:"owl", m:"부엉이", s:"A dog barks, and an **owl** hoots.", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"hoot", w:"hoot", m:"부엉부엉 울다", s:"A dog barks, and an owl **hoots**.", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"hiss", w:"hiss", m:"쉭쉭 소리를 내다", s:"The wind **hisses** through the trees.", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"tap", w:"tap", m:"톡톡 두드리다", s:"Then, it starts raining, and they hear the rain **tapping** on the tent.", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"tent", w:"tent", m:"텐트", s:"Then, it starts raining, and they hear the rain tapping on the **tent**.", b:"Seed2(B3)", l:"Lesson 5", p:"60"},
+  {id:"suddenly", w:"suddenly", m:"갑자기", s:"**Suddenly**, there’s a rustling.", b:"Seed2(B3)", l:"Lesson 5", p:"61"},
+  {id:"rustling", w:"rustling", m:"바스락거리는 소리", s:"Suddenly, there’s a **rustling**.", b:"Seed2(B3)", l:"Lesson 5", p:"61"},
+  {id:"grab", w:"grab", m:"붙잡다", s:"Lily **grabs** Brian’s hand.", b:"Seed2(B3)", l:"Lesson 5", p:"61"},
+  {id:"zip-open", w:"zip open", m:"지퍼가 열리다", s:"The tent **zips open**.", b:"Seed2(B3)", l:"Lesson 5", p:"61"},
+  {id:"umbrella", w:"umbrella", m:"우산", s:"It’s Mom with an **umbrella**.", b:"Seed2(B3)", l:"Lesson 5", p:"61"},
+  {id:"while", w:"while", m:"~하는 동안", s:"Inside, the kids describe the sounds **while** Mom makes hot chocolate.", b:"Seed2(B3)", l:"Lesson 5", p:"61"},
+  {id:"hot-chocolate", w:"hot chocolate", m:"핫초코", s:"Inside, the kids describe the sounds while Mom makes **hot chocolate**.", b:"Seed2(B3)", l:"Lesson 5", p:"61"},
+  {id:"concert", w:"concert", m:"음악회", s:"“It was like a **concert**!” Lily says.", b:"Seed2(B3)", l:"Lesson 5", p:"61"},
+  {id:"artist", w:"artist", m:"예술가", s:"This is the work of Foley **artists**.", b:"Seed2(B3)", l:"Lesson 6", p:"72"},
+  {id:"knight", w:"knight", m:"기사", s:"Clip-clop! A **knight** comes to town on his horse.", b:"Seed2(B3)", l:"Lesson 6", p:"72"},
+  {id:"town", w:"town", m:"마을", s:"Clip-clop! A knight comes to **town** on his horse.", b:"Seed2(B3)", l:"Lesson 6", p:"72"},
+  {id:"horse", w:"horse", m:"말", s:"Clip-clop! A knight comes to town on his **horse**.", b:"Seed2(B3)", l:"Lesson 6", p:"72"},
+  {id:"castle", w:"castle", m:"성", s:"Crackle! The **castle** still burns from the dragon’s breath.", b:"Seed2(B3)", l:"Lesson 6", p:"72"},
+  {id:"burn", w:"burn", m:"타다", s:"Crackle! The castle still **burns** from the dragon’s breath.", b:"Seed2(B3)", l:"Lesson 6", p:"72"},
+  {id:"scene", w:"scene", m:"장면", s:"The sounds make these movie **scenes** come alive.", b:"Seed2(B3)", l:"Lesson 6", p:"72"},
+  {id:"come-alive", w:"come alive", m:"살아 움직이다", s:"The sounds make these movie scenes **come alive**.", b:"Seed2(B3)", l:"Lesson 6", p:"72"},
+  {id:"nearly", w:"nearly", m:"거의", s:"Foley artists start when a movie is **nearly** done.", b:"Seed2(B3)", l:"Lesson 6", p:"73"},
+  {id:"done", w:"done", m:"끝난", s:"Foley artists start when a movie is nearly **done**.", b:"Seed2(B3)", l:"Lesson 6", p:"73"},
+  {id:"choose", w:"choose", m:"고르다", s:"They watch it carefully and **choose** sounds.", b:"Seed2(B3)", l:"Lesson 6", p:"73"},
+  {id:"everyday", w:"everyday", m:"일상의", s:"They work in a studio full of **everyday** objects.", b:"Seed2(B3)", l:"Lesson 6", p:"73"},
+  {id:"object", w:"object", m:"물건", s:"They work in a studio full of everyday **objects**.", b:"Seed2(B3)", l:"Lesson 6", p:"73"},
+  {id:"coconut", w:"coconut", m:"코코넛", s:"**Coconuts** can sound like a horse’s hooves.", b:"Seed2(B3)", l:"Lesson 6", p:"73"},
+  {id:"sound-like", w:"sound like", m:"~ 소리처럼 들리다", s:"Coconuts can **sound like** a horse’s hooves.", b:"Seed2(B3)", l:"Lesson 6", p:"73"},
+  {id:"hoof", w:"hoof", m:"발굽", s:"Coconuts can sound like a horse’s **hooves**.", b:"Seed2(B3)", l:"Lesson 6", p:"73"},
+  {id:"chips", w:"chips", m:"감자칩", s:"A bag of **chips** can sound like a crackling fire.", b:"Seed2(B3)", l:"Lesson 6", p:"73"},
+  {id:"crackling", w:"crackling", m:"타닥타닥 소리 나는", s:"A bag of chips can sound like a **crackling** fire.", b:"Seed2(B3)", l:"Lesson 6", p:"73"},
+  {id:"record", w:"record", m:"녹음하다", s:"They **record** the sounds and add them to the movie.", b:"Seed2(B3)", l:"Lesson 6", p:"73"},
+  {id:"magic", w:"magic", m:"마법", s:"You’ll hear Foley artists’ **magic**!", b:"Seed2(B3)", l:"Lesson 6", p:"73"},
+  {id:"flashy", w:"flashy", m:"번쩍이는", s:"My **Flashy** New Trick", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"trick", w:"trick", m:"요령, 재주", s:"My Flashy New **Trick**", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"chess", w:"chess", m:"체스", s:"One stormy night, Uncle Jim and I are playing **chess**.", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"lightning", w:"lightning", m:"번개", s:"Suddenly, **lightning** flashes outside, and Uncle Jim starts counting.", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"flash-2", w:"flash", m:"번쩍하다", s:"Suddenly, lightning **flashes** outside, and Uncle Jim starts counting.", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"count", w:"count", m:"세다", s:"Suddenly, lightning flashes outside, and Uncle Jim starts **counting**.", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"thunder", w:"thunder", m:"천둥", s:"He gets to three, and then **thunder** booms.", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"boom", w:"boom", m:"우르릉 울리다", s:"He gets to three, and then thunder **booms**.", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"kilometer", w:"kilometer", m:"킬로미터", s:"“A **kilometer** away,” he says.", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"away", w:"away", m:"떨어진", s:"“A kilometer **away**,” he says.", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"puzzled", w:"puzzled", m:"어리둥절한", s:"I’m **puzzled**, so he explains.", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"travel", w:"travel", m:"이동하다", s:"“Sound **travels** much slower than light.”", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"slower-than", w:"slower than", m:"~보다 더 느린", s:"“Sound travels much **slower than** light.”", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"second", w:"second", m:"초", s:"“If you count the **seconds** between lightning and thunder, you can find the distance.”", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"distance", w:"distance", m:"거리", s:"“If you count the seconds between lightning and thunder, you can find the **distance**.”", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"equal-2", w:"equal", m:"~와 같다", s:"“Three seconds **equals** one kilometer.”", b:"Seed2(B3)", l:"Lesson 7", p:"84"},
+  {id:"proudly", w:"proudly", m:"자랑스럽게", s:"“Two kilometers,” I say **proudly**.", b:"Seed2(B3)", l:"Lesson 7", p:"85"},
+  {id:"exactly", w:"exactly", m:"바로 그거야", s:"Uncle Jim smiles. “**Exactly**, Mark.”", b:"Seed2(B3)", l:"Lesson 7", p:"85"},
+  {id:"how-far-away", w:"how far away", m:"얼마나 멀리 떨어져", s:"“Now, you can tell **how far away** lightning is!”", b:"Seed2(B3)", l:"Lesson 7", p:"85"},
+  {id:"cant-wait-to", w:"can’t wait to", m:"빨리 ~하고 싶다", s:"“I **can’t wait to** show my friends this trick!” I say.", b:"Seed2(B3)", l:"Lesson 7", p:"85"},
+  {id:"alarm", w:"alarm", m:"경보", s:"Pip Sounds the **Alarm**", b:"Seed2(B3)", l:"Lesson 8", p:"96"},
+  {id:"sound-2", w:"sound", m:"(경보를) 울리다", s:"Pip **Sounds** the Alarm", b:"Seed2(B3)", l:"Lesson 8", p:"96"},
+  {id:"grassy", w:"grassy", m:"풀이 무성한", s:"In a **grassy** field, a small head pops up out of the ground.", b:"Seed2(B3)", l:"Lesson 8", p:"96"},
+  {id:"field", w:"field", m:"들판", s:"In a grassy **field**, a small head pops up out of the ground.", b:"Seed2(B3)", l:"Lesson 8", p:"96"},
+  {id:"pop-up", w:"pop up", m:"불쑥 나오다", s:"In a grassy field, a small head **pops up** out of the ground.", b:"Seed2(B3)", l:"Lesson 8", p:"96"},
+  {id:"all-clear", w:"all clear", m:"안전하다", s:"Father calls, “Yip-yip!” which means “**All clear**!”", b:"Seed2(B3)", l:"Lesson 8", p:"96"},
+  {id:"one-by-one", w:"one by one", m:"하나씩", s:"**One by one**, little prairie dogs come up out of their burrow.", b:"Seed2(B3)", l:"Lesson 8", p:"96"},
+  {id:"prairie-dog", w:"prairie dog", m:"프레리도그", s:"One by one, little **prairie dogs** come up out of their burrow.", b:"Seed2(B3)", l:"Lesson 8", p:"96"},
+  {id:"burrow", w:"burrow", m:"굴", s:"One by one, little prairie dogs come up out of their **burrow**.", b:"Seed2(B3)", l:"Lesson 8", p:"96"},
+  {id:"lookout", w:"lookout", m:"망보는 사람", s:"Pip climbs out and says, “I’m the **lookout** today.”", b:"Seed2(B3)", l:"Lesson 8", p:"96"},
+  {id:"scratch", w:"scratch", m:"긁다", s:"Pip **scratches** the dirt.", b:"Seed2(B3)", l:"Lesson 8", p:"96"},
+  {id:"munch", w:"munch", m:"우적우적 먹다", s:"While everyone is busy **munching** grass, Pip watches carefully.", b:"Seed2(B3)", l:"Lesson 8", p:"97"},
+  {id:"grass", w:"grass", m:"풀", s:"While everyone is busy munching **grass**, Pip watches carefully.", b:"Seed2(B3)", l:"Lesson 8", p:"97"},
+  {id:"hawk", w:"hawk", m:"매", s:"Suddenly, he sees a **hawk** circling overhead.", b:"Seed2(B3)", l:"Lesson 8", p:"97"},
+  {id:"circle-2", w:"circle", m:"빙빙 돌다", s:"Suddenly, he sees a hawk **circling** overhead.", b:"Seed2(B3)", l:"Lesson 8", p:"97"},
+  {id:"overhead", w:"overhead", m:"머리 위에서", s:"Suddenly, he sees a hawk circling **overhead**.", b:"Seed2(B3)", l:"Lesson 8", p:"97"},
+  {id:"warning", w:"warning", m:"경고의", s:"Father hears him and makes a loud **warning** sound.", b:"Seed2(B3)", l:"Lesson 8", p:"97"},
+  {id:"race-2", w:"race", m:"달려가다", s:"Everyone **races** to safety.", b:"Seed2(B3)", l:"Lesson 8", p:"97"},
+  {id:"save-2", w:"save", m:"구하다", s:"“You **saved** us, Pip!” says Fiona, panting.", b:"Seed2(B3)", l:"Lesson 8", p:"97"},
+  {id:"pant", w:"pant", m:"헐떡이다", s:"“You saved us, Pip!” says Fiona, **panting**.", b:"Seed2(B3)", l:"Lesson 8", p:"97"}
 ];
 
 /* ---------- 저장소 (localStorage, 실패 시 메모리) ---------- */
@@ -936,17 +1568,142 @@ function renderPrint(){
     </tbody></table>`;
 }
 
+/* =====================================================================
+   교재 몰아보기 — 단어 예문(s)을 교재·레슨·쪽 순서대로 이어 붙여
+   본문처럼 읽는 화면. 같은 문장이 여러 단어의 예문으로 쓰였으면
+   한 번만 보여 주고, 표시된 단어를 모두 합쳐서 강조한다.
+===================================================================== */
+let rdBook = null;          // 보고 있는 교재
+let rdOpen = new Set();     // 펼쳐 둔 레슨
+let rdTip  = null;          // 뜻을 띄운 단어 id
+
+function bookNames(){
+  const seen=[]; WORDS.forEach(d=>{ if(d.b && !seen.includes(d.b)) seen.push(d.b); });
+  return seen;
+}
+
+/* 예문 하나에서 **...** 위치를 뽑아낸다 (여러 쌍도 처리) */
+function marksOf(s){
+  const out=[]; let plain="", i=0, open=false, start=0;
+  while(i < s.length){
+    if(s[i]==="*" && s[i+1]==="*"){
+      if(!open){ open=true; start=plain.length; }
+      else     { open=false; out.push([start, plain.length]); }
+      i+=2;
+    } else { plain += s[i]; i++; }
+  }
+  return {plain, spans: out};
+}
+
+/* 교재 → 레슨 → 쪽 → 문장 */
+function readerData(book){
+  const lessons=[];           // [{l, pages:[{p, lines:[{text, spans:[{a,b,id}]}]}], n}]
+  const lmap={};
+  WORDS.filter(d=>d.b===book).forEach(d=>{
+    const {plain, spans} = marksOf(d.s);
+    let L=lmap[d.l];
+    if(!L){ L={l:d.l, pages:[], pmap:{}, n:0}; lmap[d.l]=L; lessons.push(L); }
+    L.n++;
+    let P=L.pmap[d.p];
+    if(!P){ P={p:d.p, lines:[], lmap:{}}; L.pmap[d.p]=P; L.pages.push(P); }
+    let line=P.lmap[plain];
+    if(!line){ line={text:plain, spans:[]}; P.lmap[plain]=line; P.lines.push(line); }
+    spans.forEach(([a,b])=>{
+      if(!line.spans.some(x=>x.a===a && x.b===b)) line.spans.push({a, b, id:d.id, w:d.w, m:d.m});
+    });
+  });
+  lessons.forEach(L=>L.pages.forEach(P=>P.lines.forEach(x=>x.spans.sort((u,v)=>u.a-v.a))));
+  return lessons;
+}
+
+function lineHTML(line){
+  let out="", at=0, last=-1;
+  line.spans.forEach(sp=>{
+    if(sp.a < last) return;                 // 겹치는 표시는 건너뜀
+    out += esc(line.text.slice(at, sp.a));
+    const on = learned.has(sp.id);
+    out += `<span class="hl ${on?"done":""}" data-hl="${esc(sp.id)}">${esc(line.text.slice(sp.a, sp.b))}</span>`;
+    at = sp.b; last = sp.b;
+  });
+  out += esc(line.text.slice(at));
+  return out;
+}
+
+function renderReader(){
+  const books = bookNames();
+  if(!books.length){ document.getElementById("reader").innerHTML =
+    `<div class="rd-empty">아직 등록된 교재가 없어요.</div>`; return; }
+  if(!rdBook || !books.includes(rdBook)) rdBook = books[books.length-1];
+
+  const lessons = readerData(rdBook);
+  const body = lessons.map(L=>{
+    const id = rdBook+"|"+L.l, open = rdOpen.has(id);
+    const inner = !open ? "" : `<div class="rd-body">` +
+      L.pages.map(P=>
+        P.lines.map(x=>{
+          const tipSpan = x.spans.find(sp=>sp.id===rdTip);
+          return `<p class="rd-s" data-say="${esc(x.text)}">${lineHTML(x)}</p>` +
+                 (tipSpan ? `<div class="rd-tip"><span class="en">${esc(tipSpan.w)}</span>${esc(tipSpan.m)}</div>` : "");
+        }).join("")
+      ).join("") +
+      `<button class="rd-play" data-read="${esc(id)}">이 레슨 전체 듣기</button></div>`;
+    return `<div class="rd-les">
+      <button class="rd-hd" data-les="${esc(id)}">
+        <b>${esc(L.l)}</b><span class="ar">${open?"▾":"▸"}</span>
+        <span class="pg">단어 ${L.n}개</span>
+      </button>${inner}</div>`;
+  }).join("");
+
+  document.getElementById("reader").innerHTML = `
+    <div class="rd-key">
+      <span><i class="y"></i>단어장 단어</span>
+      <span><i class="g"></i>외운 단어</span>
+      <span>👆 단어 = 뜻 · 문장 = 듣기</span>
+    </div>
+    <div class="rd-books">${bookNames().map(b=>
+      `<button data-book="${esc(b)}" aria-pressed="${b===rdBook}">${esc(b)}</button>`).join("")}</div>
+    ${body || `<div class="rd-empty">이 교재에는 아직 문장이 없어요.</div>`}`;
+}
+
+document.getElementById("reader").addEventListener("click", e=>{
+  const bk=e.target.closest("[data-book]");
+  if(bk){ rdBook=bk.dataset.book; rdTip=null; renderReader(); return; }
+  const ls=e.target.closest("[data-les]");
+  if(ls){ const id=ls.dataset.les;
+          if(rdOpen.has(id)) rdOpen.delete(id); else rdOpen.add(id);
+          rdTip=null; renderReader(); return; }
+  const pl=e.target.closest("[data-read]");
+  if(pl){ readLesson(pl.dataset.read); return; }
+  const hl=e.target.closest("[data-hl]");
+  if(hl){ rdTip = (rdTip===hl.dataset.hl) ? null : hl.dataset.hl; renderReader(); return; }
+  const sp=e.target.closest("[data-say]");
+  if(sp) say(sp.dataset.say);
+});
+
+function readLesson(id){
+  if(!("speechSynthesis" in window)) return;
+  const [b,l] = id.split("|");
+  const L = readerData(b).find(x=>x.l===l); if(!L) return;
+  speechSynthesis.cancel();
+  L.pages.forEach(P=>P.lines.forEach(x=>{
+    const u=new SpeechSynthesisUtterance(x.text); u.lang="en-US"; u.rate=0.9;
+    speechSynthesis.speak(u);
+  }));
+}
+
 function render(){
   document.getElementById("list").style.display = mode==="list" ? "" : "none";
   document.getElementById("card").classList.toggle("on", mode==="card");
   document.getElementById("maker").classList.toggle("on", mode==="make");
   document.getElementById("dex").classList.toggle("on", mode==="dex");
+  document.getElementById("reader").classList.toggle("on", mode==="read");
   document.getElementById("settings").classList.toggle("on", mode==="set");
   document.body.classList.toggle("makemode", mode!=="list" && mode!=="card");
   if(mode==="list") renderList();
   else if(mode==="card") renderCard();
   else if(mode==="make") renderMaker();
   else if(mode==="dex") renderDex();
+  else if(mode==="read") renderReader();
   else renderSettings();
 }
 
@@ -993,13 +1750,16 @@ document.getElementById("next").addEventListener("click", ()=>{
 document.getElementById("mList").addEventListener("click", ()=>setMode("list"));
 document.getElementById("mCard").addEventListener("click", ()=>setMode("card"));
 document.getElementById("mMake").addEventListener("click", ()=>setMode("make"));
+document.getElementById("mRead").addEventListener("click", ()=>setMode("read"));
 document.getElementById("mDex").addEventListener("click", ()=>setMode("dex"));
 document.getElementById("mSet").addEventListener("click", ()=>setMode("set"));
 function setMode(m){
+  if(mode==="read" && m!=="read" && "speechSynthesis" in window) speechSynthesis.cancel();
   mode=m; revealed=false;
   document.getElementById("mList").setAttribute("aria-pressed", m==="list");
   document.getElementById("mCard").setAttribute("aria-pressed", m==="card");
   document.getElementById("mMake").setAttribute("aria-pressed", m==="make");
+  document.getElementById("mRead").setAttribute("aria-pressed", m==="read");
   document.getElementById("mDex").setAttribute("aria-pressed", m==="dex");
   document.getElementById("mSet").setAttribute("aria-pressed", m==="set");
   render();
@@ -1270,7 +2030,125 @@ const CITIES=[
  {id:"portmoresby",en:"Port Moresby",ko:"포트모르즈비",cen:"Papua New Guinea",cko:"파푸아뉴기니",con:"오세아니아",mo:"Bird of Paradise",mko:"극락조",
   art:A("#D5EBD8","#4F7C4A",`<path d="M14 72q16-28 36-28t30 28z" fill="#3F7A55"/><path d="M48 44q-20 5-28 18" stroke="#E8A33D" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M50 49q-17 9-23 19" stroke="#F2C43D" stroke-width="2.6" fill="none" stroke-linecap="round"/><ellipse cx="62" cy="44" rx="15" ry="9.4" fill="#2E9BC4"/><rect x="57" y="52" width="2.4" height="11" fill="#5C4433"/><rect x="66" y="52" width="2.4" height="11" fill="#5C4433"/><circle cx="75" cy="37" r="6.4" fill="#1F7FA6"/><path d="M80 36.4l8 1.8-8 2z" fill="#F2C43D"/><circle cx="77" cy="35.4" r="1.5" fill="#fff"/>`)},
  {id:"honolulu",en:"Honolulu",ko:"호놀룰루",cen:"United States",cko:"미국",con:"오세아니아",mo:"Diamond Head",mko:"다이아몬드 헤드",
-  art:A("#BFE4F2","#EBD9A8",`<path d="M40 66 74 34l38 32z" fill="#7E8B5E"/><path d="M74 34 62 48l12 5 14-7z" fill="#98A670"/><rect y="62" width="120" height="10" fill="#4FA8C4"/><path d="M0 64q12 5 24 0t24 0 24 0 24 0 24 0" stroke="#BFE6F0" stroke-width="1.8" fill="none"/><ellipse cx="34" cy="60" rx="4.4" ry="13" fill="#F2C24B" transform="rotate(16 34 60)"/><rect x="14" y="42" width="3.4" height="30" fill="#8B6B45"/><path d="M15.7 43q-13-3-16 5 10-2 16 2zM15.7 43q13-3 16 5-10-2-16 2zM15.7 43q-4-11 3-14 3 8 0 14z" fill="#3E8B54"/>`)}
+  art:A("#BFE4F2","#EBD9A8",`<path d="M40 66 74 34l38 32z" fill="#7E8B5E"/><path d="M74 34 62 48l12 5 14-7z" fill="#98A670"/><rect y="62" width="120" height="10" fill="#4FA8C4"/><path d="M0 64q12 5 24 0t24 0 24 0 24 0 24 0" stroke="#BFE6F0" stroke-width="1.8" fill="none"/><ellipse cx="34" cy="60" rx="4.4" ry="13" fill="#F2C24B" transform="rotate(16 34 60)"/><rect x="14" y="42" width="3.4" height="30" fill="#8B6B45"/><path d="M15.7 43q-13-3-16 5 10-2 16 2zM15.7 43q13-3 16 5-10-2-16 2zM15.7 43q-4-11 3-14 3 8 0 14z" fill="#3E8B54"/>`)},
+ {id:"lisbon",en:"Lisbon",ko:"리스본",cen:"Portugal",cko:"포르투갈",con:"유럽",mo:"Belem Tower",mko:"벨렘 탑",
+  art:A("#CFE4F2","#7FA8BC",`<rect y="60" width="120" height="30" fill="#6FA6BE"/><rect x="46" y="26" width="24" height="42" fill="#EDE4CE"/><rect x="42" y="46" width="36" height="22" fill="#E2D8BE"/><g fill="#D3C7A8"><rect x="44" y="22" width="4" height="5"/><rect x="52" y="22" width="4" height="5"/><rect x="60" y="22" width="4" height="5"/><rect x="68" y="22" width="4" height="5"/></g><g fill="#B9AB89"><rect x="52" y="36" width="5" height="9" rx="2.5"/><rect x="62" y="36" width="5" height="9" rx="2.5"/><rect x="48" y="54" width="6" height="12" rx="3"/><rect x="66" y="54" width="6" height="12" rx="3"/></g><path d="M0 66q12 5 24 0t24 0 24 0 24 0 24 0" stroke="#A9D2E0" stroke-width="1.8" fill="none"/>`)},
+ {id:"stockholm",en:"Stockholm",ko:"스톡홀름",cen:"Sweden",cko:"스웨덴",con:"유럽",mo:"Vasa Ship",mko:"바사호",
+  art:A("#D3E5F4","#7FA0BE",`<rect y="58" width="120" height="32" fill="#6E9CBE"/><path d="M26 58h68l-8 12H34z" fill="#7A5334"/><rect x="34" y="48" width="52" height="10" fill="#8B6242"/><g fill="#5C4433"><rect x="42" y="16" width="3" height="34"/><rect x="59" y="10" width="3" height="40"/><rect x="76" y="18" width="3" height="32"/></g><g fill="#EDE6D6"><path d="M45 20h13v12H45zM62 14h13v14H62zM33 24h8v10h-8z"/></g><path d="M60 10l7 3-7 3z" fill="#F2C43D"/>`)},
+ {id:"bergen",en:"Bergen",ko:"베르겐",cen:"Norway",cko:"노르웨이",con:"유럽",mo:"Fjord",mko:"피오르",
+  art:A("#CBE0EE","#4E7A66",`<path d="M0 72V22l26 18v32z" fill="#4A6B58"/><path d="M120 72V16L92 38v34z" fill="#3F5C4C"/><path d="M26 40l14 12v20H26z" fill="#5C7F68"/><rect y="58" width="120" height="32" fill="#5E93A8"/><g fill="#C2453F"><rect x="46" y="46" width="10" height="12"/><rect x="60" y="43" width="11" height="15"/></g><g fill="#F2E8D6"><rect x="48" y="50" width="3" height="4"/><rect x="63" y="47" width="3" height="4"/></g><path d="M44 58h30l-3 4H47z" fill="#7A5334"/>`)},
+ {id:"ulaanbaatar",en:"Ulaanbaatar",ko:"울란바토르",cen:"Mongolia",cko:"몽골",con:"아시아",mo:"Ger",mko:"게르",
+  art:A("#D8E8F2","#A8B57E",`<path d="M34 72V52q26-16 52 0v20z" fill="#F0EDE2"/><path d="M34 52q26-20 52 0z" fill="#E2DCCB"/><path d="M60 34 34 52h52z" fill="#DCD4BE"/><rect x="54" y="58" width="12" height="14" fill="#8B5E3C"/><circle cx="60" cy="40" r="3" fill="#C9A227"/><circle cx="98" cy="18" r="7" fill="#F6D77E"/><path d="M8 72V62q6-8 12 0v10z" fill="#8FA06A"/>`)},
+ {id:"samarkand",en:"Samarkand",ko:"사마르칸트",cen:"Uzbekistan",cko:"우즈베키스탄",con:"아시아",mo:"Registan",mko:"레기스탄",
+  art:A("#F2DEB4","#D2B87E",`<rect x="30" y="40" width="60" height="32" fill="#E4D6B4"/><path d="M46 72V52q14-14 28 0v20z" fill="#2E6EA6"/><path d="M50 72V54q10-10 20 0v18z" fill="#F0E4C4"/><circle cx="60" cy="28" r="13" fill="#2E8CC4"/><path d="M47 30q13 8 26 0z" fill="#2E6EA6"/><rect x="59" y="12" width="2" height="5" fill="#C9A227"/><g fill="#2E8CC4"><rect x="24" y="34" width="7" height="38" rx="3.5"/><rect x="89" y="34" width="7" height="38" rx="3.5"/></g>`)},
+ {id:"sigiriya",en:"Sigiriya",ko:"시기리야",cen:"Sri Lanka",cko:"스리랑카",con:"아시아",mo:"Lion Rock",mko:"사자바위",
+  art:A("#CFE6EE","#5F8A56",`<path d="M34 72V34q26-16 52 0v38z" fill="#A6795A"/><path d="M34 34q26-18 52 0z" fill="#BF8F6A"/><path d="M52 72V54h16v18z" fill="#7A5334"/><g fill="#8A6547"><rect x="44" y="60" width="32" height="3"/><rect x="46" y="66" width="28" height="3"/></g><path d="M14 72V56q7-11 14 0v16z" fill="#4E7A48"/><path d="M96 72V58q7-10 14 0v14z" fill="#4E7A48"/>`)},
+ {id:"vancouver",en:"Vancouver",ko:"밴쿠버",cen:"Canada",cko:"캐나다",con:"아메리카",mo:"Totem Pole",mko:"토템 폴",
+  art:A("#CFE2EE","#5E8A62",`<rect x="50" y="14" width="20" height="58" fill="#B9895E"/><path d="M44 20h32l-16-8z" fill="#C2453F"/><g><rect x="50" y="24" width="20" height="15" fill="#2E8CC4"/><rect x="50" y="41" width="20" height="15" fill="#E8B93D"/><rect x="50" y="58" width="20" height="14" fill="#4E9B6A"/></g><g fill="#2E2A24"><circle cx="55.5" cy="31" r="2"/><circle cx="64.5" cy="31" r="2"/><circle cx="55.5" cy="48" r="2"/><circle cx="64.5" cy="48" r="2"/><rect x="55" y="64" width="10" height="2.4" rx="1.2"/></g><path d="M18 72V50l-8-14 16 3 6 14v19z" fill="#3F6B4A"/><path d="M104 72V54l-7-12 14 2 5 12v16z" fill="#3F6B4A"/>`)},
+ {id:"anchorage",en:"Anchorage",ko:"앵커리지",cen:"United States",cko:"미국",con:"아메리카",mo:"Denali",mko:"디날리산",
+  art:A("#20304E","#E8EFF4",`<path d="M8 30q26-16 46 2" stroke="#6EE0B4" stroke-width="3.4" fill="none" opacity=".8" stroke-linecap="round"/><path d="M60 26q26-14 48 4" stroke="#8FD8F0" stroke-width="2.6" fill="none" opacity=".7" stroke-linecap="round"/><path d="M4 72 42 30l24 26 14-12 34 28z" fill="#5E6E82"/><path d="M42 30 30 43l6 3 8-4 8 6 6-4z" fill="#F2F7FA"/><path d="M80 44l-8 8 5 2 6-3 5 4z" fill="#F2F7FA"/><circle cx="100" cy="16" r="2" fill="#fff"/><circle cx="88" cy="10" r="1.6" fill="#fff"/>`)},
+ {id:"panamacity",en:"Panama City",ko:"파나마시티",cen:"Panama",cko:"파나마",con:"아메리카",mo:"Panama Canal",mko:"파나마 운하",
+  art:A("#CFE7F2","#6E8B58",`<rect y="40" width="120" height="32" fill="#4E92B4"/><g fill="#9CA6A8"><rect x="30" y="34" width="8" height="42"/><rect x="82" y="34" width="8" height="42"/></g><rect x="38" y="52" width="44" height="8" fill="#8A939A"/><path d="M42 58h36l-5 8H47z" fill="#C2453F"/><rect x="50" y="46" width="20" height="12" fill="#EDE7D6"/><g fill="#3A4A55"><rect x="53" y="40" width="3" height="7"/><rect x="63" y="40" width="3" height="7"/></g><path d="M0 44q12 4 24 0M96 44q12 4 24 0" stroke="#8FC4DC" stroke-width="1.8" fill="none"/>`)},
+ {id:"santiago",en:"Santiago",ko:"산티아고",cen:"Chile",cko:"칠레",con:"아메리카",mo:"Andes Mountains",mko:"안데스산맥",
+  art:A("#CDE2F0","#9C8F6E",`<path d="M0 72 26 30l20 26 16-18 22 26 16-14 20 22z" fill="#7E7A72"/><path d="M26 30 16 46l6 2 5-4 6 5 5-3zM62 38l-8 10 5 2 4-3 5 4z" fill="#F4F7FA"/><path d="M100 40l-7 8 4 2 4-3 4 3z" fill="#F4F7FA"/><g fill="#C9BFA6"><rect x="18" y="60" width="10" height="12"/><rect x="34" y="56" width="9" height="16"/><rect x="76" y="58" width="10" height="14"/></g>`)},
+ {id:"lalibela",en:"Lalibela",ko:"랄리벨라",cen:"Ethiopia",cko:"에티오피아",con:"아프리카",mo:"Rock-Hewn Church",mko:"암굴 교회",
+  art:A("#F2DEBE","#C49A62",`<rect x="18" y="34" width="84" height="38" fill="#B0854F"/><path d="M40 40h40v32H40z" fill="#8A6238"/><path d="M52 34h16v44H52z" fill="#C9A06A"/><path d="M40 50h40v12H40z" fill="#C9A06A"/><path d="M54 36h12v40H54zM42 52h36v8H42z" fill="#D9B77E"/><rect x="57" y="60" width="6" height="12" fill="#6B4A33"/>`)},
+ {id:"timbuktu",en:"Timbuktu",ko:"팀북투",cen:"Mali",cko:"말리",con:"아프리카",mo:"Djinguereber Mosque",mko:"징게레베르 모스크",
+  art:A("#F6E0AE","#DCBE84",`<path d="M28 72V44h64v28z" fill="#C98F52"/><path d="M44 44 60 20l16 24z" fill="#BF8447"/><rect x="52" y="30" width="16" height="14" fill="#C98F52"/><g fill="#6B4A33"><rect x="34" y="40" width="12" height="2.4"/><rect x="74" y="40" width="12" height="2.4"/><rect x="30" y="52" width="12" height="2.4"/><rect x="78" y="52" width="12" height="2.4"/><rect x="52" y="26" width="16" height="2.4"/></g><rect x="55" y="60" width="10" height="12" rx="5" fill="#7A5334"/><circle cx="60" cy="16" r="2.4" fill="#E0B45E"/>`)},
+ {id:"antananarivo",en:"Antananarivo",ko:"안타나나리보",cen:"Madagascar",cko:"마다가스카르",con:"아프리카",mo:"Baobab Tree",mko:"바오바브나무",
+  art:A("#F4D9A8","#C9A46A",`<path d="M46 72V48q-5-7 2-10 5-3 12-3t12 3q7 3 2 10v24z" fill="#9C7A56"/><g stroke="#7A5E42" stroke-width="2.6" stroke-linecap="round" fill="none"><path d="M60 36V24M60 28l-11-8M60 28l11-8M51 22l-8-4M69 22l8-4M49 20l-5-7M71 20l5-7"/></g><path d="M28 72V58q5-7 10 0v14z" fill="#8A7048"/><path d="M88 72V60q5-6 10 0v12z" fill="#8A7048"/><circle cx="22" cy="18" r="7" fill="#F0BC62"/>`)},
+ {id:"sossusvlei",en:"Sossusvlei",ko:"소서스블레이",cen:"Namibia",cko:"나미비아",con:"아프리카",mo:"Sand Dunes",mko:"사막 모래언덕",
+  art:A("#F2C89A","#E0A45E",`<path d="M0 72V52q34-26 62-6 22 16 58 6v20z" fill="#D98F4A"/><path d="M0 72V60q30-18 54-2 20 13 66 6v8z" fill="#EDB068"/><g fill="#5C4433"><path d="M78 72V50l-6-8 8 2 4-8 2 10 6-4-8 10v20z"/></g><circle cx="24" cy="18" r="8" fill="#F7DC96"/>`)},
+ {id:"dakar",en:"Dakar",ko:"다카르",cen:"Senegal",cko:"세네갈",con:"아프리카",mo:"Lake Retba",mko:"핑크 호수",
+  art:A("#CFE4F2","#E4CE9C",`<ellipse cx="60" cy="58" rx="56" ry="20" fill="#E48CA8"/><ellipse cx="60" cy="55" rx="42" ry="13" fill="#F0A8BE"/><g fill="#F2EDE2"><path d="M22 52 28 42l6 10zM90 54l6-11 6 11z"/></g><path d="M46 50h20l-3 6H49z" fill="#8B6242"/><rect x="55" y="40" width="2" height="10" fill="#5C4433"/><path d="M57 40l8 3-8 3z" fill="#EDE4CE"/>`)},
+ {id:"uluru",en:"Uluru",ko:"울루루",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"Uluru",mko:"울루루 바위",
+  art:A("#F4C89A","#D9A264",`<path d="M12 72q10-30 30-32t34 6q14 8 32 26z" fill="#C2543A"/><g stroke="#9C3E2C" stroke-width="1.6" fill="none"><path d="M30 60q6-14 14-20M50 62q4-16 12-22M72 64q2-12 8-18"/></g><circle cx="24" cy="18" r="8" fill="#F7C463"/><path d="M96 72V62q5-8 10 0v10z" fill="#8A9C5E"/>`)},
+ {id:"milfordsound",en:"Milford Sound",ko:"밀퍼드 사운드",cen:"New Zealand",cko:"뉴질랜드",con:"오세아니아",mo:"Mitre Peak",mko:"마이터봉",
+  art:A("#CBDCE8","#3E5E56",`<path d="M0 72V30l20 12v30z" fill="#3A5A4E"/><path d="M120 72V18L96 40v32z" fill="#33503F"/><path d="M40 72 62 14l24 58z" fill="#46685A"/><path d="M62 14 54 34l7 3 5-4 6 6z" fill="#EFF4F7"/><path d="M24 44q2 14 0 24" stroke="#EAF4F8" stroke-width="3" fill="none" stroke-linecap="round"/><rect y="64" width="120" height="26" fill="#3E7A8C"/><path d="M0 68q14 5 28 0t28 0 28 0 28 0" stroke="#8FBFCE" stroke-width="1.6" fill="none"/>`)},
+ {id:"kyiv",en:"Kyiv",ko:"키이우",cen:"Ukraine",cko:"우크라이나",con:"유럽",mo:"Saint Sophia Cathedral",mko:"성 소피아 대성당",
+  art:A("#D6E7F4","#8FA98C",`<rect x="36" y="44" width="48" height="28" fill="#F0EAD8"/><rect x="52" y="24" width="16" height="20" fill="#EDE4CE"/><path d="M60 8c5 5 7 9 7 12.4 0 4.2-3.2 6.6-7 6.6s-7-2.4-7-6.6C53 17 55 13 60 8z" fill="#C9A227"/><g fill="#C9A227"><path d="M42 30c4 4 5.6 7 5.6 9.6 0 3.2-2.6 5-5.6 5s-5.6-1.8-5.6-5c0-2.6 1.6-5.6 5.6-9.6z"/><path d="M78 30c4 4 5.6 7 5.6 9.6 0 3.2-2.6 5-5.6 5s-5.6-1.8-5.6-5c0-2.6 1.6-5.6 5.6-9.6z"/></g><rect x="38" y="40" width="8" height="6" fill="#EDE4CE"/><rect x="74" y="40" width="8" height="6" fill="#EDE4CE"/><rect x="55" y="58" width="10" height="14" rx="5" fill="#7A9CC4"/>`)},
+ {id:"tromso",en:"Tromso",ko:"트롬쇠",cen:"Norway",cko:"노르웨이",con:"유럽",mo:"Arctic Cathedral",mko:"북극 대성당",
+  art:A("#1E2E4A","#E4EEF4",`<path d="M6 30q26-16 44 2" stroke="#6EE0B4" stroke-width="3.6" fill="none" opacity=".8" stroke-linecap="round"/><path d="M58 24q26-12 50 6" stroke="#8FC8F0" stroke-width="2.6" fill="none" opacity=".7" stroke-linecap="round"/><path d="M60 20 30 72h60z" fill="#F0F5F8"/><g stroke="#B9CBD8" stroke-width="1.4"><path d="M52 34v38M60 26v46M68 34v38M44 48v24M76 48v24"/></g><rect x="56" y="60" width="8" height="12" fill="#8FA9BF"/><circle cx="98" cy="16" r="2" fill="#fff"/><circle cx="88" cy="10" r="1.5" fill="#fff"/>`)},
+ {id:"tenerife",en:"Tenerife",ko:"테네리페",cen:"Spain",cko:"스페인",con:"유럽",mo:"Mount Teide",mko:"테이데산",
+  art:A("#CFE4F2","#8A7A62",`<rect y="62" width="120" height="28" fill="#5E9CB4"/><path d="M10 62 56 18l50 44z" fill="#8A6B58"/><path d="M56 18 44 34l7 3 6-4 7 6 6-4z" fill="#F2F6F8"/><path d="M56 18q-3-9 2-13 3 6 7 4-2 7-4 9z" fill="#D9694F"/><path d="M0 66q12 5 24 0t24 0 24 0 24 0 24 0" stroke="#A9D6E4" stroke-width="1.8" fill="none"/><path d="M14 62V52q5-8 10 0v10z" fill="#4E7A48"/>`)},
+ {id:"bagan",en:"Bagan",ko:"바간",cen:"Myanmar",cko:"미얀마",con:"아시아",mo:"Bagan Temples",mko:"바간 불탑",
+  art:A("#F6D5A4","#C9A272",`<circle cx="96" cy="20" r="9" fill="#F5B85E"/><g fill="#A87A52"><path d="M18 72V54q6-16 12 0v18z"/><path d="M96 72V56q6-14 12 0v16z"/></g><g fill="#B98A52"><path d="M40 72V46q10-24 20 0v26z"/><path d="M64 72V52q8-19 16 0v20z"/></g><g fill="#D9AE6E"><path d="M50 22l4 24h-8zM72 34l3 18h-6z"/></g><path d="M28 30a9 9 0 0 1 18 0q0 6-9 8t-9-8z" fill="#E86E4E"/><path d="M37 38v6" stroke="#7A5334" stroke-width="1.4"/><rect x="33" y="44" width="8" height="5" rx="1.4" fill="#8B6242"/>`)},
+ {id:"lhasa",en:"Lhasa",ko:"라싸",cen:"China",cko:"중국",con:"아시아",mo:"Potala Palace",mko:"포탈라궁",
+  art:A("#CFE6F4","#B0A88E",`<path d="M0 72 26 46l14 12 10-8 20 14 16-10 34 18z" fill="#9C9480"/><rect x="34" y="34" width="52" height="38" fill="#F0EAD8"/><rect x="48" y="20" width="24" height="52" fill="#8C3A2E"/><g fill="#C9A227"><rect x="52" y="14" width="16" height="6"/><rect x="57" y="8" width="6" height="6"/></g><g fill="#3A332A"><rect x="38" y="42" width="5" height="8"/><rect x="47" y="42" width="5" height="8"/><rect x="68" y="42" width="5" height="8"/><rect x="77" y="42" width="5" height="8"/><rect x="55" y="34" width="4" height="7"/><rect x="62" y="34" width="4" height="7"/></g>`)},
+ {id:"borobudur",en:"Borobudur",ko:"보로부두르",cen:"Indonesia",cko:"인도네시아",con:"아시아",mo:"Borobudur Temple",mko:"보로부두르 사원",
+  art:A("#CDE7EE","#6E8F5E",`<path d="M8 72V62h104v10z" fill="#9C9484"/><path d="M18 62V52h84v10z" fill="#A8A08E"/><path d="M28 52V42h64v10z" fill="#B4AC98"/><path d="M38 42V33h44v9z" fill="#9C9484"/><g fill="#8A8272"><path d="M60 12 52 33h16z"/></g><g fill="#B4AC98"><circle cx="44" cy="30" r="4"/><circle cx="76" cy="30" r="4"/><circle cx="34" cy="39" r="3.4"/><circle cx="86" cy="39" r="3.4"/></g><rect x="56" y="6" width="8" height="7" rx="4" fill="#A8A08E"/>`)},
+ {id:"yellowstone",en:"Yellowstone",ko:"옐로스톤",cen:"United States",cko:"미국",con:"아메리카",mo:"Old Faithful Geyser",mko:"올드페이스풀 간헐천",
+  art:A("#CFE2F0","#8A9C6A",`<path d="M0 72V44l24-18 20 20 14-10 22 22 20-14 20 16v12z" fill="#7E8A72"/><path d="M52 72q-6-24 6-46 12 22 6 46z" fill="#EAF2F6" opacity=".95"/><g fill="#F2F7FA" opacity=".8"><circle cx="58" cy="18" r="6"/><circle cx="68" cy="12" r="4.4"/><circle cx="49" cy="12" r="4"/></g><ellipse cx="60" cy="72" rx="22" ry="5" fill="#BFD9C8"/><path d="M14 72V60q5-8 10 0v12z" fill="#3F6B4A"/>`)},
+ {id:"easterisland",en:"Easter Island",ko:"이스터섬",cen:"Chile",cko:"칠레",con:"아메리카",mo:"Moai Statues",mko:"모아이 석상",
+  art:A("#CFE0EE","#8A9C6A",`<rect y="66" width="120" height="24" fill="#5E9CB4"/><g fill="#6E6A60"><path d="M22 72V44q0-12 9-12t9 12v28z"/><path d="M52 72V38q0-13 10-13t10 13v34z"/><path d="M84 72V48q0-11 8-11t8 11v24z"/></g><g fill="#3E3A34"><rect x="25" y="46" width="4" height="3"/><rect x="33" y="46" width="4" height="3"/><rect x="56" y="40" width="4.4" height="3.4"/><rect x="65" y="40" width="4.4" height="3.4"/><rect x="87" y="50" width="3.6" height="2.8"/><rect x="94" y="50" width="3.6" height="2.8"/></g><g fill="#57534B"><rect x="24" y="56" width="12" height="4"/><rect x="54" y="52" width="16" height="4"/></g>`)},
+ {id:"uyuni",en:"Uyuni",ko:"우유니",cen:"Bolivia",cko:"볼리비아",con:"아메리카",mo:"Salar de Uyuni",mko:"우유니 소금 사막",
+  art:A("#EAD8E4","#EDF2F4",`<rect y="52" width="120" height="38" fill="#E4ECF2"/><path d="M0 52h120v6H0z" fill="#D6E2EA"/><circle cx="86" cy="26" r="9" fill="#F7D9A0"/><circle cx="86" cy="66" r="7" fill="#F2D6AE" opacity=".55"/><path d="M0 46q22-8 44-2t34-2 42 4v6H0z" fill="#C8B8C4"/><g stroke="#FFFFFF" stroke-width="1.2" opacity=".8"><path d="M8 62h22M40 68h26M76 60h30M20 74h34M66 76h30"/></g>`)},
+ {id:"abuja",en:"Abuja",ko:"아부자",cen:"Nigeria",cko:"나이지리아",con:"아프리카",mo:"Zuma Rock",mko:"주마 바위",
+  art:A("#CFE4EE","#7E9C5E",`<path d="M18 72V44q0-20 18-24 8-2 14 0 20 5 20 26v26z" fill="#8A7E6E"/><path d="M24 44q22-16 42 0" stroke="#6E6458" stroke-width="1.8" fill="none"/><path d="M22 56q26-10 46 0" stroke="#6E6458" stroke-width="1.6" fill="none"/><path d="M26 66q22-8 40 0" stroke="#6E6458" stroke-width="1.4" fill="none"/><path d="M8 72V58q6-10 12 0v14z" fill="#4E7A48"/><path d="M96 72V54q7-11 14 0v18z" fill="#4E7A48"/><circle cx="98" cy="18" r="7" fill="#F2C86A"/>`)},
+ {id:"kinshasa",en:"Kinshasa",ko:"킨샤사",cen:"DR Congo",cko:"콩고민주공화국",con:"아프리카",mo:"Congo Rainforest",mko:"콩고 열대우림",
+  art:A("#CFE6DC","#3F6B4A",`<path d="M0 46q18-16 34-4 14-14 30-2 16-12 32 2 12-6 24 4v26H0z" fill="#2E5A40"/><path d="M0 60q20-14 38-2 16-12 32 0 14-10 28 2 10-4 22 2v28H0z" fill="#3F7A52"/><rect y="62" width="120" height="28" fill="#5E93A0"/><path d="M0 70q16 5 32 0t32 0 32 0 24 0" stroke="#8FBCC6" stroke-width="1.6" fill="none"/><g fill="#5C4433"><rect x="86" y="30" width="3" height="22"/></g><ellipse cx="80" cy="30" rx="9" ry="6" fill="#2E6EA6"/><circle cx="72" cy="27" r="4.6" fill="#2E86C4"/><path d="M68 26l-8 2 8 2.4z" fill="#F2A83D"/><circle cx="71" cy="25.6" r="1.2" fill="#fff"/>`)},
+ {id:"abusimbel",en:"Abu Simbel",ko:"아부심벨",cen:"Egypt",cko:"이집트",con:"아프리카",mo:"Abu Simbel Temple",mko:"아부심벨 신전",
+  art:A("#F4DDAE","#DDBE7E",`<path d="M8 72V30h104v42z" fill="#C99E62"/><path d="M8 30h104l-10-8H18z" fill="#B98F55"/><g fill="#B08650"><path d="M22 72V44q0-9 7-9t7 9v28z"/><path d="M44 72V42q0-9 7-9t7 9v30z"/><path d="M66 72V42q0-9 7-9t7 9v30z"/><path d="M88 72V44q0-9 7-9t7 9v28z"/></g><g fill="#7A5A34"><rect x="25" y="46" width="2.8" height="2.4"/><rect x="31" y="46" width="2.8" height="2.4"/><rect x="47" y="44" width="3" height="2.6"/><rect x="53" y="44" width="3" height="2.6"/><rect x="69" y="44" width="3" height="2.6"/><rect x="75" y="44" width="3" height="2.6"/><rect x="91" y="46" width="2.8" height="2.4"/><rect x="97" y="46" width="2.8" height="2.4"/></g><rect x="56" y="60" width="9" height="12" fill="#6B4A33"/>`)},
+ {id:"seychelles",en:"Victoria",ko:"빅토리아",cen:"Seychelles",cko:"세이셸",con:"아프리카",mo:"Aldabra Giant Tortoise",mko:"알다브라 거북",
+  art:A("#CFEAF0","#EDDCA8",`<rect y="58" width="120" height="14" fill="#5EBCC4"/><path d="M0 62q14 5 28 0t28 0 28 0 28 0" stroke="#A9E0E8" stroke-width="1.6" fill="none"/><path d="M34 66q0-18 26-18t26 18z" fill="#7A6B4E"/><g stroke="#5C5038" stroke-width="1.4" fill="none"><path d="M46 50v16M60 47v19M74 50v16M38 58h44"/></g><path d="M88 60q8-3 10 3-4 4-10 1z" fill="#8A7A5A"/><circle cx="95" cy="61.6" r="1.3" fill="#2E2A24"/><g fill="#8A7A5A"><rect x="40" y="64" width="6" height="8" rx="2"/><rect x="72" y="64" width="6" height="8" rx="2"/></g><path d="M14 72V54l-7-12 14 2 4 12v16z" fill="#3E8B54"/>`)},
+ {id:"papeete",en:"Papeete",ko:"파페에테",cen:"French Polynesia",cko:"프랑스령 폴리네시아",con:"오세아니아",mo:"Overwater Bungalow",mko:"수상 방갈로",
+  art:A("#CDE9F2","#5EC4C8",`<rect y="54" width="120" height="36" fill="#4FBCC4"/><path d="M0 58q14 5 28 0t28 0 28 0 28 0" stroke="#A9E8EE" stroke-width="1.6" fill="none"/><path d="M62 46 88 30l26 16z" fill="#B98A4E"/><rect x="70" y="46" width="36" height="16" fill="#EDE0C2"/><rect x="84" y="52" width="10" height="10" fill="#8B6B45"/><g fill="#8B6B45"><rect x="72" y="62" width="3" height="10"/><rect x="101" y="62" width="3" height="10"/></g><path d="M28 68V44h3.4v24z" fill="#8B6B45"/><path d="M30 45q-14-4-18 4 11-2 18 2zM30 45q14-4 18 4-11-2-18 2zM30 45q-4-12 3-15 4 8 0 15z" fill="#3E9B5E"/>`)},
+ {id:"cairns",en:"Cairns",ko:"케언스",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"Great Barrier Reef",mko:"대보초",
+  art:A("#BFE4F0","#2E7E9C",`<rect y="20" width="120" height="70" fill="#2E8CAE"/><g fill="#E88A5E"><path d="M14 72V56q-8-4-4-10 6-4 10 2 2-10 10-8 6 2 4 10 8-2 8 6 0 6-8 6v10z"/></g><g fill="#E0C05E"><path d="M86 72V58q10-4 6-12 8 0 8 8 6-4 10 2 2 8-8 8v8z"/></g><g fill="#D96E8E"><circle cx="52" cy="44" r="5"/><circle cx="62" cy="50" r="4"/><circle cx="44" cy="52" r="3.4"/></g><g fill="#F2D24E"><path d="M64 28l8 4-8 4-2-4z"/><path d="M34 34l7 3.4-7 3.6-2-3.6z"/></g><path d="M0 24q14 5 28 0t28 0 28 0 28 0" stroke="#BFE8F4" stroke-width="1.6" fill="none"/>`)},
+ {id:"koror",en:"Koror",ko:"코로르",cen:"Palau",cko:"팔라우",con:"오세아니아",mo:"Jellyfish Lake",mko:"해파리 호수",
+  art:A("#CDEAF0","#2E8C9C",`<rect y="18" width="120" height="72" fill="#2E9CAC"/><g fill="#F2A83D" opacity=".9"><path d="M30 40a9 9 0 0 1 18 0q0 4-9 5t-9-5z"/><path d="M33 46q1 8-2 12M39 47v12M45 46q-1 8 2 12" stroke="#F2A83D" stroke-width="1.6" fill="none"/></g><g fill="#F2C43D" opacity=".9"><path d="M62 26a7 7 0 0 1 14 0q0 3-7 4t-7-4z"/><path d="M65 31q1 6-2 9M69 32v9M73 31q-1 6 2 9" stroke="#F2C43D" stroke-width="1.4" fill="none"/></g><g fill="#F2A83D" opacity=".85"><path d="M80 56a8 8 0 0 1 16 0q0 3-8 4.4T80 56z"/><path d="M83 61q1 7-2 10M88 62v10M93 61q-1 7 2 10" stroke="#F2A83D" stroke-width="1.5" fill="none"/></g><path d="M0 22q14 5 28 0t28 0 28 0 28 0" stroke="#BFE8F0" stroke-width="1.6" fill="none"/>`)},
+ {id:"faroe",en:"Torshavn",ko:"토르스하운",cen:"Faroe Islands",cko:"페로 제도",con:"유럽",mo:"Turf-Roof House",mko:"잔디 지붕 집",
+  art:A("#CBDCE6","#4E7A5E",`<path d="M0 72V34l30 14v24z" fill="#4A6B58"/><path d="M120 72V28L92 44v28z" fill="#3F5C4C"/><rect y="64" width="120" height="26" fill="#5E8A9C"/><path d="M34 52 58 36l24 16z" fill="#5FA05E"/><path d="M34 52h48v18H34z" fill="#8C3A2E"/><g fill="#F2E8D6"><rect x="42" y="56" width="7" height="7"/><rect x="66" y="56" width="7" height="7"/><rect x="54" y="58" width="8" height="12"/></g><path d="M34 52q24-8 48 0" stroke="#3E7A45" stroke-width="2.4" fill="none"/>`)},
+ {id:"kazan",en:"Kazan",ko:"카잔",cen:"Russia",cko:"러시아",con:"유럽",mo:"Kul Sharif Mosque",mko:"쿨 샤리프 모스크",
+  art:A("#D6E7F4","#8FA98C",`<rect x="40" y="42" width="40" height="30" fill="#F0EAD8"/><path d="M60 20q13 10 13 18 0 8-13 8t-13-8q0-8 13-18z" fill="#2E6EA6"/><g fill="#2E6EA6"><path d="M32 34q5 5 5 9t-5 4-5-4 5-9z"/><path d="M88 34q5 5 5 9t-5 4-5-4 5-9z"/></g><g fill="#E4DCC8"><rect x="28" y="46" width="8" height="26"/><rect x="84" y="46" width="8" height="26"/></g><g fill="#C9A227"><rect x="59.2" y="13" width="1.8" height="7"/><rect x="31.2" y="28" width="1.6" height="6"/><rect x="87.2" y="28" width="1.6" height="6"/></g><rect x="54" y="58" width="12" height="14" rx="6" fill="#2E6EA6"/>`)},
+ {id:"malta",en:"Valletta",ko:"발레타",cen:"Malta",cko:"몰타",con:"유럽",mo:"Blue Grotto",mko:"블루 그로토",
+  art:A("#CFE6F2","#2E86AE",`<rect y="44" width="120" height="46" fill="#2E86AE"/><path d="M6 72V12h108v60H86V38q0-12-26-12T34 38v34z" fill="#C9B48E"/><path d="M6 12h108l-8 10H14z" fill="#B0997A"/><path d="M36 40q24-10 48 0" stroke="#B0997A" stroke-width="1.6" fill="none"/><path d="M36 56q14 5 24 0t24 0" stroke="#7FC4DC" stroke-width="1.6" fill="none"/><path d="M50 62h20l-3 5H53z" fill="#8B5E3C"/><rect x="58" y="52" width="2" height="10" fill="#5C4433"/><path d="M60 52l8 3-8 3z" fill="#EDE4CE"/>`)},
+ {id:"xian",en:"Xi’an",ko:"시안",cen:"China",cko:"중국",con:"아시아",mo:"Terracotta Army",mko:"병마용",
+  art:A("#E4D6BE","#B09878",`<rect y="56" width="120" height="34" fill="#9C8A6E"/><g fill="#A87E58"><path d="M13 72V52q0-7 8-7t8 7v20z"/><path d="M32 72V48q0-8 10-8t10 8v24z"/><path d="M54 72V50q0-8 10-8t10 8v22z"/><path d="M76 72V46q0-8 10-8t10 8v26z"/><path d="M99 72V52q0-7 8-7t8 7v20z"/></g><g fill="#6E5238"><circle cx="21" cy="42" r="4"/><circle cx="42" cy="38" r="4.4"/><circle cx="64" cy="40" r="4.2"/><circle cx="86" cy="36" r="4.4"/><circle cx="107" cy="42" r="4"/></g><g fill="#7A5E42"><rect x="18" y="52" width="6" height="2"/><rect x="39" y="50" width="6" height="2"/><rect x="61" y="51" width="6" height="2"/><rect x="83" y="48" width="6" height="2"/></g>`)},
+ {id:"bohol",en:"Bohol",ko:"보홀",cen:"Philippines",cko:"필리핀",con:"아시아",mo:"Chocolate Hills",mko:"초콜릿 힐",
+  art:A("#CFE6F0","#7E9C5E",`<g fill="#A8804E"><path d="M0 72q10-24 22 0zM18 72q12-30 26 0zM40 72q11-26 24 0zM60 72q13-32 28 0zM84 72q11-25 24 0zM102 72q9-20 18 0z"/></g><g fill="#B98F5E"><path d="M8 72q8-16 16 0zM48 72q9-18 18 0zM90 72q8-16 16 0z"/></g><circle cx="98" cy="18" r="8" fill="#F5CE72"/><path d="M0 76h120v14H0z" fill="#6E8F4E"/>`)},
+ {id:"almaty",en:"Almaty",ko:"알마티",cen:"Kazakhstan",cko:"카자흐스탄",con:"아시아",mo:"Tian Shan Mountains",mko:"톈산산맥",
+  art:A("#CFE2F0","#8FA07E",`<path d="M0 72 24 34l18 22 14-16 22 26 14-12 28 18z" fill="#7E8A96"/><path d="M24 34 12 52l7 2 5-4 6 6 6-4zM56 40l-9 12 6 2 4-3 5 4z" fill="#F2F7FA"/><path d="M92 46l-7 8 4 2 3-2 4 3z" fill="#F2F7FA"/><g fill="#4E7A48"><path d="M14 72V62q5-8 10 0v10zM100 72V60q5-9 10 0v12z"/></g><rect x="42" y="60" width="12" height="12" fill="#C9B396"/>`)},
+ {id:"grandcanyon",en:"Grand Canyon",ko:"그랜드 캐니언",cen:"United States",cko:"미국",con:"아메리카",mo:"Grand Canyon",mko:"그랜드 캐니언",
+  art:A("#EDD3A4","#C97E4E",`<path d="M0 40h120v10H0z" fill="#D9A05E"/><path d="M0 50h44l-8 12H0zM120 50H76l8 12h36z" fill="#C08046"/><path d="M0 62h30l-6 10H0zM120 62H90l6 10h24z" fill="#A8683A"/><path d="M36 62h48l-10 10H46z" fill="#8A5430"/><path d="M46 72h28l-6 6H52z" fill="#4E86A6"/><circle cx="100" cy="16" r="8" fill="#F5C168"/>`)},
+ {id:"iguazu",en:"Iguazu Falls",ko:"이구아수 폭포",cen:"Brazil",cko:"브라질",con:"아메리카",mo:"Iguazu Falls",mko:"이구아수 폭포",
+  art:A("#CBE7EE","#4E7A48",`<path d="M0 34h44v30H0z" fill="#4E7A48"/><path d="M76 34h44v30H76z" fill="#4E7A48"/><path d="M44 34h32v30H44z" fill="#3F6B3E"/><g fill="#E8F4F8"><rect x="30" y="40" width="12" height="26" rx="4"/><rect x="46" y="38" width="10" height="28" rx="4"/><rect x="60" y="40" width="10" height="26" rx="4"/><rect x="76" y="38" width="12" height="28" rx="4"/></g><ellipse cx="60" cy="70" rx="46" ry="8" fill="#DCEEF4"/><path d="M34 24q26-14 52 0" stroke="#F2C0D4" stroke-width="2.6" fill="none"/>`)},
+ {id:"nuuk",en:"Nuuk",ko:"누크",cen:"Greenland",cko:"그린란드",con:"아메리카",mo:"Icebergs",mko:"빙산",
+  art:A("#B9D6E6","#8FB4C6",`<rect y="56" width="120" height="34" fill="#4E86A6"/><path d="M14 56 30 26l18 30z" fill="#E8F4FA"/><path d="M30 26 22 44l8 3 7-5z" fill="#FFFFFF"/><path d="M56 56 74 34l16 22z" fill="#DCEEF6"/><path d="M92 56l14-16 12 16z" fill="#E8F4FA"/><path d="M14 60q16 6 34 0M56 62q18 6 34 0" stroke="#8FC4DC" stroke-width="1.8" fill="none"/><path d="M6 22q22-12 40 0" stroke="#7EE0C0" stroke-width="2.6" fill="none" opacity=".7"/>`)},
+ {id:"djanet",en:"Djanet",ko:"자네트",cen:"Algeria",cko:"알제리",con:"아프리카",mo:"Tassili Rock Art",mko:"타실리 암각화",
+  art:A("#F6DCA8","#DCA862",`<path d="M0 72V26h46v46z" fill="#B4794A"/><path d="M86 72V34h34v38z" fill="#A86E42"/><g fill="#7A4A2E"><path d="M14 44v-8l-4-4 4-2 4 2-4 4v8zM12 52l-2 10h3l2-8 2 8h3l-2-10z"/><path d="M28 46q6-6 12 0-2 8-12 8z"/><path d="M30 54v8M38 54v8" stroke="#7A4A2E" stroke-width="1.6"/></g><path d="M52 72q10-14 24 0z" fill="#D9A05E"/><circle cx="66" cy="20" r="8" fill="#F7CE72"/>`)},
+ {id:"portlouis",en:"Port Louis",ko:"포트루이스",cen:"Mauritius",cko:"모리셔스",con:"아프리카",mo:"Dodo",mko:"도도새",
+  art:A("#CFE8EE","#6E9C5E",`<rect y="66" width="120" height="24" fill="#5EB4BE"/><path d="M42 72V54q-10-6-10-16 0-14 16-14t16 14q0 10-10 16v18z" fill="#8A8272"/><circle cx="60" cy="26" r="10" fill="#9C9484"/><path d="M69 24q10 2 10 8-8 4-11-2z" fill="#E8C05E"/><circle cx="63" cy="23" r="1.6" fill="#2E2A24"/><path d="M32 44q-10 4-8 12 8-2 12-6z" fill="#7A7264"/><g fill="#C9A227"><rect x="42" y="70" width="4" height="6"/><rect x="54" y="70" width="4" height="6"/></g><path d="M100 72V54l-7-12 14 2 4 12v16z" fill="#3E8B54"/>`)},
+ {id:"perth",en:"Perth",ko:"퍼스",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"Pinnacles Desert",mko:"피너클스 사막",
+  art:A("#F4D2A0","#E0AE68",`<path d="M0 72V58q30-12 60-4t60 2v16z" fill="#D9964E"/><g fill="#C08A54"><path d="M16 72V50q0-6 4-6t4 6v22z"/><path d="M32 72V42q0-7 5-7t5 7v30z"/><path d="M54 72V48q0-6 4-6t4 6v24z"/><path d="M72 72V38q0-8 5-8t5 8v34z"/><path d="M94 72V52q0-6 4-6t4 6v20z"/></g><circle cx="24" cy="18" r="8" fill="#F7D07E"/>`)},
+ {id:"tarawa",en:"Tarawa",ko:"타라와",cen:"Kiribati",cko:"키리바시",con:"오세아니아",mo:"Coral Atoll",mko:"산호 환초",
+  art:A("#CDEAF2","#3EA0B4",`<rect y="14" width="120" height="76" fill="#2E9CB4"/><path d="M60 76q-40 0-40-26T60 24t40 26-40 26z" fill="#6FD0DC" opacity=".55"/><path d="M60 70q-30 0-30-20T60 30t30 20-30 20z" fill="#2E9CB4"/><g fill="#EDD9A8"><path d="M60 24q16 0 26 8-10 4-26 4t-26-4q10-8 26-8z"/><path d="M22 52q2-8 8-12 4 6 2 14z"/><path d="M98 52q-2-8-8-12-4 6-2 14z"/></g><g fill="#3E8B54"><path d="M58 28V20h2.4v8z"/><path d="M59 20q-7-2-9 2 5-1 9 1zM59 20q7-2 9 2-5-1-9 1z"/></g><path d="M0 18q14 5 28 0t28 0 28 0 28 0" stroke="#BFE8F0" stroke-width="1.6" fill="none"/>`)},
+ {id:"azores",en:"Ponta Delgada",ko:"폰타델가다",cen:"Portugal",cko:"포르투갈",con:"유럽",mo:"Sete Cidades Crater Lakes",mko:"세트 시다드스 분화구 호수",
+  art:A("#CFE4F2","#4E7A52",`<path d="M0 72V38q22-18 46-6 22 11 40-2 18-12 34 2v40z" fill="#4E7A52"/><path d="M18 58q0-12 20-12t20 12-20 10-20-10z" fill="#3E8B9C"/><path d="M60 60q0-11 20-11t20 11-20 9-20-9z" fill="#5EA86E"/><path d="M52 46q8 8 8 14" stroke="#6E5238" stroke-width="2.4" fill="none"/><g fill="#3F6B4A"><path d="M8 72V60q5-8 10 0v12zM104 72V62q5-7 10 0v10z"/></g>`)},
+ {id:"yakutsk",en:"Yakutsk",ko:"야쿠츠크",cen:"Russia",cko:"러시아",con:"아시아",mo:"Lena Pillars",mko:"레나 기둥",
+  art:A("#D6E4F0","#DCE8F0",`<rect y="62" width="120" height="28" fill="#8FB4C6"/><g fill="#8A8272"><path d="M10 66V28q0-6 5-6t5 6v38z"/><path d="M24 66V20q0-7 6-7t6 7v46z"/><path d="M40 66V32q0-6 5-6t5 6v34z"/><path d="M56 66V22q0-7 6-7t6 7v44z"/><path d="M74 66V34q0-6 5-6t5 6v32z"/><path d="M90 66V24q0-7 6-7t6 7v42z"/><path d="M106 66V36q0-6 5-6t5 6v30z"/></g><g fill="#EFF5F8"><path d="M10 28q5-6 10 0zM24 20q6-7 12 0zM56 22q6-7 12 0zM90 24q6-7 12 0z"/></g><path d="M0 68q14 4 28 0t28 0 28 0 28 0" stroke="#C6DEE8" stroke-width="1.6" fill="none"/>`)},
+ {id:"tehran",en:"Tehran",ko:"테헤란",cen:"Iran",cko:"이란",con:"아시아",mo:"Azadi Tower",mko:"아자디 타워",
+  art:A("#7FAFD4","#9C8A6A",`<path d="M20 72V66h80v6z" fill="#6E6252"/><path d="M32 66V52l28-42 28 42v14H74V44q0-9-14-9t-14 9v22z" fill="#F4F1E8"/><path d="M32 66V52l28-42v25q-14 0-14 9v22z" fill="#DCD6C6"/><path d="M46 66V48q0-9 14-9t14 9v18h-7V50q0-7-7-7t-7 7v16z" fill="#4E6E8C"/><path d="M52 28h16l-8-14z" fill="#C6BFAC"/><g fill="#6E8C5E"><path d="M8 72V62q5-7 10 0v10zM104 72V62q5-7 10 0v10z"/></g>`)},
+ {id:"taipei",en:"Taipei",ko:"타이베이",cen:"Taiwan",cko:"대만",con:"아시아",mo:"Taipei 101",mko:"타이베이 101",
+  art:A("#CFE2F0","#7E8C74",`<g fill="#8FB4A6"><rect x="50" y="30" width="20" height="42"/><path d="M48 30h24l-3 5H51zM47 40h26l-3 5H50zM46 50h28l-3 5H49zM45 60h30l-3 5H48z"/></g><path d="M52 18h16v12H52z" fill="#7EA396"/><rect x="59" y="6" width="2" height="12" fill="#6E9386"/><g fill="#A8B9C4"><rect x="20" y="52" width="10" height="20"/><rect x="34" y="58" width="9" height="14"/><rect x="80" y="54" width="10" height="18"/><rect x="94" y="60" width="9" height="12"/></g>`)},
+ {id:"churchill",en:"Churchill",ko:"처칠",cen:"Canada",cko:"캐나다",con:"아메리카",mo:"Polar Bear",mko:"북극곰",
+  art:A("#B9D6E8","#EDF3F7",`<path d="M6 26q24-14 42 2" stroke="#7EE0C0" stroke-width="3.2" fill="none" opacity=".7" stroke-linecap="round"/><path d="M0 62h120v10H0z" fill="#DCE8F0"/><path d="M30 66V52q0-10 14-10h22q14 0 14 10v14z" fill="#F4F8FA"/><circle cx="86" cy="44" r="10" fill="#F4F8FA"/><circle cx="82" cy="35" r="3.4" fill="#EAF0F4"/><circle cx="92" cy="35" r="3.4" fill="#EAF0F4"/><circle cx="90" cy="44" r="1.8" fill="#3A3630"/><circle cx="84" cy="42" r="1.4" fill="#3A3630"/><g fill="#E4EDF2"><rect x="32" y="62" width="9" height="8" rx="3"/><rect x="52" y="62" width="9" height="8" rx="3"/><rect x="68" y="62" width="9" height="8" rx="3"/></g>`)},
+ {id:"neworleans",en:"New Orleans",ko:"뉴올리언스",cen:"United States",cko:"미국",con:"아메리카",mo:"Jazz",mko:"재즈",
+  art:A("#4E3A5E","#6E4E7E",`<circle cx="94" cy="20" r="8" fill="#F2D77E"/><path d="M28 52q0-8 8-8h24v16H36q-8 0-8-8z" fill="#E8B93D"/><path d="M60 40l26-10v36L60 56z" fill="#F2C84E"/><path d="M86 30q10 6 10 14t-10 14z" fill="#E8B93D"/><g fill="#C79A2E"><rect x="38" y="38" width="4" height="8" rx="2"/><rect x="47" y="38" width="4" height="8" rx="2"/><rect x="56" y="38" width="4" height="8" rx="2"/></g><g fill="#F2E4A8" opacity=".8"><path d="M14 30l6 2-6 2zM20 20l5 2-5 2zM10 44l5 2-5 2z"/></g>`)},
+ {id:"galapagos",en:"Galapagos",ko:"갈라파고스",cen:"Ecuador",cko:"에콰도르",con:"아메리카",mo:"Marine Iguana",mko:"바다이구아나",
+  art:A("#CFE6EE","#5E5A52",`<rect y="62" width="120" height="28" fill="#4E9CB4"/><path d="M0 66h120v6H0z" fill="#6E6A60"/><path d="M18 62V52q0-6 10-6h34q12 0 18 6l14 10z" fill="#4E4A44"/><path d="M84 52q12-4 18 2-6 6-18 4z" fill="#5C5850"/><circle cx="96" cy="53" r="1.6" fill="#E8C05E"/><g fill="#3E3A34"><path d="M28 46l4-8 4 8zM40 44l4-9 4 9zM54 44l4-9 4 9zM68 46l4-8 4 8z"/></g><g fill="#4E4A44"><rect x="26" y="60" width="7" height="6" rx="2"/><rect x="60" y="60" width="7" height="6" rx="2"/></g><path d="M18 56q-14 2-18 8 12 2 18-2z" fill="#4E4A44"/>`)},
+ {id:"kruger",en:"Kruger",ko:"크루거",cen:"South Africa",cko:"남아프리카공화국",con:"아프리카",mo:"Safari Elephant",mko:"사파리 코끼리",
+  art:A("#F2D9A0","#C9A86A",`<circle cx="98" cy="18" r="9" fill="#F2A83D"/><path d="M28 68V48q0-14 16-14h16q16 0 16 14v20z" fill="#8A8A84"/><circle cx="80" cy="42" r="13" fill="#94948E"/><path d="M88 34q12-6 16 2-6 10-16 6z" fill="#84847E"/><path d="M84 52q4 14-2 18 8 0 10-16z" fill="#8A8A84"/><circle cx="76" cy="39" r="1.8" fill="#3A3630"/><g fill="#7E7E78"><rect x="32" y="64" width="9" height="8" rx="2"/><rect x="48" y="64" width="9" height="8" rx="2"/><rect x="64" y="64" width="9" height="8" rx="2"/></g><path d="M6 72V56l-6-12 12 2 4 12v14z" fill="#7E9C5E"/>`)},
+ {id:"moroni",en:"Moroni",ko:"모로니",cen:"Comoros",cko:"코모로",con:"아프리카",mo:"Karthala Volcano",mko:"카르탈라 화산",
+  art:A("#F0D2B4","#5E8A6E",`<rect y="64" width="120" height="26" fill="#4EA0B4"/><path d="M10 68 58 22l52 46z" fill="#6E6258"/><path d="M58 22 46 38l10 4 8-5 8 6z" fill="#8A7E72"/><path d="M58 22q-4-10 2-14 3 6 8 4-3 8-5 10z" fill="#D9694F"/><circle cx="50" cy="8" r="3" fill="#F2A03D"/><path d="M0 70q14 4 28 0t28 0 28 0 28 0" stroke="#8FCEDC" stroke-width="1.6" fill="none"/><path d="M14 68V56l-6-11 12 2 3 11v10z" fill="#3E8B54"/>`)},
+ {id:"agadez",en:"Agadez",ko:"아가데즈",cen:"Niger",cko:"니제르",con:"아프리카",mo:"Grand Mosque of Agadez",mko:"아가데즈 대모스크",
+  art:A("#F6DEB0","#DCB878",`<path d="M26 72V46h60v26z" fill="#C98F52"/><path d="M46 46 60 8l14 38z" fill="#BF8447"/><g fill="#6B4A33"><path d="M52 22h16v2.4H52zM50 30h20v2.4H50zM48 38h24v2.4H48zM30 52h52v2.4H30zM30 62h52v2.4H30z"/></g><circle cx="60" cy="5" r="2.4" fill="#E0B45E"/><rect x="54" y="60" width="12" height="12" rx="6" fill="#7A5334"/><path d="M8 72V60q6-10 12 0v12z" fill="#8FA05E"/>`)},
+ {id:"honiara",en:"Honiara",ko:"호니아라",cen:"Solomon Islands",cko:"솔로몬 제도",con:"오세아니아",mo:"Tomoko War Canoe",mko:"전통 카누",
+  art:A("#CFE8F0","#3EA8B4",`<rect y="56" width="120" height="34" fill="#3EA8B4"/><path d="M14 62h92q-8 12-46 12T14 62z" fill="#5C4433"/><path d="M14 62q-6-10-2-18 10 4 12 18z" fill="#4A362A"/><path d="M106 62q6-10 2-18-10 4-12 18z" fill="#4A362A"/><g fill="#EDE4CE"><path d="M30 64h4v4h-4zM42 64h4v4h-4zM54 64h4v4h-4zM66 64h4v4h-4zM78 64h4v4h-4z"/></g><g fill="#8B6B45"><rect x="44" y="52" width="2.6" height="12" transform="rotate(20 45 58)"/><rect x="70" y="52" width="2.6" height="12" transform="rotate(-20 71 58)"/></g><path d="M0 58q14 4 28 0t28 0 28 0 28 0" stroke="#9EDCE6" stroke-width="1.6" fill="none"/>`)},
+ {id:"adelaide",en:"Adelaide",ko:"애들레이드",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"Kangaroo Island",mko:"캥거루섬",
+  art:A("#F2D9A8","#B4C47E",`<circle cx="98" cy="18" r="8" fill="#F2C86A"/><path d="M40 72q-8-4-8-14t10-14l10-2 8 6q6 4 6 12 0 8-6 12z" fill="#B47E52"/><circle cx="64" cy="34" r="9" fill="#B47E52"/><path d="M64 26q-2-12 2-14 4 4 3 14zM72 27q4-11 8-11-1 6-5 13z" fill="#A6714A"/><circle cx="69" cy="33" r="1.6" fill="#3A3630"/><path d="M32 62q-16 6-20 14 14 2 24-6z" fill="#A6714A"/><path d="M44 68v6M56 68v6" stroke="#A6714A" stroke-width="4" stroke-linecap="round"/><path d="M8 72V62q5-8 10 0v10z" fill="#7E9C5E"/>`)},
+ {id:"hobart",en:"Hobart",ko:"호바트",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"Tasmanian Devil",mko:"태즈메이니아데블",
+  art:A("#CFE2EE","#5E7A52",`<path d="M32 70V52q0-14 18-14h20q18 0 18 14v18z" fill="#3A3630"/><circle cx="76" cy="42" r="13" fill="#423E38"/><path d="M66 32q-6-8-2-12 6 2 8 8zM86 32q6-8 2-12-6 2-8 8z" fill="#8A3A3A"/><circle cx="72" cy="41" r="1.8" fill="#F2E8D6"/><circle cx="82" cy="41" r="1.8" fill="#F2E8D6"/><path d="M70 50q6 5 12 0-2 6-6 6t-6-6z" fill="#F2E8D6"/><path d="M36 54h34v4H36z" fill="#F2E8D6"/><g fill="#423E38"><rect x="36" y="66" width="9" height="6" rx="2"/><rect x="56" y="66" width="9" height="6" rx="2"/></g><path d="M32 58q-16 2-22 10 14 4 22-4z" fill="#3A3630"/>`)}
 ];
 
 let unlocked = new Set(JSON.parse(store.get("cities")||"[]"));
@@ -1305,7 +2183,27 @@ const PIN={
  dubai:[236,79], singapore:[284,110], halong:[288,84],
  mexicocity:[81,86], chicago:[93,57], buenosaires:[122,157], havana:[98,81],
  marrakesh:[173,70], capetown:[199,156], livingstone:[206,135],
- portvila:[349,135], portmoresby:[328,124], honolulu:[23,84]
+ portvila:[349,135], portmoresby:[328,124], honolulu:[23,84],
+ lisbon:[171,61], stockholm:[199,34], bergen:[186,32],
+ ulaanbaatar:[287,49], samarkand:[247,60], sigiriya:[261,101],
+ vancouver:[57,47], anchorage:[31,31], panamacity:[101,100], santiago:[110,156],
+ lalibela:[220,96], timbuktu:[177,90], antananarivo:[228,136], sossusvlei:[196,144], dakar:[163,92],
+ uluru:[312,145], milfordsound:[348,170],
+ kyiv:[211,45], tromso:[199,20], tenerife:[164,75],
+ bagan:[275,84], lhasa:[272,73], borobudur:[291,122],
+ yellowstone:[70,53], easterisland:[71,147], uyuni:[113,138],
+ abuja:[184,103], kinshasa:[196,117], abusimbel:[212,82], seychelles:[236,118],
+ papeete:[31,134], cairns:[326,134], koror:[315,102],
+ faroe:[173,30], kazan:[230,38], malta:[195,64],
+ xian:[289,67], bohol:[305,99], almaty:[257,55],
+ grandcanyon:[68,64], iguazu:[126,145], nuuk:[128,27],
+ djanet:[190,80], portlouis:[238,138],
+ perth:[296,154], tarawa:[353,110],
+ azores:[155,63],
+ yakutsk:[310,30], tehran:[232,65], taipei:[302,79],
+ churchill:[86,34], neworleans:[90,72], galapagos:[90,113],
+ kruger:[212,143], moroni:[224,127], agadez:[188,89],
+ honiara:[340,124], adelaide:[319,157], hobart:[328,168]
 };
 const PIN_SHAPE="M0 0c0 0-4.6-6-4.6-8.6a4.6 4.6 0 1 1 9.2 0C4.6-6 0 0 0 0z";
 function pins(){
