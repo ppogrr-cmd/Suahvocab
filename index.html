@@ -45,7 +45,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 /* ---------- 상단 ---------- */
 header{
-  position:sticky;top:0;z-index:20;
+  flex:0 0 auto;z-index:20;
   background:var(--ink);color:#fff;
   padding:14px 16px 12px;
   padding-top:calc(14px + env(safe-area-inset-top));
@@ -358,6 +358,7 @@ body.makemode .tools{display:none}
   header,.bar,main,#card{display:none !important}
   body{background:#fff;font-size:10pt;height:auto;display:block;overflow:visible}
   #scrollArea{overflow:visible;height:auto;flex:none}
+  header{position:static}
   #print{display:block}
   .ph{display:flex;justify-content:space-between;align-items:baseline;
       border-bottom:1.2pt solid #000;padding-bottom:5px;margin-bottom:9px}
@@ -379,8 +380,6 @@ body.makemode .tools{display:none}
 </style>
 </head>
 <body>
-
-<div id="scrollArea">
 
 <header>
   <div class="brand">
@@ -415,6 +414,8 @@ body.makemode .tools{display:none}
   </div>
   <div class="chips" id="chips"></div>
 </header>
+
+<div id="scrollArea">
 
 <main id="list"></main>
 
