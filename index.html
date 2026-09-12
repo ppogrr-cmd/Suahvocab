@@ -72,7 +72,8 @@ header{
 .iconbtn[aria-pressed="true"]{background:var(--mark);color:#1B2A41}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 
-.chips{display:flex;gap:7px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
+.chips{display:flex;gap:6px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
+#chips{flex-wrap:wrap;overflow:visible;row-gap:6px}
 .subchips{margin-top:7px;padding-left:2px}
 .subchips .chip{font-size:12.5px;padding:4px 11px}
 .chip .ar{font-size:10px;opacity:.75;margin-left:1px}
@@ -80,7 +81,7 @@ header{
 .chip{
   display:inline-flex;align-items:center;gap:5px;
   border:1px solid #40587A;background:transparent;color:#B9C9DC;
-  border-radius:999px;padding:5px 12px 5px 10px;font-size:13.5px;white-space:nowrap;
+  border-radius:999px;padding:5px 10px 5px 9px;font-size:12.5px;white-space:nowrap;
 }
 .chip svg{width:14px;height:14px;display:block;flex:none}
 .chip[aria-pressed="true"]{background:var(--mark);border-color:var(--mark);color:#1B2A41;font-weight:600}
@@ -2620,28 +2621,39 @@ function render(){
 /* ---------- 이벤트 ---------- */
 const chips = document.getElementById("chips");
 const subchips = document.getElementById("subchips");
-let openCat = null;                     // 펼쳐 둔 교재 묶음
+let openCat = null;   // null=자동(교재 고르면 펼침), ""=접음, 그 외=해당 묶음
+
+const catOfBook = b => CATS.find(c=>c.books.includes(b));
+/* 교재를 고르면 그 묶음은 계속 펼쳐 둔다 → 고른 교재 칩이 항상 보인다 */
+const shownCat = () => openCat===null ? (fBook ? (catOfBook(fBook)||{}).id : null) : (openCat || null);
 
 function catLabel(c){
-  return (fBook && c.books.includes(fBook)) ? `${c.label} · ${fBook}` : c.label;
+  /* 펼쳐져 있으면 아래 줄에 교재가 보이므로 짧게, 접혀 있으면 이름을 붙여 준다 */
+  return (fBook && c.books.includes(fBook) && shownCat()!==c.id) ? `${c.label} · ${fBook}` : c.label;
 }
 function drawChips(){
+  const open = shownCat();
   chips.innerHTML =
     FILTERS.map(f=>
       `<button class="chip" data-f="${f.id}" aria-pressed="${fState===f.id}">${f.ic||""}${f.label}</button>`).join("") +
     CATS.map(c=>{
-      const picked = fBook && c.books.includes(fBook);
-      return `<button class="chip" data-cat="${c.id}" aria-pressed="${!!(openCat===c.id || picked)}">${catLabel(c)}<i class="ar">${openCat===c.id?"▲":"▼"}</i></button>`;
+      const picked = !!(fBook && c.books.includes(fBook));
+      return `<button class="chip" data-cat="${c.id}" aria-pressed="${open===c.id || picked}">${catLabel(c)}<i class="ar">${open===c.id?"▲":"▼"}</i></button>`;
     }).join("");
 
-  const cat = CATS.find(c=>c.id===openCat);
+  const cat = CATS.find(c=>c.id===open);
   subchips.hidden = !cat;
   subchips.innerHTML = cat ? cat.books.map(b=>
     `<button class="chip" data-book-f="${b}" aria-pressed="${fBook===b}">${b}</button>`).join("") : "";
-  /* 고른 칩이 가로 스크롤 밖으로 밀려나지 않게 */
-  chips.scrollLeft = (()=>{ const on=chips.querySelector('[data-f][aria-pressed="true"]'); return on?Math.max(0,on.offsetLeft-12):0; })();
-  const onB = subchips.querySelector('[aria-pressed="true"]');
-  if(onB) subchips.scrollLeft = Math.max(0, onB.offsetLeft - 12);
+
+  /* 켜진 칩이 잘리지 않도록 가로 위치를 맞춘다 */
+  const fit = box => {
+    const on = [...box.querySelectorAll('[aria-pressed="true"]')].pop();
+    if(!on) { box.scrollLeft = 0; return; }
+    const right = on.offsetLeft + on.offsetWidth + 8;
+    box.scrollLeft = Math.max(0, right - box.clientWidth);
+  };
+  fit(chips); if(cat) fit(subchips);
 }
 drawChips();
 
@@ -2649,13 +2661,14 @@ function applyFilter(){ ci=0; revealed=false; drawChips(); render(); }
 
 chips.addEventListener("click", e=>{
   const c=e.target.closest("[data-cat]");
-  if(c){ openCat = (openCat===c.dataset.cat) ? null : c.dataset.cat; drawChips(); return; }
+  if(c){ openCat = (shownCat()===c.dataset.cat) ? "" : c.dataset.cat; drawChips(); return; }
   const b=e.target.closest("[data-f]");
   if(b){ fState=b.dataset.f; applyFilter(); }        // 교재 선택은 그대로 둔다
 });
 subchips.addEventListener("click", e=>{
   const b=e.target.closest("[data-book-f]"); if(!b) return;
   fBook = (fBook===b.dataset.bookF) ? null : b.dataset.bookF;   // 같은 교재를 다시 누르면 해제
+  if(fBook) openCat = null;                                     // 자동(펼침)으로 되돌림
   applyFilter();
 });
 
