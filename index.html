@@ -2385,20 +2385,23 @@ const CATS = (()=>{
 })();
 
 const FILTERS = [
-  {id:"all",  label:"전체",      ic:ICON_ALL},
   {id:"todo", label:"안 외운 것", ic:ICON_TODO},
-  {id:"done", label:"외운 것",    ic:ICON_DONE}
+  {id:"done", label:"외운 것",    ic:ICON_DONE},
+  {id:"all",  label:"전체",      ic:ICON_ALL}
 ];
-let filter="all", query="", hide=false, mode="list", ci=0, revealed=false;
+const DEFAULT_FILTER = "todo";          // 앱을 켜면 안 외운 것부터
+/* 외움 여부와 교재를 따로 두고 둘 다 동시에 건다 */
+let fState=DEFAULT_FILTER, fBook=null;
+let query="", hide=false, mode="list", ci=0, revealed=false;
 
 
 
 function visible(){
   const q = query.trim().toLowerCase();
   return WORDS.filter((d,i)=>{
-    if(filter==="done" && !learned.has(key(d))) return false;
-    if(filter==="todo" &&  learned.has(key(d))) return false;
-    if(filter.startsWith("B:") && d.b!==filter.slice(2)) return false;
+    if(fState==="done" && !learned.has(key(d))) return false;
+    if(fState==="todo" &&  learned.has(key(d))) return false;
+    if(fBook && d.b!==fBook) return false;
     if(!q) return true;
     return (d.w+" "+d.m+" "+d.s).toLowerCase().includes(q);
   }).sort((a,b)=>(BOOK_ORDER.get(a.b) ?? 999) - (BOOK_ORDER.get(b.b) ?? 999));
@@ -2620,41 +2623,40 @@ const subchips = document.getElementById("subchips");
 let openCat = null;                     // 펼쳐 둔 교재 묶음
 
 function catLabel(c){
-  const on = filter.startsWith("B:") && c.books.includes(filter.slice(2));
-  return on ? `${c.label} · ${filter.slice(2)}` : c.label;
+  return (fBook && c.books.includes(fBook)) ? `${c.label} · ${fBook}` : c.label;
 }
 function drawChips(){
   chips.innerHTML =
     FILTERS.map(f=>
-      `<button class="chip" data-f="${f.id}" aria-pressed="${filter===f.id}">${f.ic||""}${f.label}</button>`).join("") +
+      `<button class="chip" data-f="${f.id}" aria-pressed="${fState===f.id}">${f.ic||""}${f.label}</button>`).join("") +
     CATS.map(c=>{
-      const on = openCat===c.id || (filter.startsWith("B:") && c.books.includes(filter.slice(2)));
-      return `<button class="chip" data-cat="${c.id}" aria-pressed="${on}">${catLabel(c)}<i class="ar">${openCat===c.id?"▲":"▼"}</i></button>`;
+      const picked = fBook && c.books.includes(fBook);
+      return `<button class="chip" data-cat="${c.id}" aria-pressed="${!!(openCat===c.id || picked)}">${catLabel(c)}<i class="ar">${openCat===c.id?"▲":"▼"}</i></button>`;
     }).join("");
 
   const cat = CATS.find(c=>c.id===openCat);
   subchips.hidden = !cat;
   subchips.innerHTML = cat ? cat.books.map(b=>
-    `<button class="chip" data-f="B:${b}" aria-pressed="${filter==="B:"+b}">${b}</button>`).join("") : "";
+    `<button class="chip" data-book-f="${b}" aria-pressed="${fBook===b}">${b}</button>`).join("") : "";
   /* 고른 칩이 가로 스크롤 밖으로 밀려나지 않게 */
-  [chips, subchips].forEach(box=>{
-    const on = box.querySelector('[aria-pressed="true"]');
-    if(on) box.scrollLeft = Math.max(0, on.offsetLeft - 12);
-  });
+  chips.scrollLeft = (()=>{ const on=chips.querySelector('[data-f][aria-pressed="true"]'); return on?Math.max(0,on.offsetLeft-12):0; })();
+  const onB = subchips.querySelector('[aria-pressed="true"]');
+  if(onB) subchips.scrollLeft = Math.max(0, onB.offsetLeft - 12);
 }
 drawChips();
 
-function pickFilter(v){ filter=v; ci=0; revealed=false; drawChips(); render(); }
+function applyFilter(){ ci=0; revealed=false; drawChips(); render(); }
 
 chips.addEventListener("click", e=>{
   const c=e.target.closest("[data-cat]");
   if(c){ openCat = (openCat===c.dataset.cat) ? null : c.dataset.cat; drawChips(); return; }
   const b=e.target.closest("[data-f]");
-  if(b){ openCat=null; pickFilter(b.dataset.f); }
+  if(b){ fState=b.dataset.f; applyFilter(); }        // 교재 선택은 그대로 둔다
 });
 subchips.addEventListener("click", e=>{
-  const b=e.target.closest("[data-f]"); if(!b) return;
-  pickFilter(filter===b.dataset.f ? "all" : b.dataset.f);
+  const b=e.target.closest("[data-book-f]"); if(!b) return;
+  fBook = (fBook===b.dataset.bookF) ? null : b.dataset.bookF;   // 같은 교재를 다시 누르면 해제
+  applyFilter();
 });
 
 document.getElementById("q").addEventListener("input", e=>{ query=e.target.value; ci=0; render(); });
