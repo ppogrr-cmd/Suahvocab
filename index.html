@@ -173,86 +173,7 @@ main{padding:12px 12px 26px;max-width:640px;margin:0 auto}
 .mk-none{background:var(--paper);border:1px dashed #C3D0DE;border-radius:11px;
          padding:22px 18px;margin-top:14px;text-align:center;color:var(--ink-soft);line-height:1.7}
 
-/* ---------- 도시 카드 도감 ---------- */
-#dex{display:none;padding:14px 12px 26px;max-width:640px;margin:0 auto}
-#dex.on{display:block}
-.dex-msg{background:var(--paper);border:1px solid var(--rule);border-radius:12px;
-  padding:14px;text-align:center;font-size:14.5px;color:var(--ink-soft);line-height:1.6}
-.dex-msg b{color:var(--ink);font-size:16px}
-.bar button{position:relative}
-.bar .dot{position:absolute;top:-6px;right:-5px;
-  min-width:17px;height:17px;line-height:17px;padding:0 4px;
-  border-radius:9px;background:#E24A3B;color:#fff;font-size:11px;font-weight:700;
-  margin:0;font-variant-numeric:tabular-nums}
-.bar .dot[hidden]{display:none}
-
-/* 지도 대시보드 */
-.map-card{background:var(--paper);border:1px solid var(--rule);border-radius:14px;padding:12px 12px 6px}
-.map-head{display:flex;align-items:baseline;justify-content:space-between;margin:0 2px 8px}
-.map-head b{font-size:17px}
-.map-head span{font-size:13px;color:var(--ink-soft)}
-.wmap{width:100%;height:auto;display:block;margin:2px 0 6px}
-.wmap path{cursor:pointer;transition:opacity .15s}
-.wmap path:active{opacity:.7}
-.wmap .pin{cursor:pointer}
-.wmap .pin path{filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
-.wmap .pin:active{opacity:.75}
-.legend{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:6px}
-.lg{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:9px;
-  border:1px solid var(--rule);font-size:12.5px;cursor:pointer;background:#fff}
-.lg[aria-pressed="true"]{border-color:var(--ink);background:#F3F6F9}
-.lg .sw{width:11px;height:11px;border-radius:3px;flex:none}
-.lg .nm{flex:1;min-width:0}
-.lg .ct{color:var(--ink-soft);font-variant-numeric:tabular-nums}
-
-/* 뒤집을 카드 */
-.pack-wrap{margin:16px 0 4px;text-align:center}
-.pack-lead{font-size:15px;color:var(--ink);margin-bottom:2px}
-.pack-lead b{color:#C0392B}
-.pack-sub{font-size:12.5px;color:var(--ink-soft);margin:0 auto 11px;max-width:330px}
-.pack{perspective:1100px;width:196px;height:262px;margin:0 auto 10px;cursor:pointer}
-.pack-in{position:relative;width:100%;height:100%;transform-style:preserve-3d;
-  transition:transform .8s cubic-bezier(.2,.85,.25,1)}
-.pack.open .pack-in{transform:rotateY(180deg)}
-.pack .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  border-radius:16px;overflow:hidden;box-shadow:0 5px 18px rgba(27,42,65,.2)}
-.pack .front{background:linear-gradient(140deg,#27496B,#16324F);display:grid;place-items:center;gap:6px}
-.pack .front .globe{width:78px;height:78px;opacity:.55}
-.pack .front .txt{color:#9FC0DC;font-size:13px;letter-spacing:.02em}
-.pack .back{transform:rotateY(180deg);background:var(--paper);border:1px solid var(--rule)}
-.pack .back .cm-t{padding:10px 12px 12px}
-.pack .back .en{font-size:22px}
-.pack-ok{border:0;border-radius:11px;background:var(--ink);color:#fff;padding:11px 26px;font-size:15px}
-.chance{display:flex;align-items:center;gap:9px;background:var(--paper);border:1px solid var(--rule);
-  border-radius:12px;padding:10px 14px;margin:12px auto 7px;max-width:330px}
-.chance .ci{display:grid;place-items:center;color:var(--accent);flex:none}
-.chance .ci svg{width:21px;height:21px;display:block}
-.chance .cl{flex:1;text-align:left;font-size:14.5px}
-.chance .cv{font-size:22px;font-variant-numeric:tabular-nums;color:var(--ink)}
-.chance .cv em{font-style:normal;font-size:14px;font-weight:400;color:var(--ink-soft);margin-left:2px}
-.go{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:330px;
-  margin:0 auto 12px;border:0;border-radius:12px;background:var(--accent);color:#fff;
-  padding:13px;font-size:16px;font-weight:600;cursor:pointer}
-.go svg{width:20px;height:20px;display:block}
-.go:disabled{background:#DFE6EC;color:#9AA8BC;cursor:default}
-.pack.sample{cursor:pointer}
-.pack.sample .pack-in{transition:none}
-.pack-note{font-size:12px;color:#9AA8BC;margin-top:2px}
-
-/* 도시 목록 */
-.clist{margin-top:18px;display:flex;flex-direction:column;gap:8px}
-.crow{display:flex;align-items:center;gap:11px;background:var(--paper);
-  border:1px solid var(--rule);border-radius:12px;padding:8px 11px 8px 8px;cursor:pointer}
-.crow .th{width:68px;flex:none;border-radius:8px;overflow:hidden}
-.crow .th svg{width:100%;height:auto;display:block}
-.crow .tx{min-width:0;flex:1}
-.crow .en{font-family:"Newsreader",Georgia,serif;font-size:18px;font-weight:600;line-height:1.2}
-.crow .ko{font-size:12.5px;color:var(--ink-soft);margin-top:1px}
-.crow .mo{font-size:12px;color:#9AA8BC;margin-top:2px}
-.crow.lock{background:#EDF1F5;border-style:dashed;cursor:default}
-.crow.lock .th{width:68px;aspect-ratio:4/3;display:grid;place-items:center;
-  background:#DFE6EC;color:#AEBBC8;font-size:22px}
-.backup{margin-top:26px;background:var(--paper);border:1px solid var(--rule);
+.backup{margin-top:14px;background:var(--paper);border:1px solid var(--rule);
   border-radius:12px;padding:13px 14px}
 .backup h4{margin:0 0 4px;font-size:14.5px}
 .backup p{margin:0 0 10px;font-size:12.5px;color:var(--ink-soft);line-height:1.55}
@@ -263,37 +184,6 @@ main{padding:12px 12px 26px;max-width:640px;margin:0 auto}
 .backup textarea{width:100%;margin-top:9px;border:1px solid var(--rule);border-radius:9px;
   padding:9px;font-size:11px;font-family:ui-monospace,monospace;height:74px;resize:none;
   color:var(--ink);background:#F7FAFC}
-.clist-h{margin:20px 2px 0;font-size:13.5px;color:var(--ink-soft);display:flex;
-  align-items:center;justify-content:space-between;gap:8px}
-.clist-h .clr{border:1px solid var(--rule);background:#fff;color:var(--ink);
-  border-radius:8px;padding:4px 10px;font-size:12.5px;cursor:pointer;flex:none}
-
-#cityModal{position:fixed;inset:0;z-index:40;background:rgba(20,32,48,.55);
-  display:grid;place-items:center;padding:22px}
-#cityModal[hidden]{display:none}
-.cm-box{background:var(--paper);border-radius:18px;overflow:hidden;width:100%;max-width:330px}
-.cm-box svg{width:100%;height:auto;display:block}
-.cm-t{padding:14px 16px 16px}
-.cm-t .en{font-family:"Newsreader",Georgia,serif;font-size:27px;font-weight:600;
-  display:flex;align-items:center;gap:7px;cursor:pointer}
-.cm-t .ko{font-size:15px;color:var(--ink-soft);margin-top:1px}
-.cm-t .mo{font-size:14px;margin-top:9px;padding-top:9px;border-top:1px solid var(--rule)}
-.rxrow{display:flex;gap:6px;margin-top:9px;padding-top:9px;border-top:1px solid var(--rule)}
-.rxrow button{flex:1;border:1px solid var(--rule);background:#fff;border-radius:9px;
-  padding:6px 2px 5px;cursor:pointer;display:grid;gap:1px;place-items:center;line-height:1.1}
-.rxrow button .e{font-size:17px}
-.rxrow button .n{font-size:11.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
-.rxrow button[aria-pressed="true"]{border-color:var(--ink);background:#F2F6FA}
-.rxrow button[aria-pressed="true"] .n{color:var(--ink);font-weight:700}
-.rx{display:flex;gap:6px;padding:2px 14px 12px}
-.rx button{flex:1;border:1px solid var(--rule);background:#fff;border-radius:10px;
-  padding:7px 2px 5px;cursor:pointer;display:grid;gap:2px;place-items:center;line-height:1.1}
-.rx button .e{font-size:20px}
-.rx button .t{font-size:10.5px;color:var(--ink-soft);white-space:nowrap}
-.rx button[aria-pressed="true"]{border-color:var(--ink);background:#F2F6FA}
-.rx button[aria-pressed="true"] .t{color:var(--ink);font-weight:600}
-.crow .rb{font-size:18px;flex:none;margin-left:2px}
-.cm-close{width:100%;border:0;background:var(--ink);color:#fff;padding:12px;font-size:15px}
 
 #settings{display:none;padding:14px 12px 26px;max-width:640px;margin:0 auto}
 #settings.on{display:block}
@@ -453,16 +343,11 @@ body.makemode .tools{display:none}
   <div id="mkOut"></div>
 </section>
 
-<section id="dex">
-  <div id="dexTop"></div>
-  <div id="dexGrid"></div>
-</section>
 
 <section id="reader"></section>
 
 <section id="settings"></section>
 
-<div id="cityModal" hidden><div class="cm-box" id="cmBox"></div></div>
 
 </div><!-- /scrollArea -->
 
@@ -471,7 +356,6 @@ body.makemode .tools{display:none}
   <button id="mCard" aria-pressed="false">카드</button>
   <button id="mMake" aria-pressed="false">문장</button>
   <button id="mRead" aria-pressed="false">본문</button>
-  <button id="mDex"  aria-pressed="false">Passport<i class="dot" id="dexDot" hidden></i></button>
   <button id="mSet"  aria-pressed="false">설정</button>
 </nav>
 
@@ -2474,11 +2358,9 @@ const plain = t => t.replace(/\*\*/g,"");
 const SVG = (p)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 const ICON_CHECK = SVG(`<path d="M4.5 12.8l4.6 4.6L19.6 6.9"/>`);
-const ICON_TICKET = SVG(`<path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2 2.4 2.4 0 0 0 0 6 2 2 0 0 1-2 2H5a2 2 0 0 1-2-2 2.4 2.4 0 0 0 0-6Z"/><path d="M9.5 7.6v8.8"/>`);
 const ICON_ALL  = SVG(`<path d="M4 7.5h16M4 12h16M4 16.5h16"/>`);
 const ICON_TODO = SVG(`<circle cx="12" cy="12" r="7.6"/>`);
 const ICON_DONE = SVG(`<path d="M5 12.6l4.5 4.5L19.2 7.2"/>`);
-const ICON_PLANE = SVG(`<path d="M3 13.2 20.6 4.4 12.6 21l-2.5-6.4z"/><path d="M10.1 14.6 20.6 4.4"/>`);
 const ICON_SOUND = SVG(`<path d="M4 9.3h3.3L12 5.4v13.2L7.3 14.7H4a1 1 0 0 1-1-1v-3.4a1 1 0 0 1 1-1Z"/>
   <path d="M15.6 9.4a3.7 3.7 0 0 1 0 5.2"/><path d="M18.2 6.8a7.4 7.4 0 0 1 0 10.4"/>`);
 
@@ -2740,17 +2622,14 @@ function render(){
   document.getElementById("list").style.display = mode==="list" ? "" : "none";
   document.getElementById("card").classList.toggle("on", mode==="card");
   document.getElementById("maker").classList.toggle("on", mode==="make");
-  document.getElementById("dex").classList.toggle("on", mode==="dex");
   document.getElementById("reader").classList.toggle("on", mode==="read");
   document.getElementById("settings").classList.toggle("on", mode==="set");
   document.body.classList.toggle("makemode", mode!=="list" && mode!=="card");
   if(mode==="list") renderList();
   else if(mode==="card") renderCard();
   else if(mode==="make") renderMaker();
-  else if(mode==="dex") renderDex();
   else if(mode==="read") renderReader();
   else renderSettings();
-  updateDexDot();
 }
 
 /* ---------- 이벤트 ---------- */
@@ -2814,7 +2693,7 @@ document.getElementById("list").addEventListener("click", e=>{
   if(dn){ const w=dn.dataset.done;
           if(learned.has(w)){ learned.delete(w); pendingDel.add(w); }
           else { learned.add(w); pendingDel.delete(w); }
-          saveLearned(); savePendingDel(); render(); updateDexDot(); syncPush(); }
+          saveLearned(); savePendingDel(); render(); syncPush(); }
   if(sy) say(sy.dataset.say);
 });
 
@@ -2840,7 +2719,6 @@ document.getElementById("mList").addEventListener("click", ()=>setMode("list"));
 document.getElementById("mCard").addEventListener("click", ()=>setMode("card"));
 document.getElementById("mMake").addEventListener("click", ()=>setMode("make"));
 document.getElementById("mRead").addEventListener("click", ()=>setMode("read"));
-document.getElementById("mDex").addEventListener("click", ()=>setMode("dex"));
 document.getElementById("mSet").addEventListener("click", ()=>setMode("set"));
 function setMode(m){
   if(mode==="read" && m!=="read" && "speechSynthesis" in window) speechSynthesis.cancel();
@@ -2849,7 +2727,6 @@ function setMode(m){
   document.getElementById("mCard").setAttribute("aria-pressed", m==="card");
   document.getElementById("mMake").setAttribute("aria-pressed", m==="make");
   document.getElementById("mRead").setAttribute("aria-pressed", m==="read");
-  document.getElementById("mDex").setAttribute("aria-pressed", m==="dex");
   document.getElementById("mSet").setAttribute("aria-pressed", m==="set");
   render();
 }
@@ -3040,578 +2917,12 @@ document.getElementById("mkOut").addEventListener("click", e=>{
   const sy=e.target.closest("[data-say]"); if(sy) say(sy.dataset.say);
 });
 
-/* ---------- 도시 카드 도감 ----------
-   외운 단어 15개마다 새 도시 카드 한 장. 도시는 계속 추가할 수 있다. */
-
-const A=(sky,gr,inner)=>`<svg viewBox="0 0 120 90" xmlns="http://www.w3.org/2000/svg">`
-  +`<rect width="120" height="90" fill="${sky}"/><rect y="72" width="120" height="18" fill="${gr}"/>`
-  +inner+`</svg>`;
-
-const CITIES=[
- {id:"paris",en:"Paris",ko:"파리",cen:"France",cko:"프랑스",con:"유럽",mo:"Eiffel Tower",mko:"에펠탑",
-  art:A("#BFD9EE","#8FA98C",`<path d="M54 72c3-16 4-30 6-46 2 16 3 30 6 46h-4c-1-12-2-22-2-30 0 8-1 18-2 30z" fill="#8B7355"/><rect x="51" y="52" width="18" height="2.6" fill="#8B7355"/><rect x="55" y="40" width="10" height="2.2" fill="#8B7355"/><path d="M53 72q7-9 14 0" fill="none" stroke="#8B7355" stroke-width="2.2"/><circle cx="24" cy="20" r="7" fill="#F6E39B"/>`)},
- {id:"london",en:"London",ko:"런던",cen:"United Kingdom",cko:"영국",con:"유럽",mo:"Big Ben",mko:"빅 벤",
-  art:A("#C3D4E2","#7E8F84",`<rect x="53" y="26" width="15" height="46" fill="#C9A227"/><rect x="51" y="21" width="19" height="5.5" fill="#B08722"/><path d="M60.5 6 53 21h15z" fill="#B08722"/><circle cx="60.5" cy="34" r="5.4" fill="#FFF8E1"/><path d="M60.5 34v-3.4M60.5 34l2.4 1.8" stroke="#5A4B1E" stroke-width="1.2" stroke-linecap="round"/><rect x="20" y="56" width="16" height="16" fill="#A08C6E"/>`)},
- {id:"rome",en:"Rome",ko:"로마",cen:"Italy",cko:"이탈리아",con:"유럽",mo:"Colosseum",mko:"콜로세움",
-  art:A("#EBD9BE","#9C8F6E",`<rect x="34" y="36" width="52" height="36" rx="5" fill="#DFCCA6"/><g fill="#9C8158"><rect x="39" y="43" width="7" height="11" rx="3.5"/><rect x="52" y="43" width="7" height="11" rx="3.5"/><rect x="65" y="43" width="7" height="11" rx="3.5"/><rect x="74" y="43" width="7" height="11" rx="3.5"/><rect x="39" y="58" width="7" height="11" rx="3.5"/><rect x="52" y="58" width="7" height="11" rx="3.5"/><rect x="65" y="58" width="7" height="11" rx="3.5"/><rect x="74" y="58" width="7" height="11" rx="3.5"/></g>`)},
- {id:"athens",en:"Athens",ko:"아테네",cen:"Greece",cko:"그리스",con:"유럽",mo:"Parthenon",mko:"파르테논 신전",
-  art:A("#BDE0F0","#A79B7E",`<path d="M36 34 60 19l24 15z" fill="#EDE6D6"/><rect x="36" y="34" width="48" height="5" fill="#D8CFBB"/><g fill="#F4EEE0"><rect x="40" y="39" width="5.5" height="33"/><rect x="51" y="39" width="5.5" height="33"/><rect x="62" y="39" width="5.5" height="33"/><rect x="73" y="39" width="5.5" height="33"/></g>`)},
- {id:"barcelona",en:"Barcelona",ko:"바르셀로나",cen:"Spain",cko:"스페인",con:"유럽",mo:"Sagrada Familia",mko:"사그라다 파밀리아",
-  art:A("#F3D9B0","#9A8B6B",`<g fill="#C98B57"><path d="M42 72V46l5-16 5 16v26z"/><path d="M55 72V36l6-21 6 21v36z"/><path d="M70 72V48l5-14 5 14v24z"/></g><g fill="#E8C07A"><circle cx="47" cy="29" r="2.4"/><circle cx="61" cy="14" r="2.6"/><circle cx="75" cy="33" r="2.4"/></g>`)},
- {id:"amsterdam",en:"Amsterdam",ko:"암스테르담",cen:"Netherlands",cko:"네덜란드",con:"유럽",mo:"Windmill",mko:"풍차",
-  art:A("#CBE3F2","#7FA36B",`<path d="M52 72 56 38h11l4 34z" fill="#A8724D"/><g stroke="#5C4433" stroke-width="3.2" stroke-linecap="round"><path d="M61.5 36 42 22M61.5 36 81 50M61.5 36 48 56M61.5 36 75 16"/></g><circle cx="61.5" cy="36" r="4" fill="#5C4433"/>`)},
- {id:"tokyo",en:"Tokyo",ko:"도쿄",cen:"Japan",cko:"일본",con:"아시아",mo:"Tokyo Tower",mko:"도쿄 타워",
-  art:A("#F5CFC8","#8B8B94",`<path d="M54 72c3-15 4-29 6.5-44 2.5 15 3.5 29 6.5 44h-4c-1-11-2-21-2.5-28-.5 7-1.5 17-2.5 28z" fill="#E24A3B"/><rect x="51" y="52" width="19" height="2.6" fill="#E24A3B"/><rect x="55" y="41" width="11" height="2.2" fill="#E24A3B"/><rect x="20" y="58" width="13" height="14" fill="#9AA3AE"/><rect x="88" y="54" width="13" height="18" fill="#9AA3AE"/>`)},
- {id:"seoul",en:"Seoul",ko:"서울",cen:"South Korea",cko:"대한민국",con:"아시아",mo:"Gyeongbokgung",mko:"경복궁",
-  art:A("#CDE6F5","#8FA98C",`<path d="M28 42q32-12 64 0l-8-8q-24-8-48 0z" fill="#3F6B4A"/><rect x="36" y="42" width="48" height="7" fill="#8B5E3C"/><rect x="40" y="49" width="40" height="23" fill="#C29764"/><rect x="54" y="57" width="12" height="15" rx="6" fill="#5C4433"/><path d="M28 42h64" stroke="#2F5238" stroke-width="1.6"/>`)},
- {id:"beijing",en:"Beijing",ko:"베이징",cen:"China",cko:"중국",con:"아시아",mo:"Great Wall",mko:"만리장성",
-  art:A("#E8DCC0","#7E8B6A",`<path d="M14 72V56l12-7 13 7v-7l13-7 13 7 12-7 17 9v21z" fill="#BCAC8C"/><rect x="76" y="34" width="18" height="21" fill="#A2916F"/><g fill="#A2916F"><rect x="76" y="30" width="4" height="5"/><rect x="84" y="30" width="4" height="5"/><rect x="92" y="30" width="2" height="5"/></g>`)},
- {id:"agra",en:"Agra",ko:"아그라",cen:"India",cko:"인도",con:"아시아",mo:"Taj Mahal",mko:"타지마할",
-  art:A("#F6DCC0","#93A88E",`<rect x="45" y="46" width="30" height="26" fill="#F4F2EC"/><path d="M60 28c9 0 15 8 15 18H45c0-10 6-18 15-18z" fill="#FAF8F3"/><path d="M60 22v6" stroke="#D9D4C6" stroke-width="2.4" stroke-linecap="round"/><g fill="#EDE9DC"><rect x="33" y="38" width="5.5" height="34" rx="2.7"/><rect x="81" y="38" width="5.5" height="34" rx="2.7"/></g><rect x="55" y="58" width="10" height="14" rx="5" fill="#C9BFA8"/>`)},
- {id:"istanbul",en:"Istanbul",ko:"이스탄불",cen:"Turkey",cko:"튀르키예",con:"아시아",mo:"Hagia Sophia",mko:"아야 소피아",
-  art:A("#F0D6A8","#8E9A8C",`<rect x="43" y="50" width="34" height="22" fill="#E3B368"/><path d="M60 32c9 0 16 8 16 18H44c0-10 7-18 16-18z" fill="#D89F49"/><g fill="#C08B3A"><rect x="31" y="32" width="4.5" height="40" rx="2.2"/><rect x="84" y="32" width="4.5" height="40" rx="2.2"/></g><circle cx="60" cy="28" r="2.6" fill="#C08B3A"/>`)},
- {id:"bangkok",en:"Bangkok",ko:"방콕",cen:"Thailand",cko:"태국",con:"아시아",mo:"Wat Arun",mko:"왓 아룬",
-  art:A("#CFE9E2","#8FA98C",`<path d="M60 12 71 46l4 26H45l4-26z" fill="#EFE3C6"/><path d="M60 12 68 40H52z" fill="#E0CFA4"/><g fill="#D8B45E"><rect x="47" y="52" width="26" height="2.4"/><rect x="49" y="60" width="22" height="2.4"/></g><path d="M36 72V54l6-10 6 10v18z" fill="#E4D8BA"/><path d="M72 72V54l6-10 6 10v18z" fill="#E4D8BA"/>`)},
- {id:"newyork",en:"New York",ko:"뉴욕",cen:"United States",cko:"미국",con:"아메리카",mo:"Statue of Liberty",mko:"자유의 여신상",
-  art:A("#BBD6EA","#7B8A93",`<rect x="50" y="58" width="20" height="14" fill="#8E9A8C"/><path d="M60 24c4.5 0 7 3.4 7 8l-2.4 26h-9.2L53 32c0-4.6 2.5-8 7-8z" fill="#5FA08C"/><circle cx="60" cy="21" r="4.4" fill="#5FA08C"/><g stroke="#5FA08C" stroke-width="1.4"><path d="M56 18l-2-3M64 18l2-3M60 16v-3"/></g><path d="M67 30 76 17" stroke="#5FA08C" stroke-width="2.4"/><path d="M76 17l3.2-6.5 3 6.5z" fill="#F5C542"/>`)},
- {id:"sanfrancisco",en:"San Francisco",ko:"샌프란시스코",cen:"United States",cko:"미국",con:"아메리카",mo:"Golden Gate Bridge",mko:"금문교",
-  art:A("#F0C9A8","#6E8FA6",`<g stroke="#D9534F" stroke-width="3.4" fill="none"><path d="M30 68V28M90 68V28"/><path d="M30 30q30 24 60 0"/><path d="M30 30q-14 10-22 14M90 30q14 10 22 14"/></g><rect x="8" y="64" width="104" height="4.5" fill="#D9534F"/>`)},
- {id:"rio",en:"Rio de Janeiro",ko:"리우데자네이루",cen:"Brazil",cko:"브라질",con:"아메리카",mo:"Sugarloaf Mountain",mko:"슈가로프산",
-  art:A("#FFD9A8","#4F86A8",`<path d="M22 72q12-28 26-28t22 28z" fill="#3E7C59"/><path d="M60 72q10-36 24-36t10 36z" fill="#2F6349"/><path d="M38 44 84 33" stroke="#6B6B6B" stroke-width="1.2"/><rect x="58" y="37" width="7" height="5" rx="1.5" fill="#8B8B8B"/><circle cx="26" cy="20" r="7" fill="#FFB169"/>`)},
- {id:"cusco",en:"Cusco",ko:"쿠스코",cen:"Peru",cko:"페루",con:"아메리카",mo:"Machu Picchu",mko:"마추픽추",
-  art:A("#CFE3F0","#7C8B6A",`<path d="M18 72 46 32l16 22 12-15 26 33z" fill="#6E8B6E"/><g fill="#C4B99E"><rect x="36" y="58" width="34" height="4"/><rect x="40" y="64" width="30" height="4"/><rect x="44" y="52" width="22" height="4"/></g><path d="M46 32 52 42h-12z" fill="#5C7A5C"/>`)},
- {id:"cairo",en:"Cairo",ko:"카이로",cen:"Egypt",cko:"이집트",con:"아프리카",mo:"Pyramids",mko:"피라미드",
-  art:A("#F7DFA6","#E0C083",`<path d="M14 72 42 30l26 42z" fill="#E4C489"/><path d="M56 72 78 38l22 34z" fill="#D3AF70"/><path d="M42 30 42 72" stroke="#D8B87C" stroke-width="1.2"/><circle cx="98" cy="20" r="9" fill="#F8C96A"/>`)},
- {id:"nairobi",en:"Nairobi",ko:"나이로비",cen:"Kenya",cko:"케냐",con:"아프리카",mo:"Savanna",mko:"사바나",
-  art:A("#FBD08A","#C9A153",`<rect x="78" y="50" width="4.5" height="22" fill="#8B6B45"/><ellipse cx="80" cy="46" rx="18" ry="7" fill="#5E8B4A"/><path d="M40 72V52l-5-19 7-2 6 21v20z" fill="#E0A94F"/><rect x="40" y="60" width="14" height="12" fill="#E0A94F"/><circle cx="35" cy="31" r="3.4" fill="#C98B3A"/><circle cx="24" cy="20" r="8" fill="#F5A65B"/>`)},
- {id:"sydney",en:"Sydney",ko:"시드니",cen:"Australia",cko:"호주",con:"오세아니아",mo:"Opera House",mko:"오페라 하우스",
-  art:A("#BEE0F2","#5C93B8",`<g fill="#F6F5F0"><path d="M28 70q4-26 20-26t18 26z"/><path d="M50 70q4-21 18-21t16 21z"/><path d="M70 70q3-15 13-15t11 15z"/></g><rect x="20" y="70" width="80" height="3.4" fill="#CFCFC6"/>`)},
- {id:"auckland",en:"Auckland",ko:"오클랜드",cen:"New Zealand",cko:"뉴질랜드",con:"오세아니아",mo:"Sky Tower",mko:"스카이 타워",
-  art:A("#CBE7F3","#6F9B7A",`<path d="M56 72 58 42h6l2 30z" fill="#BCC2CB"/><path d="M54 42h14l-2.4-9h-9.2z" fill="#9AA0AA"/><ellipse cx="61" cy="32" rx="10" ry="5.4" fill="#8A9099"/><rect x="60" y="8" width="2.4" height="19" fill="#9AA0AA"/><rect x="24" y="58" width="12" height="14" fill="#A9B3BC"/><rect x="88" y="62" width="11" height="10" fill="#A9B3BC"/>`)},
- {id:"berlin",en:"Berlin",ko:"베를린",cen:"Germany",cko:"독일",con:"유럽",mo:"Brandenburg Gate",mko:"브란덴부르크 문",
-  art:A("#CDE0F2","#8FA98C",`<rect x="36" y="30" width="48" height="6" fill="#E3DCCB"/><rect x="34" y="36" width="52" height="5" fill="#D8CFBB"/><g fill="#EFEAE0"><rect x="38" y="41" width="6" height="31"/><rect x="49" y="41" width="6" height="31"/><rect x="60" y="41" width="6" height="31"/><rect x="71" y="41" width="6" height="31"/></g><g fill="#B9A06A"><rect x="51" y="22" width="18" height="4" rx="1.4"/><circle cx="55" cy="18.6" r="3"/><circle cx="63" cy="18.6" r="3"/></g>`)},
- {id:"reykjavik",en:"Reykjavik",ko:"레이캬비크",cen:"Iceland",cko:"아이슬란드",con:"유럽",mo:"Hallgrimskirkja",mko:"할그림스키르캬 교회",
-  art:A("#CFE6F4","#8FA98C",`<path d="M8 20q18-11 34-1" stroke="#7ED9C0" stroke-width="3.4" fill="none" opacity=".75" stroke-linecap="round"/><path d="M60 8 52 30v42h16V30z" fill="#EDE9DF"/><path d="M52 30 40 52v20h12z" fill="#DED9CD"/><path d="M68 30l12 22v20H68z" fill="#DED9CD"/><path d="M40 52 30 66v6h10z" fill="#D0CABD"/><path d="M80 52l10 14v6H80z" fill="#D0CABD"/><rect x="57.4" y="18" width="5.2" height="11" fill="#C6C0B2"/>`)},
- {id:"moscow",en:"Moscow",ko:"모스크바",cen:"Russia",cko:"러시아",con:"유럽",mo:"Saint Basil’s Cathedral",mko:"성 바실리 대성당",
-  art:A("#D8E7F4","#8AA285",`<rect x="42" y="46" width="36" height="26" fill="#E8DCC6"/><rect x="34" y="50" width="9" height="22" fill="#E8DCC6"/><rect x="77" y="50" width="9" height="22" fill="#E8DCC6"/><path d="M60 20c6 4 9.4 9 9.4 13.4 0 5-4.2 8.2-9.4 8.2s-9.4-3.2-9.4-8.2C50.6 29 54 24 60 20z" fill="#D9534F"/><rect x="56" y="41" width="8" height="6" fill="#C7B896"/><path d="M38.5 34c5 3.2 7.2 7 7.2 10.2 0 3.8-3.2 6-7.2 6s-7.2-2.2-7.2-6c0-3.2 2.2-7 7.2-10.2z" fill="#4C8CC4"/><path d="M81.5 34c5 3.2 7.2 7 7.2 10.2 0 3.8-3.2 6-7.2 6s-7.2-2.2-7.2-6c0-3.2 2.2-7 7.2-10.2z" fill="#5BA36F"/><g fill="#C9A227"><rect x="59.2" y="13" width="1.8" height="7"/><rect x="37.7" y="29" width="1.8" height="5"/><rect x="80.7" y="29" width="1.8" height="5"/></g>`)},
- {id:"dubai",en:"Dubai",ko:"두바이",cen:"United Arab Emirates",cko:"아랍에미리트",con:"아시아",mo:"Burj Khalifa",mko:"부르즈 할리파",
-  art:A("#F7D9A8","#D8C08E",`<path d="M56 72V34l4-22 4 22v38z" fill="#BFD3E4"/><path d="M47 72V46l7-4v30z" fill="#A6BFD4"/><path d="M73 72V46l-7-4v30z" fill="#A6BFD4"/><rect x="59.3" y="4" width="1.6" height="9" fill="#8FA9BF"/><circle cx="24" cy="20" r="8" fill="#F8C86A"/><rect x="16" y="58" width="11" height="14" fill="#CBB58C"/>`)},
- {id:"singapore",en:"Singapore",ko:"싱가포르",cen:"Singapore",cko:"싱가포르",con:"아시아",mo:"Marina Bay Sands",mko:"마리나 베이 샌즈",
-  art:A("#CFE6F2","#7FA0AE",`<g fill="#C9D6E2"><rect x="34" y="40" width="9" height="32"/><rect x="55" y="38" width="9" height="34"/><rect x="76" y="40" width="9" height="32"/></g><path d="M26 38q34-10 68 0l-2.4 6q-32-9-63.2 0z" fill="#8FA6B8"/><ellipse cx="74" cy="34" rx="8" ry="2.6" fill="#6F8E7C"/><rect y="66" width="120" height="24" fill="#79B0C2"/>`)},
- {id:"halong",en:"Ha Long",ko:"할롱",cen:"Vietnam",cko:"베트남",con:"아시아",mo:"Ha Long Bay",mko:"할롱베이",
-  art:A("#CDE6EE","#6E8F72",`<path d="M12 70 22 30l12 40z" fill="#5A7358"/><path d="M30 70 44 22l14 48z" fill="#48604A"/><path d="M84 70 96 34l12 36z" fill="#5A7358"/><path d="M66 70 76 44l10 26z" fill="#6B8465"/><rect y="62" width="120" height="28" fill="#7FBAC8"/><path d="M52 62V38l12 24z" fill="#E8DCC0"/><path d="M50 62V44l-9 18z" fill="#D9534F"/><path d="M36 62h32l-5 6H41z" fill="#7A5334"/><path d="M0 70q14 4 28 0t28 0 28 0 28 0" stroke="#A9DAE4" stroke-width="1.6" fill="none"/>`)},
- {id:"mexicocity",en:"Mexico City",ko:"멕시코시티",cen:"Mexico",cko:"멕시코",con:"아메리카",mo:"Pyramid of the Sun",mko:"태양의 피라미드",
-  art:A("#F5D9A0","#D2B078",`<path d="M16 72 60 26l44 46z" fill="#C9A87C"/><g fill="#AE8C63"><rect x="30" y="58" width="60" height="4"/><rect x="40" y="46" width="40" height="4"/><rect x="49" y="35" width="22" height="4"/></g><rect x="54" y="64" width="12" height="8" fill="#8A6B47"/><circle cx="99" cy="17" r="8" fill="#F3B95C"/>`)},
- {id:"chicago",en:"Chicago",ko:"시카고",cen:"United States",cko:"미국",con:"아메리카",mo:"Cloud Gate",mko:"클라우드 게이트",
-  art:A("#C6DCEE","#8C9AA6",`<g fill="#7E93A4"><rect x="10" y="38" width="10" height="34"/><rect x="100" y="32" width="10" height="40"/><rect x="24" y="48" width="8" height="24"/></g><path d="M60 34c19 0 31 10 31 20 0 8-6 14-14 14H43c-8 0-14-6-14-14 0-10 12-20 31-20z" fill="#A6BBCB"/><path d="M45 68q15-13 30 0z" fill="#6E8496"/><path d="M40 44q20-8 40 0" stroke="#EAF2F8" stroke-width="3.4" fill="none" stroke-linecap="round"/>`)},
- {id:"buenosaires",en:"Buenos Aires",ko:"부에노스아이레스",cen:"Argentina",cko:"아르헨티나",con:"아메리카",mo:"Obelisco",mko:"오벨리스코",
-  art:A("#BFDCF0","#8FA98C",`<path d="M55 72V26l5-15 5 15v46z" fill="#EDE7D9"/><rect x="50" y="68" width="20" height="4" fill="#CFC8B8"/><g fill="#8FB8D8"><rect x="14" y="54" width="12" height="18"/><rect x="94" y="50" width="13" height="22"/></g><circle cx="28" cy="18" r="7" fill="#F5D77E"/>`)},
- {id:"havana",en:"Havana",ko:"아바나",cen:"Cuba",cko:"쿠바",con:"아메리카",mo:"El Capitolio",mko:"엘 카피톨리오",
-  art:A("#BEE4EE","#93A88E",`<rect x="38" y="48" width="46" height="24" fill="#EFE7D6"/><path d="M61 24c10 0 17 10 17 24H44c0-14 7-24 17-24z" fill="#E2D6BE"/><rect x="60" y="16" width="2.2" height="8" fill="#C7B896"/><g fill="#CFC2A6"><rect x="45" y="54" width="4" height="18"/><rect x="57" y="54" width="4" height="18"/><rect x="69" y="54" width="4" height="18"/></g><path d="M10 72v-7h5l4-5h14l4 5h5v7z" fill="#D9534F"/><circle cx="19" cy="71.4" r="3.4" fill="#3A3A3A"/><circle cx="35" cy="71.4" r="3.4" fill="#3A3A3A"/>`)},
- {id:"marrakesh",en:"Marrakesh",ko:"마라케시",cen:"Morocco",cko:"모로코",con:"아프리카",mo:"Koutoubia Mosque",mko:"쿠투비아 모스크",
-  art:A("#F6DCA8","#D7A96A",`<rect x="48" y="26" width="24" height="46" fill="#D98E5A"/><rect x="45" y="21" width="30" height="5.4" fill="#C57C4A"/><rect x="54" y="9" width="12" height="12" fill="#C57C4A"/><circle cx="60" cy="5.4" r="2.6" fill="#E7BC63"/><g fill="#B96F42"><rect x="52.5" y="36" width="6" height="10" rx="3"/><rect x="61.5" y="36" width="6" height="10" rx="3"/></g><path d="M16 72V58q6-11 12 0v14z" fill="#5E7F4E"/><path d="M96 72V56q6-11 12 0v16z" fill="#6C8B57"/>`)},
- {id:"capetown",en:"Cape Town",ko:"케이프타운",cen:"South Africa",cko:"남아프리카공화국",con:"아프리카",mo:"Table Mountain",mko:"테이블 마운틴",
-  art:A("#CFE7F4","#8FA36F",`<path d="M8 72V44h104v28z" fill="#8B7F6B"/><path d="M8 44h104l-16-8H24z" fill="#9C8F79"/><path d="M16 39q22-10 46-4" stroke="#F2F5F7" stroke-width="5" fill="none" stroke-linecap="round"/><rect y="66" width="120" height="24" fill="#5F97B5"/><path d="M0 68q12 5 24 0t24 0 24 0 24 0 24 0" stroke="#B9DCEA" stroke-width="1.8" fill="none"/>`)},
- {id:"livingstone",en:"Livingstone",ko:"리빙스턴",cen:"Zambia",cko:"잠비아",con:"아프리카",mo:"Victoria Falls",mko:"빅토리아 폭포",
-  art:A("#CBE7F0","#6E8B58",`<path d="M0 40h50v32H0z" fill="#6E8B58"/><path d="M70 40h50v32H70z" fill="#6E8B58"/><rect x="50" y="40" width="20" height="32" fill="#DCEAF2"/><g stroke="#FFFFFF" stroke-width="1.6" opacity=".85"><path d="M54 42v28M60 42v28M66 42v28"/></g><ellipse cx="60" cy="72" rx="18" ry="5.4" fill="#EAF3F8"/><path d="M38 30q22-13 44 0" stroke="#EFB8CE" stroke-width="2.6" fill="none"/>`)},
- {id:"portvila",en:"Port Vila",ko:"포트빌라",cen:"Vanuatu",cko:"바누아투",con:"오세아니아",mo:"Mount Yasur",mko:"야수르 화산",
-  art:A("#F0D6C0","#5FB0BC",`<rect y="62" width="120" height="28" fill="#5FB0BC"/><path d="M14 70 50 28l14 17 10-6 28 31z" fill="#6B5B4E"/><path d="M42 40 50 28l8 11z" fill="#8A7767"/><path d="M50 28q-4-10 1-15 3 6 8 4-2 8-4 11z" fill="#E2683F"/><circle cx="46" cy="10" r="3.2" fill="#F2A03D"/><circle cx="61" cy="7" r="2.2" fill="#F2C43D"/><path d="M0 68q12 5 24 0" stroke="#A8DCE4" stroke-width="1.8" fill="none"/>`)},
- {id:"portmoresby",en:"Port Moresby",ko:"포트모르즈비",cen:"Papua New Guinea",cko:"파푸아뉴기니",con:"오세아니아",mo:"Bird of Paradise",mko:"극락조",
-  art:A("#D5EBD8","#4F7C4A",`<path d="M14 72q16-28 36-28t30 28z" fill="#3F7A55"/><path d="M48 44q-20 5-28 18" stroke="#E8A33D" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M50 49q-17 9-23 19" stroke="#F2C43D" stroke-width="2.6" fill="none" stroke-linecap="round"/><ellipse cx="62" cy="44" rx="15" ry="9.4" fill="#2E9BC4"/><rect x="57" y="52" width="2.4" height="11" fill="#5C4433"/><rect x="66" y="52" width="2.4" height="11" fill="#5C4433"/><circle cx="75" cy="37" r="6.4" fill="#1F7FA6"/><path d="M80 36.4l8 1.8-8 2z" fill="#F2C43D"/><circle cx="77" cy="35.4" r="1.5" fill="#fff"/>`)},
- {id:"honolulu",en:"Honolulu",ko:"호놀룰루",cen:"United States",cko:"미국",con:"오세아니아",mo:"Diamond Head",mko:"다이아몬드 헤드",
-  art:A("#BFE4F2","#EBD9A8",`<path d="M40 66 74 34l38 32z" fill="#7E8B5E"/><path d="M74 34 62 48l12 5 14-7z" fill="#98A670"/><rect y="62" width="120" height="10" fill="#4FA8C4"/><path d="M0 64q12 5 24 0t24 0 24 0 24 0 24 0" stroke="#BFE6F0" stroke-width="1.8" fill="none"/><ellipse cx="34" cy="60" rx="4.4" ry="13" fill="#F2C24B" transform="rotate(16 34 60)"/><rect x="14" y="42" width="3.4" height="30" fill="#8B6B45"/><path d="M15.7 43q-13-3-16 5 10-2 16 2zM15.7 43q13-3 16 5-10-2-16 2zM15.7 43q-4-11 3-14 3 8 0 14z" fill="#3E8B54"/>`)},
- {id:"lisbon",en:"Lisbon",ko:"리스본",cen:"Portugal",cko:"포르투갈",con:"유럽",mo:"Belem Tower",mko:"벨렘 탑",
-  art:A("#CFE4F2","#7FA8BC",`<rect y="60" width="120" height="30" fill="#6FA6BE"/><rect x="46" y="26" width="24" height="42" fill="#EDE4CE"/><rect x="42" y="46" width="36" height="22" fill="#E2D8BE"/><g fill="#D3C7A8"><rect x="44" y="22" width="4" height="5"/><rect x="52" y="22" width="4" height="5"/><rect x="60" y="22" width="4" height="5"/><rect x="68" y="22" width="4" height="5"/></g><g fill="#B9AB89"><rect x="52" y="36" width="5" height="9" rx="2.5"/><rect x="62" y="36" width="5" height="9" rx="2.5"/><rect x="48" y="54" width="6" height="12" rx="3"/><rect x="66" y="54" width="6" height="12" rx="3"/></g><path d="M0 66q12 5 24 0t24 0 24 0 24 0 24 0" stroke="#A9D2E0" stroke-width="1.8" fill="none"/>`)},
- {id:"stockholm",en:"Stockholm",ko:"스톡홀름",cen:"Sweden",cko:"스웨덴",con:"유럽",mo:"Vasa Ship",mko:"바사호",
-  art:A("#D3E5F4","#7FA0BE",`<rect y="58" width="120" height="32" fill="#6E9CBE"/><path d="M26 58h68l-8 12H34z" fill="#7A5334"/><rect x="34" y="48" width="52" height="10" fill="#8B6242"/><g fill="#5C4433"><rect x="42" y="16" width="3" height="34"/><rect x="59" y="10" width="3" height="40"/><rect x="76" y="18" width="3" height="32"/></g><g fill="#EDE6D6"><path d="M45 20h13v12H45zM62 14h13v14H62zM33 24h8v10h-8z"/></g><path d="M60 10l7 3-7 3z" fill="#F2C43D"/>`)},
- {id:"bergen",en:"Bergen",ko:"베르겐",cen:"Norway",cko:"노르웨이",con:"유럽",mo:"Fjord",mko:"피오르",
-  art:A("#CBE0EE","#4E7A66",`<path d="M0 72V22l26 18v32z" fill="#4A6B58"/><path d="M120 72V16L92 38v34z" fill="#3F5C4C"/><path d="M26 40l14 12v20H26z" fill="#5C7F68"/><rect y="58" width="120" height="32" fill="#5E93A8"/><g fill="#C2453F"><rect x="46" y="46" width="10" height="12"/><rect x="60" y="43" width="11" height="15"/></g><g fill="#F2E8D6"><rect x="48" y="50" width="3" height="4"/><rect x="63" y="47" width="3" height="4"/></g><path d="M44 58h30l-3 4H47z" fill="#7A5334"/>`)},
- {id:"ulaanbaatar",en:"Ulaanbaatar",ko:"울란바토르",cen:"Mongolia",cko:"몽골",con:"아시아",mo:"Ger",mko:"게르",
-  art:A("#D8E8F2","#A8B57E",`<path d="M34 72V52q26-16 52 0v20z" fill="#F0EDE2"/><path d="M34 52q26-20 52 0z" fill="#E2DCCB"/><path d="M60 34 34 52h52z" fill="#DCD4BE"/><rect x="54" y="58" width="12" height="14" fill="#8B5E3C"/><circle cx="60" cy="40" r="3" fill="#C9A227"/><circle cx="98" cy="18" r="7" fill="#F6D77E"/><path d="M8 72V62q6-8 12 0v10z" fill="#8FA06A"/>`)},
- {id:"samarkand",en:"Samarkand",ko:"사마르칸트",cen:"Uzbekistan",cko:"우즈베키스탄",con:"아시아",mo:"Registan",mko:"레기스탄",
-  art:A("#F2DEB4","#D2B87E",`<rect x="30" y="40" width="60" height="32" fill="#E4D6B4"/><path d="M46 72V52q14-14 28 0v20z" fill="#2E6EA6"/><path d="M50 72V54q10-10 20 0v18z" fill="#F0E4C4"/><circle cx="60" cy="28" r="13" fill="#2E8CC4"/><path d="M47 30q13 8 26 0z" fill="#2E6EA6"/><rect x="59" y="12" width="2" height="5" fill="#C9A227"/><g fill="#2E8CC4"><rect x="24" y="34" width="7" height="38" rx="3.5"/><rect x="89" y="34" width="7" height="38" rx="3.5"/></g>`)},
- {id:"sigiriya",en:"Sigiriya",ko:"시기리야",cen:"Sri Lanka",cko:"스리랑카",con:"아시아",mo:"Lion Rock",mko:"사자바위",
-  art:A("#CFE6EE","#5F8A56",`<path d="M34 72V34q26-16 52 0v38z" fill="#A6795A"/><path d="M34 34q26-18 52 0z" fill="#BF8F6A"/><path d="M52 72V54h16v18z" fill="#7A5334"/><g fill="#8A6547"><rect x="44" y="60" width="32" height="3"/><rect x="46" y="66" width="28" height="3"/></g><path d="M14 72V56q7-11 14 0v16z" fill="#4E7A48"/><path d="M96 72V58q7-10 14 0v14z" fill="#4E7A48"/>`)},
- {id:"vancouver",en:"Vancouver",ko:"밴쿠버",cen:"Canada",cko:"캐나다",con:"아메리카",mo:"Totem Pole",mko:"토템 폴",
-  art:A("#CFE2EE","#5E8A62",`<rect x="50" y="14" width="20" height="58" fill="#B9895E"/><path d="M44 20h32l-16-8z" fill="#C2453F"/><g><rect x="50" y="24" width="20" height="15" fill="#2E8CC4"/><rect x="50" y="41" width="20" height="15" fill="#E8B93D"/><rect x="50" y="58" width="20" height="14" fill="#4E9B6A"/></g><g fill="#2E2A24"><circle cx="55.5" cy="31" r="2"/><circle cx="64.5" cy="31" r="2"/><circle cx="55.5" cy="48" r="2"/><circle cx="64.5" cy="48" r="2"/><rect x="55" y="64" width="10" height="2.4" rx="1.2"/></g><path d="M18 72V50l-8-14 16 3 6 14v19z" fill="#3F6B4A"/><path d="M104 72V54l-7-12 14 2 5 12v16z" fill="#3F6B4A"/>`)},
- {id:"anchorage",en:"Anchorage",ko:"앵커리지",cen:"United States",cko:"미국",con:"아메리카",mo:"Denali",mko:"디날리산",
-  art:A("#20304E","#E8EFF4",`<path d="M8 30q26-16 46 2" stroke="#6EE0B4" stroke-width="3.4" fill="none" opacity=".8" stroke-linecap="round"/><path d="M60 26q26-14 48 4" stroke="#8FD8F0" stroke-width="2.6" fill="none" opacity=".7" stroke-linecap="round"/><path d="M4 72 42 30l24 26 14-12 34 28z" fill="#5E6E82"/><path d="M42 30 30 43l6 3 8-4 8 6 6-4z" fill="#F2F7FA"/><path d="M80 44l-8 8 5 2 6-3 5 4z" fill="#F2F7FA"/><circle cx="100" cy="16" r="2" fill="#fff"/><circle cx="88" cy="10" r="1.6" fill="#fff"/>`)},
- {id:"panamacity",en:"Panama City",ko:"파나마시티",cen:"Panama",cko:"파나마",con:"아메리카",mo:"Panama Canal",mko:"파나마 운하",
-  art:A("#CFE7F2","#6E8B58",`<rect y="40" width="120" height="32" fill="#4E92B4"/><g fill="#9CA6A8"><rect x="30" y="34" width="8" height="42"/><rect x="82" y="34" width="8" height="42"/></g><rect x="38" y="52" width="44" height="8" fill="#8A939A"/><path d="M42 58h36l-5 8H47z" fill="#C2453F"/><rect x="50" y="46" width="20" height="12" fill="#EDE7D6"/><g fill="#3A4A55"><rect x="53" y="40" width="3" height="7"/><rect x="63" y="40" width="3" height="7"/></g><path d="M0 44q12 4 24 0M96 44q12 4 24 0" stroke="#8FC4DC" stroke-width="1.8" fill="none"/>`)},
- {id:"santiago",en:"Santiago",ko:"산티아고",cen:"Chile",cko:"칠레",con:"아메리카",mo:"Andes Mountains",mko:"안데스산맥",
-  art:A("#CDE2F0","#9C8F6E",`<path d="M0 72 26 30l20 26 16-18 22 26 16-14 20 22z" fill="#7E7A72"/><path d="M26 30 16 46l6 2 5-4 6 5 5-3zM62 38l-8 10 5 2 4-3 5 4z" fill="#F4F7FA"/><path d="M100 40l-7 8 4 2 4-3 4 3z" fill="#F4F7FA"/><g fill="#C9BFA6"><rect x="18" y="60" width="10" height="12"/><rect x="34" y="56" width="9" height="16"/><rect x="76" y="58" width="10" height="14"/></g>`)},
- {id:"lalibela",en:"Lalibela",ko:"랄리벨라",cen:"Ethiopia",cko:"에티오피아",con:"아프리카",mo:"Rock-Hewn Church",mko:"암굴 교회",
-  art:A("#F2DEBE","#C49A62",`<rect x="18" y="34" width="84" height="38" fill="#B0854F"/><path d="M40 40h40v32H40z" fill="#8A6238"/><path d="M52 34h16v44H52z" fill="#C9A06A"/><path d="M40 50h40v12H40z" fill="#C9A06A"/><path d="M54 36h12v40H54zM42 52h36v8H42z" fill="#D9B77E"/><rect x="57" y="60" width="6" height="12" fill="#6B4A33"/>`)},
- {id:"timbuktu",en:"Timbuktu",ko:"팀북투",cen:"Mali",cko:"말리",con:"아프리카",mo:"Djinguereber Mosque",mko:"징게레베르 모스크",
-  art:A("#F6E0AE","#DCBE84",`<path d="M28 72V44h64v28z" fill="#C98F52"/><path d="M44 44 60 20l16 24z" fill="#BF8447"/><rect x="52" y="30" width="16" height="14" fill="#C98F52"/><g fill="#6B4A33"><rect x="34" y="40" width="12" height="2.4"/><rect x="74" y="40" width="12" height="2.4"/><rect x="30" y="52" width="12" height="2.4"/><rect x="78" y="52" width="12" height="2.4"/><rect x="52" y="26" width="16" height="2.4"/></g><rect x="55" y="60" width="10" height="12" rx="5" fill="#7A5334"/><circle cx="60" cy="16" r="2.4" fill="#E0B45E"/>`)},
- {id:"antananarivo",en:"Antananarivo",ko:"안타나나리보",cen:"Madagascar",cko:"마다가스카르",con:"아프리카",mo:"Baobab Tree",mko:"바오바브나무",
-  art:A("#F4D9A8","#C9A46A",`<path d="M46 72V48q-5-7 2-10 5-3 12-3t12 3q7 3 2 10v24z" fill="#9C7A56"/><g stroke="#7A5E42" stroke-width="2.6" stroke-linecap="round" fill="none"><path d="M60 36V24M60 28l-11-8M60 28l11-8M51 22l-8-4M69 22l8-4M49 20l-5-7M71 20l5-7"/></g><path d="M28 72V58q5-7 10 0v14z" fill="#8A7048"/><path d="M88 72V60q5-6 10 0v12z" fill="#8A7048"/><circle cx="22" cy="18" r="7" fill="#F0BC62"/>`)},
- {id:"sossusvlei",en:"Sossusvlei",ko:"소서스블레이",cen:"Namibia",cko:"나미비아",con:"아프리카",mo:"Sand Dunes",mko:"사막 모래언덕",
-  art:A("#F2C89A","#E0A45E",`<path d="M0 72V52q34-26 62-6 22 16 58 6v20z" fill="#D98F4A"/><path d="M0 72V60q30-18 54-2 20 13 66 6v8z" fill="#EDB068"/><g fill="#5C4433"><path d="M78 72V50l-6-8 8 2 4-8 2 10 6-4-8 10v20z"/></g><circle cx="24" cy="18" r="8" fill="#F7DC96"/>`)},
- {id:"dakar",en:"Dakar",ko:"다카르",cen:"Senegal",cko:"세네갈",con:"아프리카",mo:"Lake Retba",mko:"핑크 호수",
-  art:A("#CFE4F2","#E4CE9C",`<ellipse cx="60" cy="58" rx="56" ry="20" fill="#E48CA8"/><ellipse cx="60" cy="55" rx="42" ry="13" fill="#F0A8BE"/><g fill="#F2EDE2"><path d="M22 52 28 42l6 10zM90 54l6-11 6 11z"/></g><path d="M46 50h20l-3 6H49z" fill="#8B6242"/><rect x="55" y="40" width="2" height="10" fill="#5C4433"/><path d="M57 40l8 3-8 3z" fill="#EDE4CE"/>`)},
- {id:"uluru",en:"Uluru",ko:"울루루",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"Uluru",mko:"울루루 바위",
-  art:A("#F4C89A","#D9A264",`<path d="M12 72q10-30 30-32t34 6q14 8 32 26z" fill="#C2543A"/><g stroke="#9C3E2C" stroke-width="1.6" fill="none"><path d="M30 60q6-14 14-20M50 62q4-16 12-22M72 64q2-12 8-18"/></g><circle cx="24" cy="18" r="8" fill="#F7C463"/><path d="M96 72V62q5-8 10 0v10z" fill="#8A9C5E"/>`)},
- {id:"milfordsound",en:"Milford Sound",ko:"밀퍼드 사운드",cen:"New Zealand",cko:"뉴질랜드",con:"오세아니아",mo:"Mitre Peak",mko:"마이터봉",
-  art:A("#CBDCE8","#3E5E56",`<path d="M0 72V30l20 12v30z" fill="#3A5A4E"/><path d="M120 72V18L96 40v32z" fill="#33503F"/><path d="M40 72 62 14l24 58z" fill="#46685A"/><path d="M62 14 54 34l7 3 5-4 6 6z" fill="#EFF4F7"/><path d="M24 44q2 14 0 24" stroke="#EAF4F8" stroke-width="3" fill="none" stroke-linecap="round"/><rect y="64" width="120" height="26" fill="#3E7A8C"/><path d="M0 68q14 5 28 0t28 0 28 0 28 0" stroke="#8FBFCE" stroke-width="1.6" fill="none"/>`)},
- {id:"kyiv",en:"Kyiv",ko:"키이우",cen:"Ukraine",cko:"우크라이나",con:"유럽",mo:"Saint Sophia Cathedral",mko:"성 소피아 대성당",
-  art:A("#D6E7F4","#8FA98C",`<rect x="36" y="44" width="48" height="28" fill="#F0EAD8"/><rect x="52" y="24" width="16" height="20" fill="#EDE4CE"/><path d="M60 8c5 5 7 9 7 12.4 0 4.2-3.2 6.6-7 6.6s-7-2.4-7-6.6C53 17 55 13 60 8z" fill="#C9A227"/><g fill="#C9A227"><path d="M42 30c4 4 5.6 7 5.6 9.6 0 3.2-2.6 5-5.6 5s-5.6-1.8-5.6-5c0-2.6 1.6-5.6 5.6-9.6z"/><path d="M78 30c4 4 5.6 7 5.6 9.6 0 3.2-2.6 5-5.6 5s-5.6-1.8-5.6-5c0-2.6 1.6-5.6 5.6-9.6z"/></g><rect x="38" y="40" width="8" height="6" fill="#EDE4CE"/><rect x="74" y="40" width="8" height="6" fill="#EDE4CE"/><rect x="55" y="58" width="10" height="14" rx="5" fill="#7A9CC4"/>`)},
- {id:"tromso",en:"Tromso",ko:"트롬쇠",cen:"Norway",cko:"노르웨이",con:"유럽",mo:"Arctic Cathedral",mko:"북극 대성당",
-  art:A("#1E2E4A","#E4EEF4",`<path d="M6 30q26-16 44 2" stroke="#6EE0B4" stroke-width="3.6" fill="none" opacity=".8" stroke-linecap="round"/><path d="M58 24q26-12 50 6" stroke="#8FC8F0" stroke-width="2.6" fill="none" opacity=".7" stroke-linecap="round"/><path d="M60 20 30 72h60z" fill="#F0F5F8"/><g stroke="#B9CBD8" stroke-width="1.4"><path d="M52 34v38M60 26v46M68 34v38M44 48v24M76 48v24"/></g><rect x="56" y="60" width="8" height="12" fill="#8FA9BF"/><circle cx="98" cy="16" r="2" fill="#fff"/><circle cx="88" cy="10" r="1.5" fill="#fff"/>`)},
- {id:"tenerife",en:"Tenerife",ko:"테네리페",cen:"Spain",cko:"스페인",con:"유럽",mo:"Mount Teide",mko:"테이데산",
-  art:A("#CFE4F2","#8A7A62",`<rect y="62" width="120" height="28" fill="#5E9CB4"/><path d="M10 62 56 18l50 44z" fill="#8A6B58"/><path d="M56 18 44 34l7 3 6-4 7 6 6-4z" fill="#F2F6F8"/><path d="M56 18q-3-9 2-13 3 6 7 4-2 7-4 9z" fill="#D9694F"/><path d="M0 66q12 5 24 0t24 0 24 0 24 0 24 0" stroke="#A9D6E4" stroke-width="1.8" fill="none"/><path d="M14 62V52q5-8 10 0v10z" fill="#4E7A48"/>`)},
- {id:"bagan",en:"Bagan",ko:"바간",cen:"Myanmar",cko:"미얀마",con:"아시아",mo:"Bagan Temples",mko:"바간 불탑",
-  art:A("#F6D5A4","#C9A272",`<circle cx="96" cy="20" r="9" fill="#F5B85E"/><g fill="#A87A52"><path d="M18 72V54q6-16 12 0v18z"/><path d="M96 72V56q6-14 12 0v16z"/></g><g fill="#B98A52"><path d="M40 72V46q10-24 20 0v26z"/><path d="M64 72V52q8-19 16 0v20z"/></g><g fill="#D9AE6E"><path d="M50 22l4 24h-8zM72 34l3 18h-6z"/></g><path d="M28 30a9 9 0 0 1 18 0q0 6-9 8t-9-8z" fill="#E86E4E"/><path d="M37 38v6" stroke="#7A5334" stroke-width="1.4"/><rect x="33" y="44" width="8" height="5" rx="1.4" fill="#8B6242"/>`)},
- {id:"lhasa",en:"Lhasa",ko:"라싸",cen:"China",cko:"중국",con:"아시아",mo:"Potala Palace",mko:"포탈라궁",
-  art:A("#CFE6F4","#B0A88E",`<path d="M0 72 26 46l14 12 10-8 20 14 16-10 34 18z" fill="#9C9480"/><rect x="34" y="34" width="52" height="38" fill="#F0EAD8"/><rect x="48" y="20" width="24" height="52" fill="#8C3A2E"/><g fill="#C9A227"><rect x="52" y="14" width="16" height="6"/><rect x="57" y="8" width="6" height="6"/></g><g fill="#3A332A"><rect x="38" y="42" width="5" height="8"/><rect x="47" y="42" width="5" height="8"/><rect x="68" y="42" width="5" height="8"/><rect x="77" y="42" width="5" height="8"/><rect x="55" y="34" width="4" height="7"/><rect x="62" y="34" width="4" height="7"/></g>`)},
- {id:"borobudur",en:"Borobudur",ko:"보로부두르",cen:"Indonesia",cko:"인도네시아",con:"아시아",mo:"Borobudur Temple",mko:"보로부두르 사원",
-  art:A("#CDE7EE","#6E8F5E",`<path d="M8 72V62h104v10z" fill="#9C9484"/><path d="M18 62V52h84v10z" fill="#A8A08E"/><path d="M28 52V42h64v10z" fill="#B4AC98"/><path d="M38 42V33h44v9z" fill="#9C9484"/><g fill="#8A8272"><path d="M60 12 52 33h16z"/></g><g fill="#B4AC98"><circle cx="44" cy="30" r="4"/><circle cx="76" cy="30" r="4"/><circle cx="34" cy="39" r="3.4"/><circle cx="86" cy="39" r="3.4"/></g><rect x="56" y="6" width="8" height="7" rx="4" fill="#A8A08E"/>`)},
- {id:"yellowstone",en:"Yellowstone",ko:"옐로스톤",cen:"United States",cko:"미국",con:"아메리카",mo:"Old Faithful Geyser",mko:"올드페이스풀 간헐천",
-  art:A("#CFE2F0","#8A9C6A",`<path d="M0 72V44l24-18 20 20 14-10 22 22 20-14 20 16v12z" fill="#7E8A72"/><path d="M52 72q-6-24 6-46 12 22 6 46z" fill="#EAF2F6" opacity=".95"/><g fill="#F2F7FA" opacity=".8"><circle cx="58" cy="18" r="6"/><circle cx="68" cy="12" r="4.4"/><circle cx="49" cy="12" r="4"/></g><ellipse cx="60" cy="72" rx="22" ry="5" fill="#BFD9C8"/><path d="M14 72V60q5-8 10 0v12z" fill="#3F6B4A"/>`)},
- {id:"easterisland",en:"Easter Island",ko:"이스터섬",cen:"Chile",cko:"칠레",con:"아메리카",mo:"Moai Statues",mko:"모아이 석상",
-  art:A("#CFE0EE","#8A9C6A",`<rect y="66" width="120" height="24" fill="#5E9CB4"/><g fill="#6E6A60"><path d="M22 72V44q0-12 9-12t9 12v28z"/><path d="M52 72V38q0-13 10-13t10 13v34z"/><path d="M84 72V48q0-11 8-11t8 11v24z"/></g><g fill="#3E3A34"><rect x="25" y="46" width="4" height="3"/><rect x="33" y="46" width="4" height="3"/><rect x="56" y="40" width="4.4" height="3.4"/><rect x="65" y="40" width="4.4" height="3.4"/><rect x="87" y="50" width="3.6" height="2.8"/><rect x="94" y="50" width="3.6" height="2.8"/></g><g fill="#57534B"><rect x="24" y="56" width="12" height="4"/><rect x="54" y="52" width="16" height="4"/></g>`)},
- {id:"uyuni",en:"Uyuni",ko:"우유니",cen:"Bolivia",cko:"볼리비아",con:"아메리카",mo:"Salar de Uyuni",mko:"우유니 소금 사막",
-  art:A("#EAD8E4","#EDF2F4",`<rect y="52" width="120" height="38" fill="#E4ECF2"/><path d="M0 52h120v6H0z" fill="#D6E2EA"/><circle cx="86" cy="26" r="9" fill="#F7D9A0"/><circle cx="86" cy="66" r="7" fill="#F2D6AE" opacity=".55"/><path d="M0 46q22-8 44-2t34-2 42 4v6H0z" fill="#C8B8C4"/><g stroke="#FFFFFF" stroke-width="1.2" opacity=".8"><path d="M8 62h22M40 68h26M76 60h30M20 74h34M66 76h30"/></g>`)},
- {id:"abuja",en:"Abuja",ko:"아부자",cen:"Nigeria",cko:"나이지리아",con:"아프리카",mo:"Zuma Rock",mko:"주마 바위",
-  art:A("#CFE4EE","#7E9C5E",`<path d="M18 72V44q0-20 18-24 8-2 14 0 20 5 20 26v26z" fill="#8A7E6E"/><path d="M24 44q22-16 42 0" stroke="#6E6458" stroke-width="1.8" fill="none"/><path d="M22 56q26-10 46 0" stroke="#6E6458" stroke-width="1.6" fill="none"/><path d="M26 66q22-8 40 0" stroke="#6E6458" stroke-width="1.4" fill="none"/><path d="M8 72V58q6-10 12 0v14z" fill="#4E7A48"/><path d="M96 72V54q7-11 14 0v18z" fill="#4E7A48"/><circle cx="98" cy="18" r="7" fill="#F2C86A"/>`)},
- {id:"kinshasa",en:"Kinshasa",ko:"킨샤사",cen:"DR Congo",cko:"콩고민주공화국",con:"아프리카",mo:"Congo Rainforest",mko:"콩고 열대우림",
-  art:A("#CFE6DC","#3F6B4A",`<path d="M0 46q18-16 34-4 14-14 30-2 16-12 32 2 12-6 24 4v26H0z" fill="#2E5A40"/><path d="M0 60q20-14 38-2 16-12 32 0 14-10 28 2 10-4 22 2v28H0z" fill="#3F7A52"/><rect y="62" width="120" height="28" fill="#5E93A0"/><path d="M0 70q16 5 32 0t32 0 32 0 24 0" stroke="#8FBCC6" stroke-width="1.6" fill="none"/><g fill="#5C4433"><rect x="86" y="30" width="3" height="22"/></g><ellipse cx="80" cy="30" rx="9" ry="6" fill="#2E6EA6"/><circle cx="72" cy="27" r="4.6" fill="#2E86C4"/><path d="M68 26l-8 2 8 2.4z" fill="#F2A83D"/><circle cx="71" cy="25.6" r="1.2" fill="#fff"/>`)},
- {id:"abusimbel",en:"Abu Simbel",ko:"아부심벨",cen:"Egypt",cko:"이집트",con:"아프리카",mo:"Abu Simbel Temple",mko:"아부심벨 신전",
-  art:A("#F4DDAE","#DDBE7E",`<path d="M8 72V30h104v42z" fill="#C99E62"/><path d="M8 30h104l-10-8H18z" fill="#B98F55"/><g fill="#B08650"><path d="M22 72V44q0-9 7-9t7 9v28z"/><path d="M44 72V42q0-9 7-9t7 9v30z"/><path d="M66 72V42q0-9 7-9t7 9v30z"/><path d="M88 72V44q0-9 7-9t7 9v28z"/></g><g fill="#7A5A34"><rect x="25" y="46" width="2.8" height="2.4"/><rect x="31" y="46" width="2.8" height="2.4"/><rect x="47" y="44" width="3" height="2.6"/><rect x="53" y="44" width="3" height="2.6"/><rect x="69" y="44" width="3" height="2.6"/><rect x="75" y="44" width="3" height="2.6"/><rect x="91" y="46" width="2.8" height="2.4"/><rect x="97" y="46" width="2.8" height="2.4"/></g><rect x="56" y="60" width="9" height="12" fill="#6B4A33"/>`)},
- {id:"seychelles",en:"Victoria",ko:"빅토리아",cen:"Seychelles",cko:"세이셸",con:"아프리카",mo:"Aldabra Giant Tortoise",mko:"알다브라 거북",
-  art:A("#CFEAF0","#EDDCA8",`<rect y="58" width="120" height="14" fill="#5EBCC4"/><path d="M0 62q14 5 28 0t28 0 28 0 28 0" stroke="#A9E0E8" stroke-width="1.6" fill="none"/><path d="M34 66q0-18 26-18t26 18z" fill="#7A6B4E"/><g stroke="#5C5038" stroke-width="1.4" fill="none"><path d="M46 50v16M60 47v19M74 50v16M38 58h44"/></g><path d="M88 60q8-3 10 3-4 4-10 1z" fill="#8A7A5A"/><circle cx="95" cy="61.6" r="1.3" fill="#2E2A24"/><g fill="#8A7A5A"><rect x="40" y="64" width="6" height="8" rx="2"/><rect x="72" y="64" width="6" height="8" rx="2"/></g><path d="M14 72V54l-7-12 14 2 4 12v16z" fill="#3E8B54"/>`)},
- {id:"papeete",en:"Papeete",ko:"파페에테",cen:"French Polynesia",cko:"프랑스령 폴리네시아",con:"오세아니아",mo:"Overwater Bungalow",mko:"수상 방갈로",
-  art:A("#CDE9F2","#5EC4C8",`<rect y="54" width="120" height="36" fill="#4FBCC4"/><path d="M0 58q14 5 28 0t28 0 28 0 28 0" stroke="#A9E8EE" stroke-width="1.6" fill="none"/><path d="M62 46 88 30l26 16z" fill="#B98A4E"/><rect x="70" y="46" width="36" height="16" fill="#EDE0C2"/><rect x="84" y="52" width="10" height="10" fill="#8B6B45"/><g fill="#8B6B45"><rect x="72" y="62" width="3" height="10"/><rect x="101" y="62" width="3" height="10"/></g><path d="M28 68V44h3.4v24z" fill="#8B6B45"/><path d="M30 45q-14-4-18 4 11-2 18 2zM30 45q14-4 18 4-11-2-18 2zM30 45q-4-12 3-15 4 8 0 15z" fill="#3E9B5E"/>`)},
- {id:"cairns",en:"Cairns",ko:"케언스",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"Great Barrier Reef",mko:"대보초",
-  art:A("#BFE4F0","#2E7E9C",`<rect y="20" width="120" height="70" fill="#2E8CAE"/><g fill="#E88A5E"><path d="M14 72V56q-8-4-4-10 6-4 10 2 2-10 10-8 6 2 4 10 8-2 8 6 0 6-8 6v10z"/></g><g fill="#E0C05E"><path d="M86 72V58q10-4 6-12 8 0 8 8 6-4 10 2 2 8-8 8v8z"/></g><g fill="#D96E8E"><circle cx="52" cy="44" r="5"/><circle cx="62" cy="50" r="4"/><circle cx="44" cy="52" r="3.4"/></g><g fill="#F2D24E"><path d="M64 28l8 4-8 4-2-4z"/><path d="M34 34l7 3.4-7 3.6-2-3.6z"/></g><path d="M0 24q14 5 28 0t28 0 28 0 28 0" stroke="#BFE8F4" stroke-width="1.6" fill="none"/>`)},
- {id:"koror",en:"Koror",ko:"코로르",cen:"Palau",cko:"팔라우",con:"오세아니아",mo:"Jellyfish Lake",mko:"해파리 호수",
-  art:A("#CDEAF0","#2E8C9C",`<rect y="18" width="120" height="72" fill="#2E9CAC"/><g fill="#F2A83D" opacity=".9"><path d="M30 40a9 9 0 0 1 18 0q0 4-9 5t-9-5z"/><path d="M33 46q1 8-2 12M39 47v12M45 46q-1 8 2 12" stroke="#F2A83D" stroke-width="1.6" fill="none"/></g><g fill="#F2C43D" opacity=".9"><path d="M62 26a7 7 0 0 1 14 0q0 3-7 4t-7-4z"/><path d="M65 31q1 6-2 9M69 32v9M73 31q-1 6 2 9" stroke="#F2C43D" stroke-width="1.4" fill="none"/></g><g fill="#F2A83D" opacity=".85"><path d="M80 56a8 8 0 0 1 16 0q0 3-8 4.4T80 56z"/><path d="M83 61q1 7-2 10M88 62v10M93 61q-1 7 2 10" stroke="#F2A83D" stroke-width="1.5" fill="none"/></g><path d="M0 22q14 5 28 0t28 0 28 0 28 0" stroke="#BFE8F0" stroke-width="1.6" fill="none"/>`)},
- {id:"faroe",en:"Torshavn",ko:"토르스하운",cen:"Faroe Islands",cko:"페로 제도",con:"유럽",mo:"Turf-Roof House",mko:"잔디 지붕 집",
-  art:A("#CBDCE6","#4E7A5E",`<path d="M0 72V34l30 14v24z" fill="#4A6B58"/><path d="M120 72V28L92 44v28z" fill="#3F5C4C"/><rect y="64" width="120" height="26" fill="#5E8A9C"/><path d="M34 52 58 36l24 16z" fill="#5FA05E"/><path d="M34 52h48v18H34z" fill="#8C3A2E"/><g fill="#F2E8D6"><rect x="42" y="56" width="7" height="7"/><rect x="66" y="56" width="7" height="7"/><rect x="54" y="58" width="8" height="12"/></g><path d="M34 52q24-8 48 0" stroke="#3E7A45" stroke-width="2.4" fill="none"/>`)},
- {id:"kazan",en:"Kazan",ko:"카잔",cen:"Russia",cko:"러시아",con:"유럽",mo:"Kul Sharif Mosque",mko:"쿨 샤리프 모스크",
-  art:A("#D6E7F4","#8FA98C",`<rect x="40" y="42" width="40" height="30" fill="#F0EAD8"/><path d="M60 20q13 10 13 18 0 8-13 8t-13-8q0-8 13-18z" fill="#2E6EA6"/><g fill="#2E6EA6"><path d="M32 34q5 5 5 9t-5 4-5-4 5-9z"/><path d="M88 34q5 5 5 9t-5 4-5-4 5-9z"/></g><g fill="#E4DCC8"><rect x="28" y="46" width="8" height="26"/><rect x="84" y="46" width="8" height="26"/></g><g fill="#C9A227"><rect x="59.2" y="13" width="1.8" height="7"/><rect x="31.2" y="28" width="1.6" height="6"/><rect x="87.2" y="28" width="1.6" height="6"/></g><rect x="54" y="58" width="12" height="14" rx="6" fill="#2E6EA6"/>`)},
- {id:"malta",en:"Valletta",ko:"발레타",cen:"Malta",cko:"몰타",con:"유럽",mo:"Blue Grotto",mko:"블루 그로토",
-  art:A("#CFE6F2","#2E86AE",`<rect y="44" width="120" height="46" fill="#2E86AE"/><path d="M6 72V12h108v60H86V38q0-12-26-12T34 38v34z" fill="#C9B48E"/><path d="M6 12h108l-8 10H14z" fill="#B0997A"/><path d="M36 40q24-10 48 0" stroke="#B0997A" stroke-width="1.6" fill="none"/><path d="M36 56q14 5 24 0t24 0" stroke="#7FC4DC" stroke-width="1.6" fill="none"/><path d="M50 62h20l-3 5H53z" fill="#8B5E3C"/><rect x="58" y="52" width="2" height="10" fill="#5C4433"/><path d="M60 52l8 3-8 3z" fill="#EDE4CE"/>`)},
- {id:"xian",en:"Xi’an",ko:"시안",cen:"China",cko:"중국",con:"아시아",mo:"Terracotta Army",mko:"병마용",
-  art:A("#E4D6BE","#B09878",`<rect y="56" width="120" height="34" fill="#9C8A6E"/><g fill="#A87E58"><path d="M13 72V52q0-7 8-7t8 7v20z"/><path d="M32 72V48q0-8 10-8t10 8v24z"/><path d="M54 72V50q0-8 10-8t10 8v22z"/><path d="M76 72V46q0-8 10-8t10 8v26z"/><path d="M99 72V52q0-7 8-7t8 7v20z"/></g><g fill="#6E5238"><circle cx="21" cy="42" r="4"/><circle cx="42" cy="38" r="4.4"/><circle cx="64" cy="40" r="4.2"/><circle cx="86" cy="36" r="4.4"/><circle cx="107" cy="42" r="4"/></g><g fill="#7A5E42"><rect x="18" y="52" width="6" height="2"/><rect x="39" y="50" width="6" height="2"/><rect x="61" y="51" width="6" height="2"/><rect x="83" y="48" width="6" height="2"/></g>`)},
- {id:"bohol",en:"Bohol",ko:"보홀",cen:"Philippines",cko:"필리핀",con:"아시아",mo:"Chocolate Hills",mko:"초콜릿 힐",
-  art:A("#CFE6F0","#7E9C5E",`<g fill="#A8804E"><path d="M0 72q10-24 22 0zM18 72q12-30 26 0zM40 72q11-26 24 0zM60 72q13-32 28 0zM84 72q11-25 24 0zM102 72q9-20 18 0z"/></g><g fill="#B98F5E"><path d="M8 72q8-16 16 0zM48 72q9-18 18 0zM90 72q8-16 16 0z"/></g><circle cx="98" cy="18" r="8" fill="#F5CE72"/><path d="M0 76h120v14H0z" fill="#6E8F4E"/>`)},
- {id:"almaty",en:"Almaty",ko:"알마티",cen:"Kazakhstan",cko:"카자흐스탄",con:"아시아",mo:"Tian Shan Mountains",mko:"톈산산맥",
-  art:A("#CFE2F0","#8FA07E",`<path d="M0 72 24 34l18 22 14-16 22 26 14-12 28 18z" fill="#7E8A96"/><path d="M24 34 12 52l7 2 5-4 6 6 6-4zM56 40l-9 12 6 2 4-3 5 4z" fill="#F2F7FA"/><path d="M92 46l-7 8 4 2 3-2 4 3z" fill="#F2F7FA"/><g fill="#4E7A48"><path d="M14 72V62q5-8 10 0v10zM100 72V60q5-9 10 0v12z"/></g><rect x="42" y="60" width="12" height="12" fill="#C9B396"/>`)},
- {id:"grandcanyon",en:"Grand Canyon",ko:"그랜드 캐니언",cen:"United States",cko:"미국",con:"아메리카",mo:"Grand Canyon",mko:"그랜드 캐니언",
-  art:A("#EDD3A4","#C97E4E",`<path d="M0 40h120v10H0z" fill="#D9A05E"/><path d="M0 50h44l-8 12H0zM120 50H76l8 12h36z" fill="#C08046"/><path d="M0 62h30l-6 10H0zM120 62H90l6 10h24z" fill="#A8683A"/><path d="M36 62h48l-10 10H46z" fill="#8A5430"/><path d="M46 72h28l-6 6H52z" fill="#4E86A6"/><circle cx="100" cy="16" r="8" fill="#F5C168"/>`)},
- {id:"iguazu",en:"Iguazu Falls",ko:"이구아수 폭포",cen:"Brazil",cko:"브라질",con:"아메리카",mo:"Iguazu Falls",mko:"이구아수 폭포",
-  art:A("#CBE7EE","#4E7A48",`<path d="M0 34h44v30H0z" fill="#4E7A48"/><path d="M76 34h44v30H76z" fill="#4E7A48"/><path d="M44 34h32v30H44z" fill="#3F6B3E"/><g fill="#E8F4F8"><rect x="30" y="40" width="12" height="26" rx="4"/><rect x="46" y="38" width="10" height="28" rx="4"/><rect x="60" y="40" width="10" height="26" rx="4"/><rect x="76" y="38" width="12" height="28" rx="4"/></g><ellipse cx="60" cy="70" rx="46" ry="8" fill="#DCEEF4"/><path d="M34 24q26-14 52 0" stroke="#F2C0D4" stroke-width="2.6" fill="none"/>`)},
- {id:"nuuk",en:"Nuuk",ko:"누크",cen:"Greenland",cko:"그린란드",con:"아메리카",mo:"Icebergs",mko:"빙산",
-  art:A("#B9D6E6","#8FB4C6",`<rect y="56" width="120" height="34" fill="#4E86A6"/><path d="M14 56 30 26l18 30z" fill="#E8F4FA"/><path d="M30 26 22 44l8 3 7-5z" fill="#FFFFFF"/><path d="M56 56 74 34l16 22z" fill="#DCEEF6"/><path d="M92 56l14-16 12 16z" fill="#E8F4FA"/><path d="M14 60q16 6 34 0M56 62q18 6 34 0" stroke="#8FC4DC" stroke-width="1.8" fill="none"/><path d="M6 22q22-12 40 0" stroke="#7EE0C0" stroke-width="2.6" fill="none" opacity=".7"/>`)},
- {id:"djanet",en:"Djanet",ko:"자네트",cen:"Algeria",cko:"알제리",con:"아프리카",mo:"Tassili Rock Art",mko:"타실리 암각화",
-  art:A("#F6DCA8","#DCA862",`<path d="M0 72V26h46v46z" fill="#B4794A"/><path d="M86 72V34h34v38z" fill="#A86E42"/><g fill="#7A4A2E"><path d="M14 44v-8l-4-4 4-2 4 2-4 4v8zM12 52l-2 10h3l2-8 2 8h3l-2-10z"/><path d="M28 46q6-6 12 0-2 8-12 8z"/><path d="M30 54v8M38 54v8" stroke="#7A4A2E" stroke-width="1.6"/></g><path d="M52 72q10-14 24 0z" fill="#D9A05E"/><circle cx="66" cy="20" r="8" fill="#F7CE72"/>`)},
- {id:"portlouis",en:"Port Louis",ko:"포트루이스",cen:"Mauritius",cko:"모리셔스",con:"아프리카",mo:"Dodo",mko:"도도새",
-  art:A("#CFE8EE","#6E9C5E",`<rect y="66" width="120" height="24" fill="#5EB4BE"/><path d="M42 72V54q-10-6-10-16 0-14 16-14t16 14q0 10-10 16v18z" fill="#8A8272"/><circle cx="60" cy="26" r="10" fill="#9C9484"/><path d="M69 24q10 2 10 8-8 4-11-2z" fill="#E8C05E"/><circle cx="63" cy="23" r="1.6" fill="#2E2A24"/><path d="M32 44q-10 4-8 12 8-2 12-6z" fill="#7A7264"/><g fill="#C9A227"><rect x="42" y="70" width="4" height="6"/><rect x="54" y="70" width="4" height="6"/></g><path d="M100 72V54l-7-12 14 2 4 12v16z" fill="#3E8B54"/>`)},
- {id:"perth",en:"Perth",ko:"퍼스",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"Pinnacles Desert",mko:"피너클스 사막",
-  art:A("#F4D2A0","#E0AE68",`<path d="M0 72V58q30-12 60-4t60 2v16z" fill="#D9964E"/><g fill="#C08A54"><path d="M16 72V50q0-6 4-6t4 6v22z"/><path d="M32 72V42q0-7 5-7t5 7v30z"/><path d="M54 72V48q0-6 4-6t4 6v24z"/><path d="M72 72V38q0-8 5-8t5 8v34z"/><path d="M94 72V52q0-6 4-6t4 6v20z"/></g><circle cx="24" cy="18" r="8" fill="#F7D07E"/>`)},
- {id:"tarawa",en:"Tarawa",ko:"타라와",cen:"Kiribati",cko:"키리바시",con:"오세아니아",mo:"Coral Atoll",mko:"산호 환초",
-  art:A("#CDEAF2","#3EA0B4",`<rect y="14" width="120" height="76" fill="#2E9CB4"/><path d="M60 76q-40 0-40-26T60 24t40 26-40 26z" fill="#6FD0DC" opacity=".55"/><path d="M60 70q-30 0-30-20T60 30t30 20-30 20z" fill="#2E9CB4"/><g fill="#EDD9A8"><path d="M60 24q16 0 26 8-10 4-26 4t-26-4q10-8 26-8z"/><path d="M22 52q2-8 8-12 4 6 2 14z"/><path d="M98 52q-2-8-8-12-4 6-2 14z"/></g><g fill="#3E8B54"><path d="M58 28V20h2.4v8z"/><path d="M59 20q-7-2-9 2 5-1 9 1zM59 20q7-2 9 2-5-1-9 1z"/></g><path d="M0 18q14 5 28 0t28 0 28 0 28 0" stroke="#BFE8F0" stroke-width="1.6" fill="none"/>`)},
- {id:"azores",en:"Ponta Delgada",ko:"폰타델가다",cen:"Portugal",cko:"포르투갈",con:"유럽",mo:"Sete Cidades Crater Lakes",mko:"세트 시다드스 분화구 호수",
-  art:A("#CFE4F2","#4E7A52",`<path d="M0 72V38q22-18 46-6 22 11 40-2 18-12 34 2v40z" fill="#4E7A52"/><path d="M18 58q0-12 20-12t20 12-20 10-20-10z" fill="#3E8B9C"/><path d="M60 60q0-11 20-11t20 11-20 9-20-9z" fill="#5EA86E"/><path d="M52 46q8 8 8 14" stroke="#6E5238" stroke-width="2.4" fill="none"/><g fill="#3F6B4A"><path d="M8 72V60q5-8 10 0v12zM104 72V62q5-7 10 0v10z"/></g>`)},
- {id:"yakutsk",en:"Yakutsk",ko:"야쿠츠크",cen:"Russia",cko:"러시아",con:"아시아",mo:"Lena Pillars",mko:"레나 기둥",
-  art:A("#D6E4F0","#DCE8F0",`<rect y="62" width="120" height="28" fill="#8FB4C6"/><g fill="#8A8272"><path d="M10 66V28q0-6 5-6t5 6v38z"/><path d="M24 66V20q0-7 6-7t6 7v46z"/><path d="M40 66V32q0-6 5-6t5 6v34z"/><path d="M56 66V22q0-7 6-7t6 7v44z"/><path d="M74 66V34q0-6 5-6t5 6v32z"/><path d="M90 66V24q0-7 6-7t6 7v42z"/><path d="M106 66V36q0-6 5-6t5 6v30z"/></g><g fill="#EFF5F8"><path d="M10 28q5-6 10 0zM24 20q6-7 12 0zM56 22q6-7 12 0zM90 24q6-7 12 0z"/></g><path d="M0 68q14 4 28 0t28 0 28 0 28 0" stroke="#C6DEE8" stroke-width="1.6" fill="none"/>`)},
- {id:"tehran",en:"Tehran",ko:"테헤란",cen:"Iran",cko:"이란",con:"아시아",mo:"Azadi Tower",mko:"아자디 타워",
-  art:A("#7FAFD4","#9C8A6A",`<path d="M20 72V66h80v6z" fill="#6E6252"/><path d="M32 66V52l28-42 28 42v14H74V44q0-9-14-9t-14 9v22z" fill="#F4F1E8"/><path d="M32 66V52l28-42v25q-14 0-14 9v22z" fill="#DCD6C6"/><path d="M46 66V48q0-9 14-9t14 9v18h-7V50q0-7-7-7t-7 7v16z" fill="#4E6E8C"/><path d="M52 28h16l-8-14z" fill="#C6BFAC"/><g fill="#6E8C5E"><path d="M8 72V62q5-7 10 0v10zM104 72V62q5-7 10 0v10z"/></g>`)},
- {id:"taipei",en:"Taipei",ko:"타이베이",cen:"Taiwan",cko:"대만",con:"아시아",mo:"Taipei 101",mko:"타이베이 101",
-  art:A("#CFE2F0","#7E8C74",`<g fill="#8FB4A6"><rect x="50" y="30" width="20" height="42"/><path d="M48 30h24l-3 5H51zM47 40h26l-3 5H50zM46 50h28l-3 5H49zM45 60h30l-3 5H48z"/></g><path d="M52 18h16v12H52z" fill="#7EA396"/><rect x="59" y="6" width="2" height="12" fill="#6E9386"/><g fill="#A8B9C4"><rect x="20" y="52" width="10" height="20"/><rect x="34" y="58" width="9" height="14"/><rect x="80" y="54" width="10" height="18"/><rect x="94" y="60" width="9" height="12"/></g>`)},
- {id:"churchill",en:"Churchill",ko:"처칠",cen:"Canada",cko:"캐나다",con:"아메리카",mo:"Polar Bear",mko:"북극곰",
-  art:A("#B9D6E8","#EDF3F7",`<path d="M6 26q24-14 42 2" stroke="#7EE0C0" stroke-width="3.2" fill="none" opacity=".7" stroke-linecap="round"/><path d="M0 62h120v10H0z" fill="#DCE8F0"/><path d="M30 66V52q0-10 14-10h22q14 0 14 10v14z" fill="#F4F8FA"/><circle cx="86" cy="44" r="10" fill="#F4F8FA"/><circle cx="82" cy="35" r="3.4" fill="#EAF0F4"/><circle cx="92" cy="35" r="3.4" fill="#EAF0F4"/><circle cx="90" cy="44" r="1.8" fill="#3A3630"/><circle cx="84" cy="42" r="1.4" fill="#3A3630"/><g fill="#E4EDF2"><rect x="32" y="62" width="9" height="8" rx="3"/><rect x="52" y="62" width="9" height="8" rx="3"/><rect x="68" y="62" width="9" height="8" rx="3"/></g>`)},
- {id:"neworleans",en:"New Orleans",ko:"뉴올리언스",cen:"United States",cko:"미국",con:"아메리카",mo:"Jazz",mko:"재즈",
-  art:A("#4E3A5E","#6E4E7E",`<circle cx="94" cy="20" r="8" fill="#F2D77E"/><path d="M28 52q0-8 8-8h24v16H36q-8 0-8-8z" fill="#E8B93D"/><path d="M60 40l26-10v36L60 56z" fill="#F2C84E"/><path d="M86 30q10 6 10 14t-10 14z" fill="#E8B93D"/><g fill="#C79A2E"><rect x="38" y="38" width="4" height="8" rx="2"/><rect x="47" y="38" width="4" height="8" rx="2"/><rect x="56" y="38" width="4" height="8" rx="2"/></g><g fill="#F2E4A8" opacity=".8"><path d="M14 30l6 2-6 2zM20 20l5 2-5 2zM10 44l5 2-5 2z"/></g>`)},
- {id:"galapagos",en:"Galapagos",ko:"갈라파고스",cen:"Ecuador",cko:"에콰도르",con:"아메리카",mo:"Marine Iguana",mko:"바다이구아나",
-  art:A("#CFE6EE","#5E5A52",`<rect y="62" width="120" height="28" fill="#4E9CB4"/><path d="M0 66h120v6H0z" fill="#6E6A60"/><path d="M18 62V52q0-6 10-6h34q12 0 18 6l14 10z" fill="#4E4A44"/><path d="M84 52q12-4 18 2-6 6-18 4z" fill="#5C5850"/><circle cx="96" cy="53" r="1.6" fill="#E8C05E"/><g fill="#3E3A34"><path d="M28 46l4-8 4 8zM40 44l4-9 4 9zM54 44l4-9 4 9zM68 46l4-8 4 8z"/></g><g fill="#4E4A44"><rect x="26" y="60" width="7" height="6" rx="2"/><rect x="60" y="60" width="7" height="6" rx="2"/></g><path d="M18 56q-14 2-18 8 12 2 18-2z" fill="#4E4A44"/>`)},
- {id:"kruger",en:"Kruger",ko:"크루거",cen:"South Africa",cko:"남아프리카공화국",con:"아프리카",mo:"Safari Elephant",mko:"사파리 코끼리",
-  art:A("#F2D9A0","#C9A86A",`<circle cx="98" cy="18" r="9" fill="#F2A83D"/><path d="M28 68V48q0-14 16-14h16q16 0 16 14v20z" fill="#8A8A84"/><circle cx="80" cy="42" r="13" fill="#94948E"/><path d="M88 34q12-6 16 2-6 10-16 6z" fill="#84847E"/><path d="M84 52q4 14-2 18 8 0 10-16z" fill="#8A8A84"/><circle cx="76" cy="39" r="1.8" fill="#3A3630"/><g fill="#7E7E78"><rect x="32" y="64" width="9" height="8" rx="2"/><rect x="48" y="64" width="9" height="8" rx="2"/><rect x="64" y="64" width="9" height="8" rx="2"/></g><path d="M6 72V56l-6-12 12 2 4 12v14z" fill="#7E9C5E"/>`)},
- {id:"moroni",en:"Moroni",ko:"모로니",cen:"Comoros",cko:"코모로",con:"아프리카",mo:"Karthala Volcano",mko:"카르탈라 화산",
-  art:A("#F0D2B4","#5E8A6E",`<rect y="64" width="120" height="26" fill="#4EA0B4"/><path d="M10 68 58 22l52 46z" fill="#6E6258"/><path d="M58 22 46 38l10 4 8-5 8 6z" fill="#8A7E72"/><path d="M58 22q-4-10 2-14 3 6 8 4-3 8-5 10z" fill="#D9694F"/><circle cx="50" cy="8" r="3" fill="#F2A03D"/><path d="M0 70q14 4 28 0t28 0 28 0 28 0" stroke="#8FCEDC" stroke-width="1.6" fill="none"/><path d="M14 68V56l-6-11 12 2 3 11v10z" fill="#3E8B54"/>`)},
- {id:"agadez",en:"Agadez",ko:"아가데즈",cen:"Niger",cko:"니제르",con:"아프리카",mo:"Grand Mosque of Agadez",mko:"아가데즈 대모스크",
-  art:A("#F6DEB0","#DCB878",`<path d="M26 72V46h60v26z" fill="#C98F52"/><path d="M46 46 60 8l14 38z" fill="#BF8447"/><g fill="#6B4A33"><path d="M52 22h16v2.4H52zM50 30h20v2.4H50zM48 38h24v2.4H48zM30 52h52v2.4H30zM30 62h52v2.4H30z"/></g><circle cx="60" cy="5" r="2.4" fill="#E0B45E"/><rect x="54" y="60" width="12" height="12" rx="6" fill="#7A5334"/><path d="M8 72V60q6-10 12 0v12z" fill="#8FA05E"/>`)},
- {id:"honiara",en:"Honiara",ko:"호니아라",cen:"Solomon Islands",cko:"솔로몬 제도",con:"오세아니아",mo:"Tomoko War Canoe",mko:"전통 카누",
-  art:A("#CFE8F0","#3EA8B4",`<rect y="56" width="120" height="34" fill="#3EA8B4"/><path d="M14 62h92q-8 12-46 12T14 62z" fill="#5C4433"/><path d="M14 62q-6-10-2-18 10 4 12 18z" fill="#4A362A"/><path d="M106 62q6-10 2-18-10 4-12 18z" fill="#4A362A"/><g fill="#EDE4CE"><path d="M30 64h4v4h-4zM42 64h4v4h-4zM54 64h4v4h-4zM66 64h4v4h-4zM78 64h4v4h-4z"/></g><g fill="#8B6B45"><rect x="44" y="52" width="2.6" height="12" transform="rotate(20 45 58)"/><rect x="70" y="52" width="2.6" height="12" transform="rotate(-20 71 58)"/></g><path d="M0 58q14 4 28 0t28 0 28 0 28 0" stroke="#9EDCE6" stroke-width="1.6" fill="none"/>`)},
- {id:"adelaide",en:"Adelaide",ko:"애들레이드",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"Kangaroo Island",mko:"캥거루섬",
-  art:A("#F2D9A8","#B4C47E",`<circle cx="98" cy="18" r="8" fill="#F2C86A"/><path d="M40 72q-8-4-8-14t10-14l10-2 8 6q6 4 6 12 0 8-6 12z" fill="#B47E52"/><circle cx="64" cy="34" r="9" fill="#B47E52"/><path d="M64 26q-2-12 2-14 4 4 3 14zM72 27q4-11 8-11-1 6-5 13z" fill="#A6714A"/><circle cx="69" cy="33" r="1.6" fill="#3A3630"/><path d="M32 62q-16 6-20 14 14 2 24-6z" fill="#A6714A"/><path d="M44 68v6M56 68v6" stroke="#A6714A" stroke-width="4" stroke-linecap="round"/><path d="M8 72V62q5-8 10 0v10z" fill="#7E9C5E"/>`)},
- {id:"hobart",en:"Hobart",ko:"호바트",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"Tasmanian Devil",mko:"태즈메이니아데블",
-  art:A("#CFE2EE","#5E7A52",`<path d="M32 70V52q0-14 18-14h20q18 0 18 14v18z" fill="#3A3630"/><circle cx="76" cy="42" r="13" fill="#423E38"/><path d="M66 32q-6-8-2-12 6 2 8 8zM86 32q6-8 2-12-6 2-8 8z" fill="#8A3A3A"/><circle cx="72" cy="41" r="1.8" fill="#F2E8D6"/><circle cx="82" cy="41" r="1.8" fill="#F2E8D6"/><path d="M70 50q6 5 12 0-2 6-6 6t-6-6z" fill="#F2E8D6"/><path d="M36 54h34v4H36z" fill="#F2E8D6"/><g fill="#423E38"><rect x="36" y="66" width="9" height="6" rx="2"/><rect x="56" y="66" width="9" height="6" rx="2"/></g><path d="M32 58q-16 2-22 10 14 4 22-4z" fill="#3A3630"/>`)},
- {id:"longyearbyen",en:"Longyearbyen",ko:"롱위에아르뷔엔",cen:"Norway",cko:"노르웨이",con:"유럽",mo:"Global Seed Vault",mko:"국제 종자 저장고",
-  art:A("#1E3050","#EDF3F8",`<path d="M6 26q26-14 46 4" stroke="#6EE0B4" stroke-width="3.4" fill="none" opacity=".75" stroke-linecap="round"/><path d="M0 72V50q30-16 60-4t60 2v24z" fill="#E4EDF4"/><path d="M46 72V38h26v34z" fill="#6E7A88"/><path d="M46 38h26l-4-8h-18z" fill="#5E6A78"/><rect x="54" y="52" width="11" height="20" fill="#2E3A48"/><rect x="57" y="24" width="5" height="8" fill="#7EE0C0"/><g fill="#fff"><circle cx="98" cy="16" r="1.8"/><circle cx="86" cy="10" r="1.4"/><circle cx="24" cy="14" r="1.5"/></g>`)},
- {id:"socotra",en:"Socotra",ko:"소코트라",cen:"Yemen",cko:"예멘",con:"아시아",mo:"Dragon Blood Tree",mko:"용혈수",
-  art:A("#EDD8B0","#D9B87E",`<rect x="56" y="44" width="9" height="28" fill="#7A5E42"/><path d="M60 46q-12-4-16-12 10 0 16 6zM60 46q12-4 16-12-10 0-16 6z" fill="#6B5138"/><path d="M60 34q-30 0-30-10t30-8 30 8-30 10z" fill="#4E7A48"/><path d="M60 26q-20 0-20-6t20-5 20 5-20 6z" fill="#5E8B54"/><g fill="#8A6B45"><path d="M16 72V60q5-8 10 0v12zM96 72V62q5-7 10 0v10z"/></g><circle cx="24" cy="16" r="7" fill="#F2C86A"/>`)},
- {id:"bandarseri",en:"Bandar Seri Begawan",ko:"반다르스리브가완",cen:"Brunei",cko:"브루나이",con:"아시아",mo:"Kampong Ayer",mko:"수상 마을",
-  art:A("#CFE6F0","#4EA0B4",`<rect y="52" width="120" height="38" fill="#4EA0B4"/><path d="M14 52 34 38l20 14z" fill="#B98A4E"/><rect x="20" y="52" width="28" height="14" fill="#EDE0C2"/><path d="M62 48 86 30l24 18z" fill="#B98A4E"/><rect x="68" y="48" width="36" height="18" fill="#EDE0C2"/><g fill="#C9A227"><path d="M86 30q7 6 7 10t-7 6-7-6 7-10z"/></g><g fill="#8B6B45"><rect x="22" y="66" width="3" height="10"/><rect x="43" y="66" width="3" height="10"/><rect x="70" y="66" width="3" height="10"/><rect x="99" y="66" width="3" height="10"/></g><path d="M0 58q14 4 28 0t28 0 28 0 28 0" stroke="#9EDCE6" stroke-width="1.6" fill="none"/>`)},
- {id:"sakhalin",en:"Sakhalin",ko:"사할린",cen:"Russia",cko:"러시아",con:"아시아",mo:"Aniva Lighthouse",mko:"아니바곶 등대",
-  art:A("#8FA8BE","#6E8A9C",`<rect y="58" width="120" height="32" fill="#5E8298"/><path d="M34 74V60q0-7 14-7h24q14 0 14 7v14z" fill="#6E6A62"/><path d="M46 56 52 20h16l6 36z" fill="#E8E2D4"/><path d="M49 38h22v7H49z" fill="#B04A3A"/><path d="M50 30h20v5H50z" fill="#C9C2B2"/><rect x="52" y="8" width="16" height="12" rx="3" fill="#F2D77E"/><path d="M68 11l24-6v14z" fill="#F7E6A8" opacity=".5"/><path d="M52 11l-24-6v14z" fill="#F7E6A8" opacity=".5"/><rect x="57" y="3" width="6" height="5" fill="#8A857A"/><rect x="55" y="62" width="10" height="12" fill="#4A463E"/><path d="M0 64q14 5 28 0t28 0 28 0 28 0" stroke="#9EBACE" stroke-width="1.6" fill="none"/>`)},
- {id:"timor",en:"Dili",ko:"딜리",cen:"Timor-Leste",cko:"동티모르",con:"아시아",mo:"Jaco Island",mko:"자쿠섬",
-  art:A("#CFEAF2","#2E9CB4",`<rect y="46" width="120" height="44" fill="#2E9CB4"/><path d="M0 62q16 5 32 0t32 0 32 0 24 0" stroke="#8FD6E4" stroke-width="1.8" fill="none"/><rect y="68" width="120" height="22" fill="#EDDCA8"/><path d="M18 68q0-10 26-10t28 10z" fill="#F2E6C0"/><path d="M84 68V44h3.4v24z" fill="#8B6B45"/><path d="M86 45q-14-4-18 4 11-2 18 2zM86 45q14-4 18 4-11-2-18 2zM86 45q-4-12 3-15 4 8 0 15z" fill="#3E9B5E"/><g fill="#4E9C5E"><path d="M30 68V58q5-7 10 0v10z"/></g>`)},
- {id:"winnipeg",en:"Winnipeg",ko:"위니펙",cen:"Canada",cko:"캐나다",con:"아메리카",mo:"Bison",mko:"들소",
-  art:A("#CFE2F0","#C9B47E",`<circle cx="100" cy="18" r="8" fill="#F2CE72"/><path d="M30 68V50q0-12 16-12h18q14 0 14 12v18z" fill="#6B5138"/><path d="M30 50q-4-16 6-18 8 8 8 18z" fill="#7A5E42"/><circle cx="80" cy="46" r="11" fill="#5C4433"/><path d="M70 38q-8-6-4-10 6 0 8 6zM90 38q8-6 4-10-6 0-8 6z" fill="#E8E0CE"/><circle cx="84" cy="44" r="1.7" fill="#2E2A24"/><g fill="#4A362A"><rect x="34" y="64" width="8" height="8" rx="2"/><rect x="50" y="64" width="8" height="8" rx="2"/><rect x="64" y="64" width="8" height="8" rx="2"/></g>`)},
- {id:"halifax",en:"Halifax",ko:"핼리팩스",cen:"Canada",cko:"캐나다",con:"아메리카",mo:"Bluenose Schooner",mko:"블루노즈 범선",
-  art:A("#CFE0EE","#4E7E9C",`<rect y="56" width="120" height="34" fill="#3E7A9C"/><path d="M22 62h76q-8 12-38 12T22 62z" fill="#2E3A48"/><rect x="34" y="58" width="52" height="5" fill="#EDE4CE"/><g fill="#5C4433"><rect x="44" y="14" width="3" height="44"/><rect x="72" y="22" width="3" height="36"/></g><g fill="#F2EDE2"><path d="M47 18q16 14 0 38zM43 20q-12 12 0 36zM75 26q13 12 0 30zM71 28q-10 10 0 28z"/></g><path d="M0 62q14 4 28 0t28 0 28 0 28 0" stroke="#8FBCD4" stroke-width="1.6" fill="none"/>`)},
- {id:"sanjuan",en:"San Juan",ko:"산후안",cen:"Puerto Rico",cko:"푸에르토리코",con:"아메리카",mo:"Bioluminescent Bay",mko:"야광 바다",
-  art:A("#16233E","#0E4E5E",`<rect y="44" width="120" height="46" fill="#12586E"/><path d="M0 52q16 6 32 0t32 0 32 0 24 0" stroke="#4EE0C8" stroke-width="2" fill="none" opacity=".8"/><path d="M0 64q16 6 32 0t32 0 32 0 24 0" stroke="#3ED0BE" stroke-width="1.6" fill="none" opacity=".6"/><g fill="#6EF0D8"><circle cx="26" cy="58" r="2.4"/><circle cx="44" cy="68" r="1.8"/><circle cx="62" cy="56" r="2.8"/><circle cx="80" cy="66" r="2"/><circle cx="96" cy="58" r="2.4"/><circle cx="36" cy="76" r="2"/><circle cx="72" cy="78" r="1.6"/></g><path d="M46 44h28l-5 8H51z" fill="#2E3A48"/><rect x="59" y="34" width="2" height="10" fill="#2E3A48"/><g fill="#fff"><circle cx="20" cy="14" r="1.5"/><circle cx="90" cy="10" r="1.3"/><circle cx="58" cy="18" r="1.2"/></g>`)},
- {id:"kaieteur",en:"Kaieteur",ko:"카이에투르",cen:"Guyana",cko:"가이아나",con:"아메리카",mo:"Giant Water Lily",mko:"빅토리아 수련",
-  art:A("#CFE8E0","#3E7A5E",`<rect y="40" width="120" height="50" fill="#3E7A6E"/><ellipse cx="40" cy="60" rx="30" ry="12" fill="#4E9C5E"/><ellipse cx="40" cy="60" rx="25" ry="8.4" fill="#5EAD68"/><ellipse cx="92" cy="76" rx="22" ry="9" fill="#4E9C5E"/><ellipse cx="86" cy="46" rx="16" ry="7" fill="#4E9C5E"/><g fill="#F2E4EE"><path d="M62 52q0-9 8-9t8 9q0 7-8 7t-8-7z"/><circle cx="70" cy="50" r="3.4" fill="#F7D9A0"/></g><path d="M0 46q16 4 32 0t32 0 32 0 24 0" stroke="#7EBCA8" stroke-width="1.4" fill="none"/>`)},
- {id:"bangui",en:"Bangui",ko:"방기",cen:"Central African Republic",cko:"중앙아프리카공화국",con:"아프리카",mo:"Lowland Gorilla",mko:"고릴라",
-  art:A("#CFE6DC","#3F6B4A",`<g fill="#2E5A40"><path d="M0 72V28q14 8 20 24v20zM120 72V24q-16 8-22 26v22z"/></g><path d="M32 72V56q0-14 16-14h20q16 0 16 14v16z" fill="#3A3630"/><circle cx="60" cy="36" r="15" fill="#423E38"/><path d="M60 30q-9 0-9 8t9 9 9-9-9-8z" fill="#6B5D50"/><circle cx="55" cy="34" r="1.8" fill="#1E1A16"/><circle cx="65" cy="34" r="1.8" fill="#1E1A16"/><path d="M56 42q4 3 8 0" stroke="#1E1A16" stroke-width="1.3" fill="none"/><g fill="#3A3630"><rect x="34" y="64" width="10" height="8" rx="3"/><rect x="76" y="64" width="10" height="8" rx="3"/></g>`)},
- {id:"sthelena",en:"Jamestown",ko:"제임스타운",cen:"Saint Helena",cko:"세인트헬레나",con:"아프리카",mo:"Jacob’s Ladder",mko:"야곱의 사다리",
-  art:A("#CFE2EE","#5E7E62",`<rect y="66" width="120" height="24" fill="#4E86A6"/><path d="M0 72V26l40 46z" fill="#6E6A5E"/><path d="M120 72V22L74 72z" fill="#7A7668"/><path d="M40 72 60 20l14 52z" fill="#8A8574"/><g stroke="#EDE4CE" stroke-width="2.2"><path d="M52 70 58 24M62 70 66 24"/></g><g stroke="#D6CBB2" stroke-width="1.4"><path d="M53 64h10M54 56h10M55 48h10M56 40h9M57 32h9"/></g><g fill="#C2453F"><rect x="14" y="60" width="9" height="8"/><rect x="98" y="62" width="9" height="6"/></g>`)},
- {id:"guam",en:"Hagatna",ko:"하갓냐",cen:"Guam",cko:"괌",con:"오세아니아",mo:"Latte Stone",mko:"라테 스톤",
-  art:A("#CFE8F2","#6E9C5E",`<rect y="64" width="120" height="26" fill="#4EB0C0"/><rect y="70" width="120" height="20" fill="#EDDCA8"/><g fill="#B0A48E"><path d="M20 70V50q0-5 7-5t7 5v20z"/><path d="M46 70V44q0-5 8-5t8 5v26z"/><path d="M76 70V48q0-5 7-5t7 5v22z"/></g><g fill="#C6BAA2"><ellipse cx="27" cy="48" rx="11" ry="5"/><ellipse cx="54" cy="42" rx="13" ry="5.6"/><ellipse cx="83" cy="46" rx="11" ry="5"/></g><path d="M0 66q14 4 28 0t28 0 28 0 28 0" stroke="#9ED8E4" stroke-width="1.6" fill="none"/><circle cx="104" cy="16" r="7" fill="#F5CE72"/>`)},
- {id:"broome",en:"Broome",ko:"브룸",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"Cable Beach Camels",mko:"케이블비치 낙타",
-  art:A("#F2C89A","#EDD9A8",`<circle cx="98" cy="20" r="9" fill="#F2A03D"/><rect y="62" width="120" height="10" fill="#4EA0BE"/><rect y="70" width="120" height="20" fill="#EDD9A8"/><g fill="#C99A5E"><path d="M22 72V56q0-8 12-8h14q12 0 12 8v16z"/><path d="M28 50q4-10 9-2zM44 48q5-11 10-1z"/></g><path d="M58 54q10-4 12-14 4 8 0 14z" fill="#C99A5E"/><circle cx="70" cy="38" r="6" fill="#C99A5E"/><path d="M74 34l7 2-7 2z" fill="#B0863F"/><circle cx="72" cy="36" r="1.3" fill="#3A3024"/><g fill="#B0863F"><rect x="26" y="66" width="4" height="8"/><rect x="38" y="66" width="4" height="8"/><rect x="50" y="66" width="4" height="8"/></g><path d="M0 66q14 4 28 0t28 0 28 0 28 0" stroke="#9ED4E4" stroke-width="1.5" fill="none"/>`)},
- {id:"rarotonga",en:"Rarotonga",ko:"라로통가",cen:"Cook Islands",cko:"쿡 제도",con:"오세아니아",mo:"Te Rua Manga",mko:"바늘바위",
-  art:A("#CFE8F0","#4EB4BE",`<rect y="70" width="120" height="20" fill="#4EB4BE"/><path d="M0 72V44l30 28z" fill="#3F6B4A"/><path d="M120 72V38L86 72z" fill="#356847"/><path d="M34 72 58 22l26 50z" fill="#4E7A52"/><path d="M58 22q-5-14 1-18 4 8 9 6-3 8-4 12z" fill="#7A7668"/><path d="M52 40q6-6 12 0" stroke="#6B8A5E" stroke-width="2" fill="none"/><path d="M14 70V56l-7-12 14 2 4 12v12z" fill="#3E8B54"/><path d="M0 74q14 4 28 0t28 0 28 0 28 0" stroke="#9EDCE4" stroke-width="1.6" fill="none"/>`)},
- {id:"sochi",en:"Sochi",ko:"소치",cen:"Russia",cko:"러시아",con:"유럽",mo:"Black Sea Coast",mko:"흑해 해안",
-  art:A("#CFE4F2","#E4D2A8",`<path d="M0 50 26 22l18 16 14-10 20 20 16-12 26 24z" fill="#7E8A96"/><path d="M26 22 16 36l6 2 4-3 5 5 5-4zM58 28l-8 10 5 2 4-3 4 4z" fill="#F2F7FA"/><rect y="52" width="120" height="20" fill="#3E86A6"/><path d="M0 58q14 4 28 0t28 0 28 0 28 0" stroke="#8FC4DC" stroke-width="1.6" fill="none"/><path d="M18 72V52h3.4v20z" fill="#8B6B45"/><path d="M20 53q-14-4-18 4 11-2 18 2zM20 53q14-4 18 4-11-2-18 2zM20 53q-4-12 3-15 4 8 0 15z" fill="#3E9B5E"/><path d="M92 72V54h3.4v18z" fill="#8B6B45"/><path d="M94 55q-12-4-16 3 10-1 16 2zM94 55q12-4 16 3-10-1-16 2z" fill="#3E9B5E"/>`)},
- {id:"kamchatka",en:"Petropavlovsk",ko:"페트로파블롭스크",cen:"Russia",cko:"러시아",con:"아시아",mo:"Klyuchevskaya Volcano",mko:"클류쳅스카야 화산",
-  art:A("#CBDCEA","#E8EFF4",`<path d="M0 72 46 16l30 38 14-12 30 30z" fill="#7E8A9C"/><path d="M46 16 30 36l9 3 7-5 8 7 8-5z" fill="#F6FAFC"/><path d="M90 42l-9 10 6 2 4-3 5 4z" fill="#F6FAFC"/><path d="M46 16q-4-10 2-14 3 6 8 4-3 8-5 10z" fill="#C6CFD8"/><circle cx="40" cy="6" r="3" fill="#DDE4EA"/><path d="M0 72h120v18H0z" fill="#E8EFF4"/><path d="M8 72V62q5-8 10 0v10z" fill="#3E6B4E"/>`)},
- {id:"karachi",en:"Karachi",ko:"카라치",cen:"Pakistan",cko:"파키스탄",con:"아시아",mo:"Truck Art",mko:"트럭 아트",
-  art:A("#F2DCB0","#D9BE88",`<path d="M10 66V44h44v22z" fill="#2E86C4"/><path d="M54 66V50h26l14 16z" fill="#E0563E"/><rect x="60" y="53" width="14" height="10" fill="#CFE4F2"/><g fill="#F2C43D"><rect x="14" y="48" width="36" height="4"/><rect x="14" y="58" width="36" height="4"/></g><g fill="#5EAD68"><rect x="14" y="53" width="36" height="4"/></g><path d="M10 44h44l-6-8H16z" fill="#8E4EA8"/><g fill="#F2C43D"><circle cx="22" cy="40" r="2"/><circle cx="32" cy="40" r="2"/><circle cx="42" cy="40" r="2"/></g><circle cx="26" cy="68" r="6" fill="#3A3630"/><circle cx="84" cy="68" r="6" fill="#3A3630"/><circle cx="26" cy="68" r="2.4" fill="#B0AAA0"/><circle cx="84" cy="68" r="2.4" fill="#B0AAA0"/>`)},
- {id:"harbin",en:"Harbin",ko:"하얼빈",cen:"China",cko:"중국",con:"아시아",mo:"Ice Festival",mko:"빙설제",
-  art:A("#16233E","#DCE8F2",`<g fill="#5EC4E0" opacity=".9"><path d="M14 72V40h20v32z"/><path d="M40 72V28h24v44z"/><path d="M70 72V44h18v28z"/><path d="M92 72V36h16v36z"/></g><path d="M40 28 52 14l12 14z" fill="#7ED8EE"/><path d="M92 36l8-10 8 10z" fill="#7ED8EE"/><g fill="#F2E86A"><rect x="20" y="52" width="6" height="8"/><rect x="46" y="44" width="6" height="9"/><rect x="56" y="56" width="6" height="8"/><rect x="76" y="54" width="6" height="8"/><rect x="97" y="48" width="6" height="8"/></g><g fill="#fff"><circle cx="24" cy="14" r="1.6"/><circle cx="78" cy="10" r="1.4"/><circle cx="110" cy="20" r="1.5"/></g>`)},
- {id:"jayapura",en:"Jayapura",ko:"자야푸라",cen:"Indonesia",cko:"인도네시아",con:"아시아",mo:"Lake Sentani",mko:"센타니 호수",
-  art:A("#CFE6EE","#3F6B4A",`<path d="M0 54 30 22l24 32z" fill="#3F6B4A"/><path d="M56 54 84 26l30 28z" fill="#356847"/><rect y="52" width="120" height="38" fill="#3E9CAE"/><path d="M0 60q16 5 32 0t32 0 32 0 24 0" stroke="#8FD0DC" stroke-width="1.6" fill="none"/><path d="M28 70h44q-6 8-22 8t-22-8z" fill="#7A5334"/><path d="M40 66h20l-3 4H43z" fill="#8B6242"/><g fill="#5C4433"><rect x="46" y="58" width="2.4" height="9" transform="rotate(18 47 62)"/><rect x="66" y="58" width="2.4" height="9" transform="rotate(-18 67 62)"/></g>`)},
- {id:"stjohns",en:"St. John’s",ko:"세인트존스",cen:"Canada",cko:"캐나다",con:"아메리카",mo:"Puffin",mko:"퍼핀",
-  art:A("#CFE2EE","#5E7E62",`<rect y="66" width="120" height="24" fill="#3E7A9C"/><path d="M0 72V54q26-12 52-2t68 0v20z" fill="#6E8A6E"/><path d="M40 70V44q0-14 14-14t14 14v26z" fill="#2E2A26"/><path d="M50 70V50q0-8 8-8t8 8v20z" fill="#F2EDE2"/><circle cx="54" cy="34" r="9" fill="#2E2A26"/><path d="M48 30q6-4 11 0-1 6-11 4z" fill="#F2EDE2"/><circle cx="52" cy="31" r="1.5" fill="#2E2A26"/><path d="M45 34q-9 1-9 5t9 4z" fill="#E8843D"/><path d="M45 36h-8" stroke="#F2C43D" stroke-width="1.4"/><g fill="#E8A33D"><rect x="46" y="68" width="7" height="6" rx="2"/><rect x="58" y="68" width="7" height="6" rx="2"/></g>`)},
- {id:"salvador",en:"Salvador",ko:"사우바도르",cen:"Brazil",cko:"브라질",con:"아메리카",mo:"Pelourinho",mko:"펠로리뉴",
-  art:A("#CFE6F2","#C9A47E",`<g><path d="M6 72V40h24v32z" fill="#E8B93D"/><path d="M32 72V32h24v40z" fill="#5EAD8E"/><path d="M58 72V38h22v34z" fill="#E0563E"/><path d="M82 72V34h26v38z" fill="#7E9CD4"/></g><g fill="#F2EDE2"><rect x="12" y="46" width="6" height="9"/><rect x="21" y="46" width="6" height="9"/><rect x="38" y="40" width="6" height="9"/><rect x="47" y="40" width="6" height="9"/><rect x="63" y="46" width="6" height="9"/><rect x="72" y="46" width="6" height="9"/><rect x="88" y="42" width="6" height="9"/><rect x="98" y="42" width="6" height="9"/></g><g fill="#8B6242"><rect x="14" y="60" width="9" height="12"/><rect x="40" y="58" width="9" height="14"/><rect x="65" y="60" width="9" height="12"/><rect x="92" y="58" width="9" height="14"/></g><path d="M6 40l12-8 12 8zM32 32l12-8 12 8zM58 38l11-7 11 7zM82 34l13-8 13 8z" fill="#B0503E"/>`)},
- {id:"manaus",en:"Manaus",ko:"마나우스",cen:"Brazil",cko:"브라질",con:"아메리카",mo:"Meeting of Waters",mko:"두 강물이 만나는 곳",
-  art:A("#CFE6EE","#2E4A5E",`<path d="M0 30h120v10H0z" fill="#3F6B4A"/><rect y="40" width="60" height="50" fill="#3A2E28"/><rect x="60" y="40" width="60" height="50" fill="#B08A52"/><path d="M60 40q6 12 0 24t0 26" stroke="#6E5A44" stroke-width="3" fill="none"/><path d="M8 52q14 5 28 0M8 68q14 5 28 0" stroke="#54463E" stroke-width="1.6" fill="none"/><path d="M76 52q14 5 28 0M76 68q14 5 28 0" stroke="#C9A26E" stroke-width="1.6" fill="none"/><path d="M44 58h32l-5 7H49z" fill="#8B5E3C"/><rect x="58" y="48" width="2.4" height="10" fill="#5C4433"/>`)},
- {id:"iquitos",en:"Iquitos",ko:"이키토스",cen:"Peru",cko:"페루",con:"아메리카",mo:"Pink River Dolphin",mko:"분홍강돌고래",
-  art:A("#CFE6E4","#3F6B4A",`<path d="M0 34h120v8H0z" fill="#3F6B4A"/><rect y="42" width="120" height="48" fill="#4E7E7A"/><path d="M24 66q10-16 30-14t34 12q-16 10-34 8T24 66z" fill="#E890AE"/><path d="M88 64q10-4 14 2-6 6-14 3z" fill="#E890AE"/><path d="M52 52q4-12 10-12 0 8-4 13z" fill="#DC7C9C"/><circle cx="82" cy="61" r="1.6" fill="#3A2A30"/><path d="M32 72q-8 6-16 4 6-8 16-6z" fill="#DC7C9C"/><path d="M0 46q16 4 32 0t32 0 32 0 24 0" stroke="#7EAEA8" stroke-width="1.4" fill="none"/>`)},
- {id:"tikal",en:"Tikal",ko:"티칼",cen:"Guatemala",cko:"과테말라",con:"아메리카",mo:"Tikal Temple",mko:"티칼 신전",
-  art:A("#CFE2EE","#3F6B4A",`<path d="M0 72V44q16 6 26 14v14zM120 72V40q-18 6-28 16v16z" fill="#356847"/><path d="M34 72V50l26-38 26 38v22z" fill="#B0A48E"/><g fill="#9C9080"><rect x="40" y="56" width="40" height="4"/><rect x="46" y="46" width="28" height="4"/><rect x="51" y="36" width="18" height="4"/></g><path d="M52 22h16v10H52z" fill="#C6BAA2"/><path d="M54 12h12v10H54z" fill="#B0A48E"/><rect x="55" y="60" width="10" height="12" fill="#6B5D50"/><path d="M8 72V60q5-8 10 0v12z" fill="#2E5A40"/>`)},
- {id:"ndjamena",en:"N’Djamena",ko:"은자메나",cen:"Chad",cko:"차드",con:"아프리카",mo:"Lake Chad",mko:"차드호",
-  art:A("#F2DEB4","#DCC28E",`<rect y="46" width="120" height="30" fill="#4E9CAE"/><path d="M0 52q16 4 32 0t32 0 32 0 24 0" stroke="#8FCEDC" stroke-width="1.6" fill="none"/><path d="M0 66q16 4 32 0t32 0 32 0 24 0" stroke="#8FCEDC" stroke-width="1.4" fill="none"/><path d="M28 58h40q-6 8-20 8t-20-8z" fill="#7A5334"/><path d="M46 50h6v9h-6z" fill="#5C4433"/><path d="M50 50l10 4-10 3z" fill="#EDE4CE"/><g fill="#4E8B5E"><path d="M8 46V36q5-7 10 0v10zM104 46V38q5-6 10 0v8z"/></g><circle cx="98" cy="18" r="8" fill="#F2C86A"/>`)},
- {id:"norfolk",en:"Norfolk Island",ko:"노퍽섬",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"Norfolk Island Pine",mko:"노퍽 소나무",
-  art:A("#CFE6F2","#6E9C5E",`<rect y="70" width="120" height="20" fill="#4EA8BE"/><path d="M0 74V60q26-10 52-2t68 0v16z" fill="#6E9C5E"/><g fill="#2E6B44"><path d="M40 72V20h4v52z"/><path d="M42 22 30 36h24zM42 34 26 50h32zM42 46 22 64h40z"/></g><g fill="#3E7A52"><path d="M84 72V40h3v32z"/><path d="M85.5 42 76 52h19zM85.5 50 72 62h27z"/></g><path d="M0 74q14 4 28 0t28 0 28 0 28 0" stroke="#9ED8E4" stroke-width="1.5" fill="none"/>`)},
- {id:"niue",en:"Alofi",ko:"알로피",cen:"Niue",cko:"니우에",con:"오세아니아",mo:"Limestone Arches",mko:"석회암 아치",
-  art:A("#CFE8F0","#3EA8BE",`<rect y="58" width="120" height="32" fill="#3EA8BE"/><path d="M8 72V22h104v50H88V46q0-12-28-12t-28 12v26z" fill="#D6CBB2"/><path d="M8 22h104l-8 10H16z" fill="#BFB399"/><path d="M34 48q26-10 52 0" stroke="#BFB399" stroke-width="1.6" fill="none"/><path d="M34 62q14 4 26 0t26 0" stroke="#8FD0DC" stroke-width="1.6" fill="none"/><g fill="#4E9C5E"><path d="M12 22V14q5-7 10 0v8zM100 22V16q5-6 10 0v6z"/></g>`)},
- {id:"krakow",en:"Krakow",ko:"크라쿠프",cen:"Poland",cko:"폴란드",con:"유럽",mo:"Wawel Dragon",mko:"바벨 용",
-  art:A("#CFE2F0","#7E8A6E",`<path d="M0 72V52q26-10 52-2t68 0v22z" fill="#8A7E6E"/><path d="M22 72V44q22-12 44 0v28z" fill="#C9B396"/><path d="M28 44 44 26l16 18z" fill="#9C4A3C"/><path d="M74 70q-10-6-8-16 2-10 14-10 10 0 12 8-8-2-12 2 8 2 10 8-4 8-16 8z" fill="#4E8B5E"/><path d="M92 44q8-4 12 2-6 4-12 2z" fill="#3E7A4E"/><circle cx="88" cy="45" r="1.6" fill="#2E2A24"/><path d="M78 40l-6-8 10 3z" fill="#E86E3D"/>`)},
- {id:"bern",en:"Bern",ko:"베른",cen:"Switzerland",cko:"스위스",con:"유럽",mo:"Zytglogge Clock Tower",mko:"시계탑",
-  art:A("#D6E6F4","#8FA98C",`<rect x="44" y="26" width="32" height="46" fill="#E4D9BE"/><path d="M60 8 40 26h40z" fill="#8C3A2E"/><circle cx="60" cy="42" r="11" fill="#2E5C8A"/><circle cx="60" cy="42" r="7" fill="#F0D98A"/><path d="M60 42v-5M60 42l4 3" stroke="#3A3226" stroke-width="1.4" stroke-linecap="round"/><rect x="54" y="58" width="12" height="14" rx="6" fill="#6B4A33"/><g fill="#C9B396"><rect x="18" y="50" width="18" height="22"/><rect x="86" y="52" width="18" height="20"/></g>`)},
- {id:"volgograd",en:"Volgograd",ko:"볼고그라드",cen:"Russia",cko:"러시아",con:"유럽",mo:"Volga River",mko:"볼가강",
-  art:A("#CFE2F0","#8FA07E",`<rect y="48" width="120" height="30" fill="#4E86A6"/><path d="M0 54q16 4 32 0t32 0 32 0 24 0" stroke="#8FC4DC" stroke-width="1.6" fill="none"/><path d="M28 64h56q-8 10-28 10t-28-10z" fill="#C2453F"/><rect x="40" y="54" width="32" height="10" fill="#EDE4CE"/><rect x="58" y="42" width="3" height="12" fill="#5C4433"/><g fill="#C9B396"><rect x="6" y="34" width="12" height="14"/><rect x="98" y="30" width="14" height="18"/></g>`)},
- {id:"rovaniemi",en:"Rovaniemi",ko:"로바니에미",cen:"Finland",cko:"핀란드",con:"유럽",mo:"Santa Claus Village",mko:"산타 마을",
-  art:A("#22304E","#EDF3F8",`<path d="M6 26q24-12 42 4" stroke="#6EE0B4" stroke-width="3.2" fill="none" opacity=".7" stroke-linecap="round"/><path d="M34 66 58 42l24 24z" fill="#C2453F"/><rect x="42" y="66" width="32" height="12" fill="#E8DCC0"/><rect x="54" y="70" width="10" height="8" fill="#7A5334"/><g fill="#F2F7FA"><path d="M34 66q24-8 48 0z"/></g><g fill="#3E6B4E"><path d="M14 78V62l-7-12 14 2 4 12v14zM100 78V64l-6-11 12 2 4 11v12z"/></g><g fill="#fff"><circle cx="98" cy="14" r="1.6"/><circle cx="22" cy="12" r="1.4"/></g>`)},
- {id:"aberdeen",en:"Aberdeen",ko:"애버딘",cen:"United Kingdom",cko:"영국",con:"유럽",mo:"Dunnottar Castle",mko:"절벽 위 성",
-  art:A("#CBD9E6","#4E7E9C",`<rect y="58" width="120" height="32" fill="#3E7A9C"/><path d="M28 58V38q0-6 8-6h48q8 0 8 6v20z" fill="#8A8272"/><g fill="#A8A08E"><rect x="38" y="18" width="14" height="20"/><rect x="66" y="14" width="16" height="24"/><rect x="54" y="24" width="10" height="14"/></g><g fill="#3A3630"><rect x="42" y="24" width="4" height="6"/><rect x="71" y="20" width="5" height="7"/></g><path d="M0 62q14 5 28 0t28 0 28 0 28 0" stroke="#8FBCD4" stroke-width="1.6" fill="none"/>`)},
- {id:"nicosia",en:"Nicosia",ko:"니코시아",cen:"Cyprus",cko:"키프로스",con:"유럽",mo:"Venetian Walls",mko:"베네치아 성벽",
-  art:A("#F2DEB4","#C9A87E",`<path d="M0 72V38h120v34H74V54q0-12-14-12t-14 12v18z" fill="#D6C6A4"/><path d="M0 38h120l-8-8H8z" fill="#B8A583"/><g fill="#C4B292"><rect x="6" y="22" width="9" height="8"/><rect x="22" y="22" width="9" height="8"/><rect x="89" y="22" width="9" height="8"/><rect x="105" y="22" width="9" height="8"/><rect x="4" y="30" width="28" height="8"/><rect x="88" y="30" width="28" height="8"/></g><path d="M46 54q14-10 28 0" stroke="#B8A583" stroke-width="2" fill="none"/><g fill="#B0997A"><rect x="16" y="46" width="10" height="8"/><rect x="94" y="46" width="10" height="8"/></g><path d="M50 72V58q0-8 10-8t10 8v14z" fill="#7A5334"/>`)},
- {id:"male",en:"Male",ko:"말레",cen:"Maldives",cko:"몰디브",con:"아시아",mo:"Coral Lagoon",mko:"산호 석호",
-  art:A("#CFEAF2","#4ECDD4",`<rect y="20" width="120" height="70" fill="#3EBCC8"/><ellipse cx="60" cy="58" rx="44" ry="22" fill="#7EE0E0"/><ellipse cx="60" cy="56" rx="28" ry="13" fill="#B8F0EC"/><path d="M40 44q20-6 40 0" stroke="#EDDCA8" stroke-width="5" fill="none"/><g fill="#3E9B5E"><path d="M56 44V32h3v12z"/><path d="M57.5 33q-11-3-14 4 9-2 14 1zM57.5 33q11-3 14 4-9-2-14 1z"/></g><path d="M0 26q14 5 28 0t28 0 28 0 28 0" stroke="#BFE8F0" stroke-width="1.6" fill="none"/>`)},
- {id:"novosibirsk",en:"Novosibirsk",ko:"노보시비르스크",cen:"Russia",cko:"러시아",con:"아시아",mo:"Siberian Birch Forest",mko:"시베리아 자작나무 숲",
-  art:A("#D6E4EE","#EAF0F4",`<g fill="#F2F5F7"><rect x="12" y="16" width="7" height="56"/><rect x="32" y="10" width="8" height="62"/><rect x="54" y="18" width="7" height="54"/><rect x="74" y="12" width="8" height="60"/><rect x="96" y="20" width="7" height="52"/></g><g fill="#3A3630"><rect x="12" y="30" width="7" height="2.4"/><rect x="32" y="26" width="8" height="2.6"/><rect x="54" y="36" width="7" height="2.4"/><rect x="74" y="30" width="8" height="2.6"/><rect x="96" y="38" width="7" height="2.4"/><rect x="32" y="46" width="8" height="2.6"/><rect x="74" y="50" width="8" height="2.6"/></g><g fill="#C8D26E"><circle cx="24" cy="22" r="5"/><circle cx="46" cy="16" r="5"/><circle cx="66" cy="24" r="5"/><circle cx="88" cy="18" r="5"/></g>`)},
- {id:"ashgabat",en:"Ashgabat",ko:"아시가바트",cen:"Turkmenistan",cko:"투르크메니스탄",con:"아시아",mo:"White Marble City",mko:"하얀 대리석 도시",
-  art:A("#CFE2F0","#DCC8A0",`<g fill="#F6F7F8"><rect x="10" y="38" width="16" height="34"/><rect x="32" y="26" width="18" height="46"/><rect x="56" y="34" width="16" height="38"/><rect x="78" y="20" width="18" height="52"/><rect x="100" y="42" width="14" height="30"/></g><g fill="#C9D6E0"><rect x="14" y="46" width="8" height="4"/><rect x="36" y="34" width="10" height="4"/><rect x="60" y="42" width="8" height="4"/><rect x="82" y="28" width="10" height="4"/></g><g fill="#C9A227"><path d="M41 26q4-8 8 0zM87 20q4-8 8 0z"/><rect x="86" y="12" width="2" height="8"/></g><circle cx="20" cy="16" r="7" fill="#F2C86A"/>`)},
- {id:"kunming",en:"Kunming",ko:"쿤밍",cen:"China",cko:"중국",con:"아시아",mo:"Stone Forest",mko:"석림",
-  art:A("#CFE6F0","#7E9C5E",`<g fill="#9C9484"><path d="M10 72V34q4-8 8 0v38z"/><path d="M24 72V22q5-9 10 0v50z"/><path d="M42 72V40q4-8 8 0v32z"/><path d="M58 72V18q5-9 10 0v54z"/><path d="M76 72V36q4-8 8 0v36z"/><path d="M92 72V26q5-9 10 0v46z"/></g><g fill="#B0A896"><path d="M24 40h10M58 44h10M92 46h10" stroke="#B0A896" stroke-width="2.4"/></g><g fill="#4E8B5E"><path d="M2 72V64q4-6 8 0v8zM110 72V62q4-6 8 0v10z"/></g>`)},
- {id:"aqtau",en:"Aqtau",ko:"악타우",cen:"Kazakhstan",cko:"카자흐스탄",con:"아시아",mo:"Caspian Cliffs",mko:"카스피해 절벽",
-  art:A("#EDDCB4","#D9C08E",`<rect y="60" width="120" height="30" fill="#3EA0BE"/><path d="M0 60V30h54l-8 12h12l-8 18z" fill="#E0C88E"/><path d="M66 60V26h54v34z" fill="#D6BC80"/><g stroke="#B8A068" stroke-width="1.6" fill="none"><path d="M0 40h48M70 38h50M74 48h46"/></g><path d="M0 64q14 5 28 0t28 0 28 0 28 0" stroke="#8FD0DC" stroke-width="1.6" fill="none"/>`)},
- {id:"chennai",en:"Chennai",ko:"첸나이",cen:"India",cko:"인도",con:"아시아",mo:"Gopuram Tower",mko:"고푸람 탑",
-  art:A("#F2DEB4","#C9A87E",`<path d="M36 72V60h48v12z" fill="#C2453F"/><path d="M40 60V48h40v12z" fill="#E0563E"/><path d="M44 48V36h32v12z" fill="#F2C43D"/><path d="M48 36V26h24v10z" fill="#5EAD68"/><path d="M52 26V18h16v8z" fill="#2E86C4"/><path d="M50 18h20l-10-8z" fill="#E0563E"/><g fill="#F2EDE2"><circle cx="52" cy="54" r="2.4"/><circle cx="68" cy="54" r="2.4"/><circle cx="56" cy="42" r="2.2"/><circle cx="64" cy="42" r="2.2"/></g><rect x="55" y="64" width="10" height="8" fill="#7A5334"/>`)},
- {id:"makassar",en:"Makassar",ko:"마카사르",cen:"Indonesia",cko:"인도네시아",con:"아시아",mo:"Pinisi Sailing Ship",mko:"전통 범선 피니시",
-  art:A("#F2C89A","#3E9CAE",`<rect y="58" width="120" height="32" fill="#3E9CAE"/><circle cx="96" cy="24" r="10" fill="#F2A03D"/><path d="M20 64h80q-10 12-40 12t-40-12z" fill="#5C4433"/><g fill="#8B6242"><rect x="42" y="14" width="3" height="50"/><rect x="72" y="22" width="3" height="42"/></g><g fill="#F2EDE2"><path d="M45 18q18 16 0 40zM41 20q-14 14 0 38zM75 26q15 12 0 32zM71 28q-12 10 0 30z"/></g><path d="M0 62q14 4 28 0t28 0 28 0 28 0" stroke="#8FD0DC" stroke-width="1.6" fill="none"/>`)},
- {id:"chita",en:"Chita",ko:"치타",cen:"Russia",cko:"러시아",con:"아시아",mo:"Trans-Siberian Railway",mko:"시베리아 횡단열차",
-  art:A("#CBD9E6","#7E8A6E",`<path d="M0 44 24 22l18 18 16-12 20 20 18-14 24 20v14H0z" fill="#8A9686"/><rect y="62" width="120" height="6" fill="#6B5D50"/><g fill="#3A3630"><rect y="68" width="120" height="3"/></g><g fill="#2E6EA6"><rect x="16" y="46" width="30" height="16" rx="2"/><rect x="50" y="46" width="26" height="16" rx="2"/><rect x="80" y="46" width="26" height="16" rx="2"/></g><g fill="#C9E0F0"><rect x="20" y="50" width="7" height="6"/><rect x="32" y="50" width="7" height="6"/><rect x="54" y="50" width="7" height="6"/><rect x="66" y="50" width="7" height="6"/><rect x="84" y="50" width="7" height="6"/><rect x="96" y="50" width="7" height="6"/></g><g fill="#3A3630"><circle cx="24" cy="64" r="3"/><circle cx="40" cy="64" r="3"/><circle cx="58" cy="64" r="3"/><circle cx="72" cy="64" r="3"/><circle cx="88" cy="64" r="3"/><circle cx="102" cy="64" r="3"/></g>`)},
- {id:"denver",en:"Denver",ko:"덴버",cen:"United States",cko:"미국",con:"아메리카",mo:"Rocky Mountains",mko:"로키산맥",
-  art:A("#CFE2F0","#8FA07E",`<path d="M0 72 26 26l20 28 14-16 22 30 14-12 24 16z" fill="#7E8A96"/><path d="M26 26 14 46l7 2 5-4 6 6 6-4zM60 38l-9 12 6 2 4-3 5 4z" fill="#F4F8FA"/><path d="M96 44l-8 8 5 2 3-2 4 3z" fill="#F4F8FA"/><g fill="#3E6B4E"><path d="M12 72V62l-6-10 12 2 3 10v8zM104 72V64l-5-9 10 2 3 9v6z"/></g>`)},
- {id:"bogota",en:"Bogota",ko:"보고타",cen:"Colombia",cko:"콜롬비아",con:"아메리카",mo:"Monserrate",mko:"몬세라테",
-  art:A("#CFE2EE","#6E8F5E",`<path d="M0 72 34 24l30 34 18-14 38 28z" fill="#5E7A5E"/><rect x="26" y="18" width="16" height="12" fill="#EDE4CE"/><path d="M24 18 34 8l10 10z" fill="#9C4A3C"/><rect x="33" y="4" width="2" height="5" fill="#C9A227"/><g fill="#C9B396"><rect x="70" y="58" width="10" height="14"/><rect x="86" y="62" width="10" height="10"/><rect x="100" y="56" width="10" height="16"/></g>`)},
- {id:"whitehorse",en:"Whitehorse",ko:"화이트호스",cen:"Canada",cko:"캐나다",con:"아메리카",mo:"Yukon Sternwheeler",mko:"유콘강 증기선",
-  art:A("#CFE2EE","#5E8A6E",`<rect y="56" width="120" height="34" fill="#4E86A6"/><path d="M18 62h74q-6 12-38 12T18 62z" fill="#EDE4CE"/><rect x="30" y="46" width="52" height="16" fill="#F2EDE2"/><rect x="42" y="34" width="28" height="12" fill="#EDE4CE"/><g fill="#8A939A"><rect x="52" y="22" width="5" height="12"/></g><circle cx="96" cy="66" r="10" fill="#C2453F"/><g stroke="#8B6242" stroke-width="1.6"><path d="M96 56v20M86 66h20M89 59l14 14M103 59l-14 14"/></g><path d="M0 60q14 4 28 0t28 0" stroke="#8FBCD4" stroke-width="1.6" fill="none"/>`)},
- {id:"recife",en:"Recife",ko:"헤시피",cen:"Brazil",cko:"브라질",con:"아메리카",mo:"Giant Carnival Puppets",mko:"대형 카니발 인형",
-  art:A("#F2D9A8","#C9A47E",`<g><circle cx="30" cy="26" r="13" fill="#F2C8A0"/><path d="M22 62V40q0-8 8-8t8 8v22z" fill="#E0563E"/><circle cx="26" cy="24" r="1.8" fill="#3A3630"/><circle cx="34" cy="24" r="1.8" fill="#3A3630"/><path d="M26 30q4 3 8 0" stroke="#3A3630" stroke-width="1.3" fill="none"/><path d="M17 12q13-8 26 0-13 4-26 0z" fill="#F2C43D"/></g><g><circle cx="76" cy="34" r="12" fill="#E8C6A8"/><path d="M68 68V48q0-8 8-8t8 8v20z" fill="#2E86C4"/><circle cx="72" cy="32" r="1.7" fill="#3A3630"/><circle cx="80" cy="32" r="1.7" fill="#3A3630"/><path d="M64 22q12-8 24 0-12 4-24 0z" fill="#5EAD68"/></g><g fill="#F2C43D"><circle cx="104" cy="20" r="3"/><circle cx="52" cy="16" r="2.4"/></g>`)},
- {id:"chihuahua",en:"Chihuahua",ko:"치와와",cen:"Mexico",cko:"멕시코",con:"아메리카",mo:"Copper Canyon Train",mko:"구리 협곡 열차",
-  art:A("#F2C89A","#B06E42",`<path d="M0 40h50v18H0zM70 34h50v24H70z" fill="#C08046"/><path d="M0 58h44l-6 10H0zM120 58H76l6 10h38z" fill="#A8683A"/><rect x="34" y="52" width="52" height="4" fill="#6B5D50"/><g fill="#C2453F"><rect x="36" y="40" width="22" height="12" rx="2"/><rect x="62" y="40" width="22" height="12" rx="2"/></g><g fill="#F2E4C8"><rect x="40" y="43" width="6" height="5"/><rect x="49" y="43" width="6" height="5"/><rect x="66" y="43" width="6" height="5"/><rect x="75" y="43" width="6" height="5"/></g><g fill="#3A3630"><circle cx="42" cy="54" r="2.4"/><circle cx="54" cy="54" r="2.4"/><circle cx="68" cy="54" r="2.4"/><circle cx="80" cy="54" r="2.4"/></g><g fill="#3E6B4E"><path d="M12 40V32q4-6 8 0v8zM104 34V26q4-6 8 0v8z"/></g>`)},
- {id:"guayaquil",en:"Guayaquil",ko:"과야킬",cen:"Ecuador",cko:"에콰도르",con:"아메리카",mo:"Iguana Park",mko:"이구아나 공원",
-  art:A("#CFE6EE","#6E9C5E",`<path d="M18 62V50q0-6 12-6h34q14 0 18 6l16 12z" fill="#5E7A4A"/><path d="M82 50q14-5 20 3-7 7-20 4z" fill="#6E8A56"/><circle cx="96" cy="52" r="1.7" fill="#E8C05E"/><g fill="#4E6B3E"><path d="M28 44l4-8 4 8zM42 42l4-9 4 9zM56 42l4-9 4 9zM70 44l4-8 4 8z"/></g><g fill="#5E7A4A"><rect x="26" y="60" width="7" height="7" rx="2"/><rect x="58" y="60" width="7" height="7" rx="2"/></g><path d="M18 54q-14 2-18 8 12 3 18-2z" fill="#5E7A4A"/><g fill="#3E8B54"><path d="M8 72V62q5-8 10 0v10zM104 72V64q5-7 10 0v8z"/></g>`)},
- {id:"brasilia",en:"Brasilia",ko:"브라질리아",cen:"Brazil",cko:"브라질",con:"아메리카",mo:"National Congress",mko:"국회의사당",
-  art:A("#CFE2F0","#8FA07E",`<rect y="60" width="120" height="12" fill="#E4E8EA"/><g fill="#F2F5F7"><rect x="48" y="18" width="9" height="42"/><rect x="62" y="18" width="9" height="42"/></g><path d="M14 60q0-14 16-14t16 14z" fill="#EDF1F4"/><path d="M74 60q0-12 16-12t16 12z" fill="#EDF1F4" transform="rotate(180 90 54)"/><path d="M74 48q0 12 16 12t16-12z" fill="#EDF1F4"/><rect y="72" width="120" height="18" fill="#7EA8C4"/><path d="M0 76q14 4 28 0t28 0 28 0 28 0" stroke="#A8CCDE" stroke-width="1.5" fill="none"/>`)},
- {id:"iqaluit",en:"Iqaluit",ko:"이칼루이트",cen:"Canada",cko:"캐나다",con:"아메리카",mo:"Inuksuk",mko:"이눅슈크",
-  art:A("#B9D2E4","#EDF3F8",`<path d="M6 24q24-12 42 4" stroke="#7EE0C0" stroke-width="3" fill="none" opacity=".7" stroke-linecap="round"/><g fill="#8A8272"><rect x="44" y="58" width="10" height="18"/><rect x="66" y="58" width="10" height="18"/><rect x="40" y="46" width="40" height="10"/><rect x="26" y="36" width="18" height="8"/><rect x="76" y="36" width="18" height="8"/><rect x="50" y="30" width="20" height="14"/><rect x="54" y="18" width="12" height="10"/></g><path d="M0 76q30-8 60 0t60 0v14H0z" fill="#F4F8FA"/>`)},
- {id:"zanzibar",en:"Zanzibar",ko:"잔지바르",cen:"Tanzania",cko:"탄자니아",con:"아프리카",mo:"Dhow Boat",mko:"다우선",
-  art:A("#F2D9A8","#3EB0C0",`<rect y="56" width="120" height="34" fill="#3EB0C0"/><circle cx="98" cy="20" r="9" fill="#F2A03D"/><path d="M22 62h76q-8 12-38 12t-38-12z" fill="#8B6242"/><rect x="56" y="14" width="3" height="48" fill="#5C4433"/><path d="M58 16 96 58H58z" fill="#F2EDE2"/><path d="M56 24 30 58h26z" fill="#EDE0C2"/><path d="M0 60q14 4 28 0t28 0 28 0 28 0" stroke="#8FD8E4" stroke-width="1.6" fill="none"/>`)},
- {id:"khartoum",en:"Khartoum",ko:"하르툼",cen:"Sudan",cko:"수단",con:"아프리카",mo:"Meroe Pyramids",mko:"메로에 피라미드",
-  art:A("#F6DEAE","#DCBE84",`<circle cx="98" cy="18" r="8" fill="#F2A83D"/><g fill="#C08A54"><path d="M8 72 24 30l16 42z"/><path d="M36 72 54 24l18 48z"/><path d="M68 72 84 34l16 38z"/><path d="M96 72l12-28 12 28z"/></g><g fill="#A8703E"><path d="M20 72h8v-8h-8zM50 72h8v-9h-8zM80 72h8v-8h-8z"/></g><path d="M0 74h120v16H0z" fill="#DCBE84"/>`)},
- {id:"toliara",en:"Toliara",ko:"툴레아르",cen:"Madagascar",cko:"마다가스카르",con:"아프리카",mo:"Ring-Tailed Lemur",mko:"여우원숭이",
-  art:A("#F2E4C0","#6E9C5E",`<path d="M34 70V48q0-12 14-12h10q14 0 14 12v22z" fill="#B0AAA0"/><circle cx="52" cy="34" r="12" fill="#E8E4DA"/><g fill="#3A3630"><circle cx="47" cy="32" r="3.4"/><circle cx="57" cy="32" r="3.4"/><path d="M50 40q4 3 6 0-2 4-6 0z"/></g><g fill="#fff"><circle cx="47" cy="32" r="1.2"/><circle cx="57" cy="32" r="1.2"/></g><path d="M41 24q-4-10 1-12 3 5 5 9zM63 24q4-10-1-12-3 5-5 9z" fill="#B0AAA0"/><g><path d="M74 62q18-6 26-22" stroke="#E8E4DA" stroke-width="7" fill="none" stroke-linecap="round"/><g stroke="#3A3630" stroke-width="3"><path d="M78 60l3-5M86 55l3-5M93 48l3-5"/></g></g>`)},
- {id:"mogadishu",en:"Mogadishu",ko:"모가디슈",cen:"Somalia",cko:"소말리아",con:"아프리카",mo:"Mogadishu Lighthouse",mko:"등대",
-  art:A("#F2DEB4","#EDDCA8",`<rect y="52" width="120" height="20" fill="#3EA8BE"/><path d="M0 56q14 4 28 0t28 0 28 0 28 0" stroke="#8FD8E4" stroke-width="1.6" fill="none"/><rect y="70" width="120" height="20" fill="#EDDCA8"/><path d="M44 70V26h32v44z" fill="#F2EDE2"/><g fill="#C2453F"><path d="M44 38h32v8H44zM44 54h32v8H44z"/></g><rect x="50" y="14" width="20" height="12" rx="3" fill="#F2D77E"/><path d="M70 18l24-6v14z" fill="#F7E6A8" opacity=".5"/><path d="M50 18l-24-6v14z" fill="#F7E6A8" opacity=".5"/>`)},
- {id:"lubumbashi",en:"Lubumbashi",ko:"루붐바시",cen:"DR Congo",cko:"콩고민주공화국",con:"아프리카",mo:"Copper Mine",mko:"구리 광산",
-  art:A("#EDD8B4","#B08A5E",`<path d="M0 72V50q30-14 60-4t60 2v24z" fill="#A8724A"/><path d="M14 72V56q22-10 44-2t48 0v18z" fill="#C08A54"/><g fill="#8A5A34"><path d="M0 62h120v3H0zM10 54h100v2.4H10z"/></g><g fill="#B87333"><circle cx="40" cy="46" r="5"/><circle cx="58" cy="40" r="6"/><circle cx="76" cy="46" r="5"/></g><g fill="#5C4433"><rect x="20" y="34" width="4" height="18"/><rect x="96" y="30" width="4" height="20"/><path d="M20 34h6l-3-6zM96 30h6l-3-6z"/></g>`)},
- {id:"oran",en:"Oran",ko:"오랑",cen:"Algeria",cko:"알제리",con:"아프리카",mo:"Fort Santa Cruz",mko:"산타크루즈 요새",
-  art:A("#F2DEB4","#C9A87E",`<rect y="62" width="120" height="28" fill="#3E86A6"/><path d="M0 62 40 22l34 40z" fill="#B09878"/><path d="M74 62 96 34l24 28z" fill="#A08E70"/><rect x="26" y="20" width="30" height="16" fill="#EDE4CE"/><g fill="#D6CBB2"><rect x="26" y="14" width="5" height="6"/><rect x="36" y="14" width="5" height="6"/><rect x="46" y="14" width="5" height="6"/></g><rect x="37" y="26" width="7" height="10" fill="#7A5334"/><path d="M0 66q14 4 28 0t28 0 28 0 28 0" stroke="#8FBCD4" stroke-width="1.6" fill="none"/>`)},
- {id:"kano",en:"Kano",ko:"카노",cen:"Nigeria",cko:"나이지리아",con:"아프리카",mo:"Kofar Mata Dye Pits",mko:"전통 염색 구덩이",
-  art:A("#F2DCAE","#D9B87E",`<circle cx="98" cy="18" r="8" fill="#F2A83D"/><g fill="#C9A473"><path d="M0 46h120v44H0z"/></g><g fill="#2E4A8A"><ellipse cx="26" cy="58" rx="15" ry="8"/><ellipse cx="62" cy="54" rx="14" ry="7.4"/><ellipse cx="96" cy="60" rx="15" ry="8"/><ellipse cx="42" cy="76" rx="15" ry="8"/><ellipse cx="80" cy="78" rx="14" ry="7.4"/></g><g fill="#4E6EB0"><ellipse cx="26" cy="57" rx="9" ry="4.4"/><ellipse cx="62" cy="53" rx="8" ry="4"/><ellipse cx="96" cy="59" rx="9" ry="4.4"/></g><g fill="#3E5EA0"><rect x="46" y="30" width="6" height="16" rx="2"/><path d="M40 30h18l-9-8z"/></g>`)},
- {id:"freetown",en:"Freetown",ko:"프리타운",cen:"Sierra Leone",cko:"시에라리온",con:"아프리카",mo:"Cotton Tree",mko:"코튼 트리",
-  art:A("#CFE6EE","#6E9C5E",`<rect x="52" y="40" width="14" height="32" fill="#7A5E42"/><path d="M59 46q-14 4-20 14 14 0 20-6zM59 46q14 4 20 14-14 0-20-6z" fill="#6B5138"/><path d="M60 42q-34 0-34-12t34-12 34 12-34 12z" fill="#3E7A4E"/><path d="M60 30q-22 0-22-7t22-6 22 6-22 7z" fill="#4E8B5E"/><g fill="#5C4433"><path d="M46 72q6-8 14-8v8zM74 72q-6-8-14-8v8z"/></g><g fill="#4E8B5E"><path d="M10 72V62q5-8 10 0v10zM102 72V64q5-7 10 0v8z"/></g>`)},
- {id:"libreville",en:"Libreville",ko:"리브르빌",cen:"Gabon",cko:"가봉",con:"아프리카",mo:"Mangrove Forest",mko:"맹그로브 숲",
-  art:A("#CFE6E4","#3E7A6E",`<rect y="52" width="120" height="38" fill="#4E8A7E"/><g fill="#2E5A40"><path d="M0 40h120v14H0z"/></g><g fill="#3F7A52"><path d="M8 40q14-16 28 0zM44 38q16-18 32 0zM82 40q14-16 28 0z"/></g><g stroke="#5C4433" stroke-width="3" fill="none" stroke-linecap="round"><path d="M22 54v10M14 64l8-10M30 64l-8-10M60 52v12M50 66l10-14M70 66l-10-14M96 54v10M88 64l8-10M104 64l-8-10"/></g><path d="M0 70q16 4 32 0t32 0 32 0 24 0" stroke="#8FC0B4" stroke-width="1.5" fill="none"/>`)},
- {id:"portelizabeth",en:"Port Elizabeth",ko:"포트엘리자베스",cen:"South Africa",cko:"남아프리카공화국",con:"아프리카",mo:"African Penguin",mko:"아프리카 펭귄",
-  art:A("#CFE2EE","#EDE4CE",`<rect y="66" width="120" height="24" fill="#3E86A6"/><path d="M0 72V64q30-10 60-2t60 0v10z" fill="#EDE4CE"/><path d="M40 72V38q0-14 14-14h6q14 0 14 14v34z" fill="#2E2A26"/><path d="M50 72V44q0-8 8-8t8 8v28z" fill="#F2EDE2"/><circle cx="57" cy="30" r="10" fill="#2E2A26"/><path d="M50 26q7-5 13 0-1 7-13 5z" fill="#F2EDE2"/><circle cx="55" cy="28" r="1.6" fill="#F2EDE2"/><path d="M64 32l8 2-8 2.4z" fill="#E8A33D"/><g fill="#E8A33D"><rect x="48" y="70" width="7" height="5" rx="2"/><rect x="60" y="70" width="7" height="5" rx="2"/></g>`)},
- {id:"melbourne",en:"Melbourne",ko:"멜버른",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"City Tram",mko:"시내 전차",
-  art:A("#CFE2F0","#8A939A",`<g fill="#A8B4BE"><rect x="6" y="20" width="12" height="42"/><rect x="98" y="16" width="14" height="46"/><rect x="24" y="28" width="10" height="34"/></g><rect y="62" width="120" height="4" fill="#6B5D50"/><rect x="20" y="36" width="76" height="26" rx="4" fill="#4E8B6A"/><g fill="#C9E4D6"><rect x="26" y="42" width="14" height="10"/><rect x="46" y="42" width="14" height="10"/><rect x="66" y="42" width="14" height="10"/></g><rect x="84" y="42" width="8" height="14" fill="#F2D77E"/><g fill="#3A3630"><circle cx="34" cy="64" r="4"/><circle cx="82" cy="64" r="4"/></g><path d="M56 36V24h2.4v12z" fill="#6B5D50"/>`)},
- {id:"brisbane",en:"Brisbane",ko:"브리즈번",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"Koala",mko:"코알라",
-  art:A("#CFE6EE","#6E9C5E",`<rect x="14" y="20" width="12" height="52" fill="#7A5E42"/><path d="M20 40q22-6 34 6-20 6-34-2z" fill="#6B5138"/><g fill="#4E8B5E"><ellipse cx="72" cy="26" rx="26" ry="12"/><ellipse cx="98" cy="42" rx="18" ry="9"/></g><path d="M32 68V50q0-12 14-12t14 12v18z" fill="#A8ACAE"/><circle cx="46" cy="38" r="13" fill="#B8BCBE"/><circle cx="33" cy="32" r="7" fill="#C6CACC"/><circle cx="59" cy="32" r="7" fill="#C6CACC"/><g fill="#3A3630"><circle cx="41" cy="37" r="1.8"/><circle cx="51" cy="37" r="1.8"/><ellipse cx="46" cy="43" rx="4" ry="3"/></g>`)},
- {id:"kavieng",en:"Kavieng",ko:"카비엥",cen:"Papua New Guinea",cko:"파푸아뉴기니",con:"오세아니아",mo:"Malagan Mask",mko:"말라간 가면",
-  art:A("#CFE8F0","#3E9CAE",`<path d="M60 12q22 0 22 26t-22 34q-22-8-22-34T60 12z" fill="#C08A54"/><g fill="#E0563E"><path d="M46 30h28v5H46zM46 48h28v5H46z"/></g><g fill="#F2EDE2"><ellipse cx="50" cy="40" rx="6" ry="4.4"/><ellipse cx="70" cy="40" rx="6" ry="4.4"/></g><g fill="#2E2A24"><circle cx="50" cy="40" r="2.2"/><circle cx="70" cy="40" r="2.2"/></g><path d="M52 58h16l-4 6h-8z" fill="#F2EDE2"/><g fill="#5EAD68"><path d="M38 22q-14-8-18 2 12 2 18 2zM82 22q14-8 18 2-12 2-18 2z"/></g><g fill="#F2C43D"><circle cx="26" cy="60" r="3"/><circle cx="96" cy="62" r="3"/></g>`)},
- {id:"mountisa",en:"Mount Isa",ko:"마운트아이자",cen:"Australia",cko:"오스트레일리아",con:"오세아니아",mo:"Outback Night Sky",mko:"아웃백 밤하늘",
-  art:A("#1B2440","#8A5E3C",`<g fill="#fff"><circle cx="16" cy="16" r="1.6"/><circle cx="38" cy="10" r="1.3"/><circle cx="58" cy="20" r="1.8"/><circle cx="78" cy="12" r="1.4"/><circle cx="100" cy="22" r="1.6"/><circle cx="28" cy="32" r="1.2"/><circle cx="88" cy="36" r="1.3"/><circle cx="66" cy="40" r="1.1"/><circle cx="46" cy="30" r="1.4"/><circle cx="110" cy="8" r="1.2"/></g><path d="M20 22q26 10 52 0" stroke="#8FA8E0" stroke-width="7" fill="none" opacity=".35"/><path d="M0 72V56q30-12 60-4t60 4v16z" fill="#7A4E32"/><g fill="#5C3A26"><path d="M14 72V62q4-6 8 0v10zM96 72V60q4-7 8 0v12z"/></g>`)}
-];
-
+/* ---------- 예전 Passport(도시 도감) 기록 ----------
+   화면에서는 없앴지만, 기기와 서버에 쌓인 기록은 지우지 않고 그대로 들고만 있는다.
+   나중에 도감을 되살리더라도 모은 도시와 이모티콘이 남아 있도록 하기 위함. */
 let unlocked = new Set(JSON.parse(store.get("cities")||"[]"));
 const saveCities = ()=> store.set("cities", JSON.stringify([...unlocked]));
-const NEED = 15;                        // 카드 한 장에 필요한 단어 수
-const owed = ()=> Math.max(0, Math.floor(learned.size/NEED) - unlocked.size);
-function updateDexDot(){
-  const d=document.getElementById("dexDot"); if(!d) return;
-  const n=owed(), left=CITIES.filter(c=>!unlocked.has(c.id)).length;
-  d.hidden = !(n>0 && left); d.textContent = n;
-}
 
-/* ---------- 세계지도 대시보드 ---------- */
-const CONS=["아메리카","유럽","아프리카","아시아","오세아니아"];
-const CON_COLOR={"아메리카":"#E08A5D","유럽":"#5B8DC9","아프리카":"#D9A441","아시아":"#4FA08A","오세아니아":"#9A7BC8"};
-const CON_PATH={
- "아메리카":"M12 26 20 17 42 20 58 19 80 15 96 20 116 32 126 43 110 52 104 63 99 77 90 72 83 77 86 89 93 90 97 100 102 101 110 97 120 105 131 111 145 118 142 128 132 145 122 157 115 170 110 183 107 170 109 151 110 135 105 118 100 111 95 100 88 93 75 85 66 71 55 59 56 48 45 35 30 33 15 39Z",
- "유럽":"M168 66 166 56 174 50 180 44 184 34 190 24 200 19 211 23 214 34 210 45 200 50 192 55 184 60 176 66Z M191 52 195 56 197 64 193 62 190 56Z M172 44 178 42 177 50 171 49Z",
- "아프리카":"M163 84 174 65 190 63 214 75 217 92 223 96 231 96 221 114 220 131 212 145 205 156 198 156 193 127 192 119 190 113 188 106 175 105 163 92Z M222 148 226 144 227 152 223 155Z",
- "아시아":"M211 22 240 17 270 12 320 16 340 22 350 33 340 39 320 52 305 62 302 72 290 85 285 98 278 101 275 92 270 83 260 101 252 85 245 79 236 79 230 96 223 96 228 72 220 59 215 56 210 52 210 39Z M328 40 334 46 336 56 330 52Z",
- "오세아니아":"M294 140 309 127 322 126 326 135 333 144 330 161 320 161 309 153 295 156Z M350 163 356 160 358 168 352 172Z"
-};
-const ISLES="M138 10 158 8 162 20 152 32 140 28Z";
-
-const PIN={
- paris:[182,47], london:[180,44], rome:[193,56], athens:[204,62], barcelona:[182,57],
- amsterdam:[185,43], tokyo:[320,65], seoul:[307,62], beijing:[296,59], agra:[258,76],
- istanbul:[209,58], bangkok:[281,93], newyork:[106,58], sanfrancisco:[58,62],
- rio:[137,141], cusco:[108,129], cairo:[211,72], nairobi:[217,113],
- sydney:[331,156], auckland:[355,160],
- berlin:[194,43], reykjavik:[159,27], moscow:[218,38],
- dubai:[236,79], singapore:[284,110], halong:[288,84],
- mexicocity:[81,86], chicago:[93,57], buenosaires:[122,157], havana:[98,81],
- marrakesh:[173,70], capetown:[199,156], livingstone:[206,135],
- portvila:[349,135], portmoresby:[328,124], honolulu:[23,84],
- lisbon:[171,61], stockholm:[199,34], bergen:[186,32],
- ulaanbaatar:[287,49], samarkand:[247,60], sigiriya:[261,101],
- vancouver:[57,47], anchorage:[31,31], panamacity:[101,100], santiago:[110,156],
- lalibela:[220,96], timbuktu:[177,90], antananarivo:[228,136], sossusvlei:[196,144], dakar:[163,92],
- uluru:[312,145], milfordsound:[348,170],
- kyiv:[211,45], tromso:[199,20], tenerife:[164,75],
- bagan:[275,84], lhasa:[272,73], borobudur:[291,122],
- yellowstone:[70,53], easterisland:[71,147], uyuni:[113,138],
- abuja:[184,103], kinshasa:[196,117], abusimbel:[212,82], seychelles:[236,118],
- papeete:[31,134], cairns:[326,134], koror:[315,102],
- faroe:[173,30], kazan:[230,38], malta:[195,64],
- xian:[289,67], bohol:[305,99], almaty:[257,55],
- grandcanyon:[68,64], iguazu:[126,145], nuuk:[128,27],
- djanet:[190,80], portlouis:[238,138],
- perth:[296,154], tarawa:[353,110],
- azores:[155,63],
- yakutsk:[310,30], tehran:[232,65], taipei:[302,79],
- churchill:[86,34], neworleans:[90,72], galapagos:[90,113],
- kruger:[212,143], moroni:[224,127], agadez:[188,89],
- honiara:[340,124], adelaide:[319,157], hobart:[328,168],
- longyearbyen:[196,9],
- socotra:[234,95], bandarseri:[295,105], sakhalin:[323,50], timor:[306,123],
- winnipeg:[83,46], halifax:[117,53], sanjuan:[114,87], kaieteur:[122,103],
- bangui:[199,106], sthelena:[175,133],
- guam:[325,94], broome:[303,135], rarotonga:[21,139],
- sochi:[220,54],
- kamchatka:[339,42], karachi:[248,79], harbin:[307,52], jayapura:[321,115],
- stjohns:[128,49], salvador:[142,129], manaus:[120,116], iquitos:[107,117], tikal:[91,89],
- ndjamena:[196,96],
- norfolk:[348,150], niue:[11,137],
- krakow:[200,46], bern:[188,50], volgograd:[225,48], rovaniemi:[206,24], aberdeen:[178,37], nicosia:[214,65],
- male:[254,106], novosibirsk:[263,39], ashgabat:[239,62], kunming:[283,79], aqtau:[232,54],
- chennai:[261,94], makassar:[300,118], chita:[294,43],
- denver:[76,59], bogota:[106,105], whitehorse:[45,32], recife:[146,122], chihuahua:[74,74],
- guayaquil:[101,114], brasilia:[133,132], iqaluit:[112,28],
- zanzibar:[220,120], khartoum:[213,91], toliara:[224,142], mogadishu:[226,109], lubumbashi:[208,127],
- oran:[180,65], kano:[189,96], freetown:[167,100], libreville:[190,111], portelizabeth:[206,156],
- melbourne:[325,161], brisbane:[334,148], kavieng:[331,115], mountisa:[320,139]
-};
-const PIN_SHAPE="M0 0c0 0-2.75-3.6-2.75-5.2a2.75 2.75 0 1 1 5.5 0C2.75-3.6 0 0 0 0z";
-function pins(){
-  return CITIES.filter(c=>unlocked.has(c.id) && PIN[c.id]).map(c=>{
-    const [x,y]=PIN[c.id];
-    return `<g transform="translate(${x},${y})" data-city="${c.id}" class="pin">
-      <circle r="9" fill="transparent"/>
-      <path d="${PIN_SHAPE}" fill="#E23B2E" stroke="#fff" stroke-width="0.8"/>
-      <circle cy="-8.6" r="1.7" fill="#fff"/></g>`;
-  }).join("");
-}
-
-function conStat(){
-  const st={};
-  CONS.forEach(c=>st[c]={have:0,total:0});
-  CITIES.forEach(c=>{ st[c.con].total++; if(unlocked.has(c.id)) st[c.con].have++; });
-  return st;
-}
-
-function worldMap(st,sel){
-  const paths=CONS.map(c=>{
-    const {have,total}=st[c];
-    const ratio = total ? have/total : 0;
-    const col = CON_COLOR[c];
-    const fill = have===0 ? "#DDE4EB" : col;
-    const op = have===0 ? 1 : (0.32 + 0.68*ratio);
-    const stroke = sel===c ? "#16324F" : "#C6D2DC";
-    const sw = sel===c ? 2 : 1;
-    return `<path d="${CON_PATH[c]}" fill="${fill}" fill-opacity="${op.toFixed(2)}"
-      stroke="${stroke}" stroke-width="${sw}" stroke-linejoin="round" data-con="${c}"/>`;
-  }).join("");
-  return `<svg class="wmap" viewBox="0 0 362 192" xmlns="http://www.w3.org/2000/svg" role="img"
-    aria-label="대륙별 수집 현황">
-    <rect width="362" height="192" rx="10" fill="#EAF3F9"/>
-    <g stroke="#D3E4EF" stroke-width=".8">
-      <path d="M0 48h362M0 96h362M0 144h362"/>
-      <path d="M60 0v192M121 0v192M181 0v192M241 0v192M302 0v192"/>
-    </g>
-    <path d="${ISLES}" fill="#DDE4EB" stroke="#C6D2DC" stroke-width="1"/>
-    ${paths}${pins()}</svg>`;
-}
-
-function legend(st,sel){
-  return `<div class="legend">`+CONS.map(c=>{
-    const {have,total}=st[c];
-    return `<button class="lg" data-con="${c}" aria-pressed="${sel===c}">
-      <i class="sw" style="background:${have?CON_COLOR[c]:"#DDE4EB"}"></i>
-      <span class="nm">${c}</span><span class="ct">${have}/${total}</span></button>`;
-  }).join("")+`</div>`;
-}
-
-/* ---------- 도감 ---------- */
-let dexFilter=null, rxFilter=null, packCity=null, sampleIdx=0;
-
-function rxCount(k){
-  return CITIES.filter(c=>unlocked.has(c.id) && reacts[c.id]===k).length;
-}
-
-function rxRow(){
-  return `<div class="rxrow">`+REACTS.map(r=>
-    `<button data-rx-f="${r.k}" aria-pressed="${rxFilter===r.k}" aria-label="${r.t}">
-       <span class="e">${r.e}</span><span class="n">${rxCount(r.k)}</span></button>`).join("")+`</div>`;
-}
-
-function renderDex(){
-  const top=document.getElementById("dexTop"), grid=document.getElementById("dexGrid");
-  const st=conStat(), left=CITIES.filter(c=>!unlocked.has(c.id)), n=owed();
-  updateDexDot();
-
-  top.innerHTML=
-    `<div class="map-card">
-       <div class="map-head"><b>모은 도시 ${unlocked.size} / ${CITIES.length}</b>
-         <span>다음 티켓까지 ${Math.max(0,(unlocked.size+1)*NEED - learned.size)}단어</span></div>
-       ${worldMap(st,dexFilter)}
-       ${legend(st,dexFilter)}
-       ${rxRow()}
-     </div>` + packArea(n,left.length);
-
-  let shown = CITIES;
-  if(dexFilter) shown = shown.filter(c=>c.con===dexFilter);
-  if(rxFilter)  shown = shown.filter(c=>unlocked.has(c.id) && reacts[c.id]===rxFilter);
-  const order = [...shown].sort((a,b)=>(unlocked.has(b.id)?1:0)-(unlocked.has(a.id)?1:0));
-
-  const tags=[dexFilter, rxFilter && REACTS.find(r=>r.k===rxFilter).t].filter(Boolean).join(" · ");
-  let head = tags ? `${tags} — ${shown.length}곳` : `도시 ${shown.length}곳`;
-  if(tags) head += ` <button class="clr" id="clrF">전체 보기</button>`;
-
-  grid.innerHTML=`<p class="clist-h">${head}</p>`
-    + (order.length ? `<div class="clist">`+order.map(c=>unlocked.has(c.id)
-      ? `<div class="crow" data-city="${c.id}">
-           <div class="th">${c.art}</div>
-           <div class="tx"><div class="en">${esc(c.en)}</div>
-             <div class="ko">${esc(c.ko)} · ${esc(c.cko)}</div>
-             <div class="mo">${esc(c.mko)}</div></div>
-           <div class="rb">${reactEmoji(c.id)}</div></div>`
-      : `<div class="crow lock"><div class="th">?</div>
-           <div class="tx"><div class="en">? ? ?</div>
-             <div class="ko">${esc(c.con)}</div>
-             <div class="mo">아직 열지 않은 카드</div></div></div>`
-    ).join("")+`</div>`
-    : `<div class="dex-msg" style="margin-top:10px">여기에 해당하는 도시가 아직 없어요.</div>`);
-}
-
-function packArea(n,leftCount){
-  const done=!leftCount, canGo=n>0 && !done;
-  const globe=`<svg class="globe" viewBox="0 0 100 100" fill="none" stroke="#9FC0DC" stroke-width="3">
-    <circle cx="50" cy="50" r="36"/><ellipse cx="50" cy="50" rx="15" ry="36"/>
-    <path d="M15 38h70M15 62h70M50 14v72"/></svg>`;
-  const sc=CITIES[sampleIdx % CITIES.length];
-  const sampleFace=`${sc.art}<div class="cm-t"><div class="en">${esc(sc.en)}</div>
-     <div class="ko">${esc(sc.ko)} · ${esc(sc.cko)}</div>
-     <div class="mo"><b>${esc(sc.mo)}</b></div></div>`;
-
-  return `<div class="pack-wrap">
-    <div class="chance">
-      <i class="ci">${ICON_TICKET}</i>
-      <span class="cl">나의 여행 티켓</span>
-      <b class="cv">${n}<em>장</em></b>
-    </div>
-    <div class="pack-sub">${done
-      ? "도시를 모두 모았어요! 새로운 도시가 곧 추가돼요."
-      : `단어 ${NEED}개를 외울 때마다 티켓이 한 장 생겨요.`}</div>
-
-    <button class="go" id="packGo" ${canGo?"":"disabled"}>
-      ${ICON_PLANE}<span>출발하기</span>
-    </button>
-
-    <div class="pack${canGo?"":" sample open"}" id="pack"><div class="pack-in">
-      <div class="face front">${globe}<div class="txt">READY</div></div>
-      <div class="face back" id="packBack">${canGo?"":sampleFace}</div>
-    </div></div>
-
-    ${canGo
-      ? `<button class="pack-ok" id="packOk" hidden>확인</button>`
-      : `<div class="pack-note">샘플 카드예요 · 눌러서 다른 도시 그림 보기 (${(sampleIdx%CITIES.length)+1}/${CITIES.length})</div>`}
-  </div>`;
-}
-
-function openPack(){
-  const left=CITIES.filter(c=>!unlocked.has(c.id));
-  if(!left.length) return;
-  const c=left[Math.floor(Math.random()*left.length)];
-  packCity=c;
-  document.getElementById("packBack").innerHTML=
-    `${c.art}<div class="cm-t"><div class="en">${esc(c.en)}</div>
-     <div class="ko">${esc(c.ko)} · ${esc(c.cko)}</div>
-     <div class="mo"><b>${esc(c.mo)}</b></div></div>`;
-  document.getElementById("pack").classList.add("open");
-  unlocked.add(c.id); saveCities(); syncPush();     // 뒤집는 순간 바로 수집
-  setTimeout(()=>say(c.en), 620);
-  setTimeout(()=>{ const b=document.getElementById("packOk"); if(b) b.hidden=false; }, 900);
-}
-
-document.getElementById("dexTop").addEventListener("click", e=>{
-  if(e.target.closest("#packOk")){ renderDex(); return; }
-  if(e.target.closest("#packGo")){ openPack(); return; }
-  const pk=e.target.closest("#pack");
-  if(pk){
-    if(pk.classList.contains("sample")){          // 샘플 카드는 눌러서 다음 도시로
-      sampleIdx=(sampleIdx+1)%CITIES.length; renderDex();
-    }else if(!pk.classList.contains("open")){
-      openPack();
-    }
-    return;
-  }
-  const pin=e.target.closest(".pin");
-  if(pin){ openCity(pin.dataset.city); return; }
-  const rf=e.target.closest("[data-rx-f]");
-  if(rf){ rxFilter = rxFilter===rf.dataset.rxF ? null : rf.dataset.rxF; renderDex(); return; }
-  const c=e.target.closest("[data-con]");
-  if(c){ dexFilter = dexFilter===c.dataset.con ? null : c.dataset.con; renderDex(); }
-});
-document.getElementById("dexGrid").addEventListener("click", e=>{
-  if(e.target.closest("#clrF")){ dexFilter=null; rxFilter=null; renderDex(); }
-});
 
 
 /* ---------- 기기 간 동기화 ----------
@@ -3635,11 +2946,11 @@ async function syncPull(){
   if(!syncOn) return;
   try{
     const r=await fetch("/api/sync",{cache:"no-store"});
-    if(r.status===503){ syncState="서버 연결 전"; renderIfDex(); return; }
+    if(r.status===503){ syncState="서버 연결 전"; renderIfSet(); return; }
     if(!r.ok) throw 0;
     const changed=applyRemote(await r.json());
-    syncState="맞춤"; if(changed) render(); else renderIfDex();
-  }catch(e){ syncState="연결 안 됨"; renderIfDex(); }
+    syncState="맞춤"; if(changed) render(); else renderIfSet();
+  }catch(e){ syncState="연결 안 됨"; renderIfSet(); }
 }
 
 let pushTimer=null;
@@ -3651,15 +2962,15 @@ function syncPush(){
       const r=await fetch("/api/sync",{method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({l:[...learned], c:[...unlocked], r:reacts, del:[...pendingDel]})});
-      if(r.status===503){ syncState="서버 연결 전"; renderIfDex(); return; }
+      if(r.status===503){ syncState="서버 연결 전"; renderIfSet(); return; }
       if(!r.ok) throw 0;
       pendingDel.clear(); savePendingDel();
       applyRemote(await r.json());
-      syncState="맞춤"; renderIfDex();
-    }catch(e){ syncState="연결 안 됨"; renderIfDex(); }
+      syncState="맞춤"; renderIfSet();
+    }catch(e){ syncState="연결 안 됨"; renderIfSet(); }
   }, 1200);
 }
-function renderIfDex(){ if(mode==="dex") renderDex(); else if(mode==="set") renderSettings(); }
+function renderIfSet(){ if(mode==="set") renderSettings(); }
 
 document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) syncPull(); });
 if(syncOn) syncPull();
@@ -3667,7 +2978,7 @@ if(syncOn) syncPull();
 /* ---------- 기록 옮기기 ----------
    아이폰은 사파리와 홈 화면 앱의 저장 공간을 따로 쓴다.
    한쪽에서 코드를 내보내 다른 쪽에서 불러오면 기록이 합쳐진다. */
-const UPDATED="2026-10-09";
+const UPDATED="2026-10-30";
 let booksOpen=false;
 function bookList(){
   const m={};
@@ -3681,7 +2992,6 @@ function renderSettings(){
       <div><span>최종 업데이트</span><b>${UPDATED}</b></div>
       <div><span>단어</span><b>${WORDS.length}개</b></div>
       <div><span>외운 단어</span><b>${learned.size}개</b></div>
-      <div><span>모은 도시</span><b>${unlocked.size} / ${CITIES.length}</b></div>
       <div class="fold" id="bookRow"><span>교재</span><b>${bookList().length}권 <i class="ar">${booksOpen?"▾":"▸"}</i></b></div>
       ${booksOpen ? bookList().map(([b,n])=>
         `<div class="sub"><span>${esc(b)}</span><b>${n}개</b></div>`).join("") : ""}
@@ -3689,7 +2999,7 @@ function renderSettings(){
 
     <div class="backup">
       <h4>기기 간 동기화</h4>
-      <p>동기화를 켠 기기끼리 외운 단어·모은 도시·이모티콘이 자동으로 합쳐집니다.
+      <p>동기화를 켠 기기끼리 외운 단어가 자동으로 합쳐집니다.
          꺼 두면 그 기기 안에만 기록됩니다.</p>
       <div class="bt">
         <button id="syncBtn" aria-pressed="${syncOn}">${syncOn?"동기화 켜짐":"동기화 꺼짐"}</button>
@@ -3741,48 +3051,9 @@ document.getElementById("settings").addEventListener("click", e=>{
     return;
   }
 });
-document.getElementById("dexGrid").addEventListener("click", e=>{
-  const t=e.target.closest("[data-city]"); if(t) openCity(t.dataset.city);
-});
 
-/* ---------- 도시 카드에 남기는 반응 ---------- */
-const REACTS=[{k:"like",e:"👍",t:"좋아요"},{k:"nope",e:"👎",t:"싫어요"},
-              {k:"love",e:"❤️",t:"사랑해"},{k:"visit",e:"✈️",t:"가보고 싶어"}];
 let reacts = (()=>{ try{ return JSON.parse(store.get("reacts")||"{}"); }catch(e){ return {}; } })();
 const saveReacts = ()=> store.set("reacts", JSON.stringify(reacts));
-const reactEmoji = id => (REACTS.find(r=>r.k===reacts[id])||{}).e || "";
-
-let modalCity=null;
-
-function openCity(id){
-  const c=CITIES.find(x=>x.id===id); if(!c) return;
-  modalCity=id;
-  document.getElementById("cmBox").innerHTML=
-    `${c.art}
-     <div class="cm-t">
-       <div class="en" data-say="${esc(c.en)}">${esc(c.en)}<i class="spk">${ICON_SOUND}</i></div>
-       <div class="ko">${esc(c.ko)} · ${esc(c.cen)} (${esc(c.cko)})</div>
-       <div class="mo"><b>${esc(c.mo)}</b> · ${esc(c.mko)}</div>
-     </div>
-     <div class="rx">${REACTS.map(r=>
-       `<button data-rx="${r.k}" aria-pressed="${reacts[id]===r.k}" aria-label="${r.t}">
-          <span class="e">${r.e}</span><span class="t">${r.t}</span></button>`).join("")}</div>
-     <button class="cm-close">닫기</button>`;
-  document.getElementById("cityModal").hidden=false;
-}
-
-document.getElementById("cityModal").addEventListener("click", e=>{
-  const rx=e.target.closest("[data-rx]");
-  if(rx){
-    const k=rx.dataset.rx;
-    if(reacts[modalCity]===k) delete reacts[modalCity]; else reacts[modalCity]=k;
-    saveReacts(); syncPush(); openCity(modalCity); renderDex(); return;
-  }
-  if(e.target.closest(".cm-close") || e.target.id==="cityModal"){
-    document.getElementById("cityModal").hidden=true; return;
-  }
-  const sp=e.target.closest("[data-say]"); if(sp) say(sp.dataset.say);
-});
 
 document.getElementById("printBtn").addEventListener("click", ()=>{ renderPrint(); window.print(); });
 window.addEventListener("beforeprint", renderPrint);
