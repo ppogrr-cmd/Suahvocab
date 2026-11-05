@@ -35,11 +35,12 @@ function mergeMax(a = {}, b = {}, del) {
   if (del) for (const k of del) delete out[k];
   return out;
 }
+// 복습 일정은 '가장 최근에 푼 쪽'을 남긴다. t가 없으면 기기가 자동으로 깐 것이라 0으로 본다.
 function mergeSrs(a = {}, b = {}, del) {
   const out = { ...a };
   for (const [k, v] of Object.entries(b)) {
     if (!v || typeof v.n !== "number") continue;
-    if (!out[k] || out[k].n < v.n) out[k] = v;
+    if (!out[k] || (out[k].t || 0) < (v.t || 0)) out[k] = v;
   }
   if (del) for (const k of del) delete out[k];
   return out;
@@ -70,15 +71,21 @@ export default async function handler(req, res) {
       const cur = await read();
       const del = new Set(body.del || []);
 
+      // 초기화(mode:"replace")일 때만 연습 기록을 보낸 쪽 상태로 갈아 끼운다.
+      // 외운 단어(l)는 어느 경우에도 합집합을 유지한다.
+      const replace = body.mode === "replace";
+
       const merged = {
         // 합집합으로 모으되, 그 기기에서 방금 푼 표시(del)는 빼 준다
         l: [...new Set([...(cur.l || []), ...(body.l || [])])].filter((x) => !del.has(x)),
         c: [...new Set([...(cur.c || []), ...(body.c || [])])],
         r: { ...(cur.r || {}), ...(body.r || {}) },
-        st: mergeMax(cur.st, body.st, del),
-        sp: mergeMax(cur.sp, body.sp),
-        sr: mergeSrs(cur.sr, body.sr, del),
-        sk: mergeStreak(cur.sk, body.sk),
+        st: replace ? body.st || {} : mergeMax(cur.st, body.st, del),
+        sp: replace ? body.sp || {} : mergeMax(cur.sp, body.sp),
+        sr: replace ? body.sr || {} : mergeSrs(cur.sr, body.sr, del),
+        sk: replace
+          ? body.sk || { n: 0, best: 0, last: "", days: [] }
+          : mergeStreak(cur.sk, body.sk),
       };
 
       await kv(`set/${KEY}`, {

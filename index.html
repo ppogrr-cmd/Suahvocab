@@ -3259,7 +3259,7 @@ function applyRemote(o){
   Object.entries(o.sp||{}).forEach(([k,v])=>{ if((spoken[k]||0)<v){ spoken[k]=v; changed=true; } });
   Object.entries(o.sr||{}).forEach(([k,v])=>{
     if(!v || typeof v.n!=="number") return;
-    if(!srs[k] || srs[k].n<v.n){ srs[k]=v; changed=true; } });
+    if(!srs[k] || (srs[k].t||0) < (v.t||0)){ srs[k]=v; changed=true; } });
   const k=o.sk;
   if(k){
     if((k.best||0)>(streak.best||0)){ streak.best=k.best; changed=true; }
@@ -3286,6 +3286,12 @@ async function syncPull(){
   }catch(e){ syncState="연결 안 됨"; renderIfSet(); }
 }
 
+/* 자동으로 깔아 둔 복습 일정(t:0)은 기기마다 똑같이 만들어지므로 보내지 않는다 */
+function realSrs(){
+  const o={};
+  Object.entries(srs).forEach(([k,v])=>{ if(v && v.t) o[k]=v; });
+  return o;
+}
 let pushTimer=null;
 function syncPush(){
   if(!syncOn) return;
@@ -3295,7 +3301,7 @@ function syncPush(){
       const r=await fetch("/api/sync",{method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({l:[...learned], c:[...unlocked], r:reacts, del:[...pendingDel],
-                             st:stageMap, sp:spoken, sr:srs, sk:streak})});
+                             st:stageMap, sp:spoken, sr:realSrs(), sk:streak})});
       if(r.status===503){ syncState="서버 연결 전"; renderIfSet(); return; }
       if(!r.ok) throw 0;
       pendingDel.clear(); savePendingDel();
@@ -3305,6 +3311,49 @@ function syncPush(){
   }, 1200);
 }
 function renderIfSet(){ if(mode==="set") renderSettings(); }
+
+/* 서버 기록을 이 기기 상태로 덮어쓴다. 초기화할 때만 쓴다.
+   외운 단어(l)는 합집합 그대로 두고, 연습 기록만 갈아 끼운다. */
+async function syncReplace(){
+  if(!syncOn){ syncState="동기화 꺼짐 — 이 기기만 지웠어요"; renderIfSet(); return; }
+  clearTimeout(pushTimer);
+  try{
+    const r=await fetch("/api/sync",{method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({mode:"replace", l:[...learned], c:[...unlocked], r:reacts,
+                           del:[...pendingDel], st:stageMap, sp:spoken, sr:realSrs(), sk:streak})});
+    if(r.status===503){ syncState="서버 연결 전 — 이 기기만 지웠어요"; renderIfSet(); return; }
+    if(!r.ok) throw 0;
+    await r.json();
+    pendingDel.clear(); savePendingDel();
+    syncState="초기화함"; renderIfSet();
+  }catch(e){ syncState="연결 안 됨 — 이 기기만 지웠어요"; renderIfSet(); }
+}
+
+/* ---------- 연습 기록 초기화 ----------
+   외운 단어 표시(learned / 2단계)는 어느 쪽에서도 건드리지 않는다. */
+function resetDay(){
+  const t = ymd();
+  daily = freshDaily(); saveDaily();
+  if(streak.days.includes(t)){                 // 오늘 찍힌 도장을 되돌린다
+    streak.days = streak.days.filter(x=>x!==t);
+    if(streak.last===t){
+      streak.last = streak.days[streak.days.length-1] || "";
+      streak.n = Math.max(0, streak.n-1);
+    }
+    saveStreak();
+  }
+}
+function resetPractice(){
+  resetDay();
+  streak = {n:0, best:0, last:"", days:[]}; saveStreak();
+  spoken = {}; saveSpoken();
+  Object.keys(stageMap).forEach(k=>{ if(stageMap[k]>2) stageMap[k]=2; });  // 말한다 → 안다
+  saveStage();
+  srs = {}; seedSrs(true);                     // 복습 일정을 처음 상태로 다시 깔아 준다
+  quiz = null; spk = null;
+  syncReplace();
+}
 
 document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) syncPull(); });
 if(syncOn) syncPull();
@@ -3345,6 +3394,18 @@ function renderSettings(){
     </div>
 
     <div class="backup">
+      <h4>연습 기록 초기화</h4>
+      <p>시험 삼아 해 본 기록을 지웁니다. <b>외운 단어 ${learned.size}개 표시는 지우지 않습니다.</b>
+         동기화가 켜져 있으면 서버 기록도 함께 맞춥니다.</p>
+      <div class="bt">
+        <button id="rsDay">오늘 것만</button>
+        <button id="rsAll">연습 기록 전체</button>
+      </div>
+      <p style="margin:9px 0 0">오늘 것만 = 미션 칸과 오늘 도장 ·
+         전체 = 거기에 연속 기록·복습 일정·말한 문장(${Object.keys(spoken).length}개)까지</p>
+    </div>
+
+    <div class="backup">
       <h4>기록 옮기기 · 백업</h4>
       <p>동기화를 쓰지 않고 기록만 옮길 때 사용합니다.
          기록이 있는 쪽에서 <b>내보내기</b>로 코드를 복사하고, 받을 쪽에서 <b>불러오기</b>에 붙여넣으면 합쳐집니다.</p>
@@ -3377,6 +3438,16 @@ document.getElementById("settings").addEventListener("click", e=>{
     syncOn=!syncOn; store.set("syncOn", syncOn?"1":"0");
     syncState=""; renderSettings();
     if(syncOn){ syncPull(); syncPush(); }
+    return;
+  }
+  if(e.target.closest("#rsDay")){
+    if(!confirm("오늘의 미션 칸과 오늘 찍힌 도장을 지웁니다.\n외운 단어 표시는 그대로예요.")) return;
+    resetDay(); renderSettings(); alert("오늘 기록을 지웠어요.");
+    return;
+  }
+  if(e.target.closest("#rsAll")){
+    if(!confirm("연속 기록·복습 일정·말한 문장까지 모두 지웁니다.\n외운 단어 "+learned.size+"개 표시는 그대로예요.\n\n계속할까요?")) return;
+    resetPractice(); renderSettings(); alert("연습 기록을 모두 지웠어요.");
     return;
   }
   if(e.target.closest("#bkOut")){
@@ -3434,23 +3505,26 @@ const saveSrs = ()=> store.set("srs", JSON.stringify(srs));
 function schedule(id, ok){
   const cur = srs[id];
   const n = ok ? Math.min((cur ? cur.n : -1)+1, SRS.length-1) : 0;
-  srs[id] = {n, d: ymd(new Date(Date.now() + SRS[n]*DAY))};
+  /* t = 고친 시각. 기기끼리 합칠 때 늘 '가장 최근에 푼 쪽'을 남긴다.
+     (단계 숫자만 비교하면 틀려서 간격이 짧아진 기록이 밀려난다) */
+  srs[id] = {n, d: ymd(new Date(Date.now() + SRS[n]*DAY)), t: Date.now()};
   saveSrs();
 }
 /* 이미 외워 둔 옛 단어들에 복습 날짜를 한 번만 깔아 준다.
    전부 오늘로 몰리지 않도록 단어 이름으로 30일에 고르게 흩뿌린다. */
-(function seedSrs(){
-  if(store.get("srs_v")==="1") return;
+function seedSrs(force){
+  if(!force && store.get("srs_v")==="1") return;
   let ch=false;
   Object.keys(stageMap).forEach(id=>{
     if(stageMap[id]<2 || srs[id]) return;
     let h=0; for(let i=0;i<id.length;i++) h=(h*31+id.charCodeAt(i))>>>0;
-    srs[id] = {n:2, d: ymd(new Date(Date.now() + (h%30)*DAY))};
+    srs[id] = {n:2, d: ymd(new Date(Date.now() + (h%30)*DAY)), t:0};  // t:0 = 자동으로 깔아 둔 것
     ch=true;
   });
   if(ch) saveSrs();
   store.set("srs_v","1");
-})();
+}
+seedSrs();
 
 /* 외운 단어 중 다시 꺼내 볼 때가 된 것 */
 function dueWords(){
