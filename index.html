@@ -95,6 +95,7 @@ main{padding:12px 12px 26px;max-width:640px;margin:0 auto}
   display:grid;grid-template-columns:1fr auto;gap:2px 10px;
 }
 .entry.done{border-color:#BFDCD5;background:#F7FCFB}
+.entry.spoken{border-color:#8FCBB9;background:#F1FAF7}
 .w{
   grid-column:1;
   font-family:"Newsreader",Georgia,serif;
@@ -106,6 +107,7 @@ main{padding:12px 12px 26px;max-width:640px;margin:0 auto}
   width:38px;height:32px;display:grid;place-items:center;font-size:15px;color:var(--ink-soft);
 }
 .mini.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.mini.on.s3{background:#0E5B4E;border-color:#0E5B4E}
 .mini svg{width:17px;height:17px;display:block}
 .m{grid-column:1;font-size:16px;color:var(--ink);margin-top:3px}
 .s{grid-column:1;font-size:14.5px;color:var(--ink-soft);margin-top:6px;line-height:1.55}
@@ -247,11 +249,135 @@ body.makemode .tools,body.makemode .chips{display:none}
 .rd-empty{font-size:13px;color:var(--ink-soft);padding:20px 4px}
 body.makemode .tools{display:none}
 
+/* ---------- 오늘 · 퀴즈 · 말하기 ---------- */
+#today,#quiz,#speak{display:none;padding:14px 12px 26px;max-width:640px;margin:0 auto}
+#today.on,#quiz.on,#speak.on{display:block}
+
+.tcard{background:var(--paper);border:1px solid var(--rule);border-radius:14px;padding:14px;margin-bottom:11px}
+.tcard h3{margin:0 0 11px;font-size:14px;letter-spacing:-.02em;display:flex;align-items:center;gap:7px}
+.tcard h3 .stamp{font-style:normal;font-size:11.5px;background:var(--accent);color:#fff;
+  border-radius:999px;padding:2px 9px;font-weight:600}
+
+.miss3{display:flex;gap:7px}
+.ms{flex:1;border:1px solid var(--rule);border-radius:11px;padding:11px 5px;text-align:center;background:#fff}
+.ms.ok{background:#EAF7F2;border-color:#9FD4C4}
+.ms .n{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.ms .n span{font-size:12px;font-weight:500;color:var(--ink-soft)}
+.ms .lb{font-size:11.5px;color:var(--ink-soft);margin-top:3px}
+
+.streak{display:flex;align-items:center;gap:9px;margin-top:12px;font-size:12.5px;color:var(--ink-soft)}
+.streak b{font-size:14px;color:var(--ink)}
+.streak .wk{display:flex;gap:4px;margin-left:auto}
+.streak .wk i{width:11px;height:11px;border-radius:50%;background:#DDE5EC;display:block}
+.streak .wk i.on{background:var(--accent)}
+
+.go3{display:flex;gap:7px;margin-top:13px}
+.go3 button{flex:1;border:1px solid var(--rule);background:#fff;color:var(--ink);
+  border-radius:10px;padding:11px 3px;font-size:12.5px;font-weight:600;letter-spacing:-.04em}
+.go3 button:first-child{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+.ptot{font-size:13.5px;color:var(--ink-soft);margin-bottom:8px}
+.ptot b{color:var(--ink);font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+.pbar{position:relative;height:9px;border-radius:99px;background:#E3EAF0;overflow:hidden}
+.pbar i{position:absolute;left:0;top:0;bottom:0;border-radius:99px}
+.pbar i.k{background:#9FD4C4}
+.pbar i.s{background:var(--accent)}
+.plegend{display:flex;flex-wrap:wrap;gap:4px 13px;margin-top:8px;font-size:11.5px;color:var(--ink-soft)}
+.plegend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.plegend .lk{background:#9FD4C4}
+.plegend .ls{background:var(--accent)}
+.fold2{width:100%;margin-top:11px;border:1px solid var(--rule);background:#fff;
+  border-radius:9px;padding:9px;font-size:12.5px;color:var(--ink-soft)}
+.fold2 i{font-style:normal;margin-left:3px}
+.prow{display:grid;grid-template-columns:1fr auto;gap:3px 8px;margin-top:12px;font-size:12.5px}
+.prow b{font-variant-numeric:tabular-nums;color:var(--ink-soft);font-weight:600}
+.prow .pbar{grid-column:1 / -1}
+.slist{margin-top:4px;font-size:13.5px;line-height:1.65;color:var(--ink-soft)}
+.slist p{margin:0 0 7px}
+.slist p b{color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums;margin-right:7px}
+
+/* 연습 하위 메뉴 */
+.pracnav{display:flex;gap:6px;padding:12px 12px 0;max-width:640px;margin:0 auto}
+.pracnav[hidden]{display:none}
+.pracnav button{flex:1;border:1px solid var(--rule);background:#fff;border-radius:9px;
+  padding:8px 0;font-size:12.5px;color:var(--ink)}
+.pracnav button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600}
+
+/* 퀴즈 */
+.qtop{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink-soft);margin:0 2px 10px}
+.qtop .qbar{flex:1;height:6px;border-radius:99px;background:#E3EAF0;overflow:hidden}
+.qtop .qbar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.qask{background:var(--paper);border:1px solid var(--rule);border-radius:14px;
+  padding:24px 18px;text-align:center;min-height:132px;display:flex;flex-direction:column;
+  justify-content:center;gap:11px}
+.qask .qs{font-size:12.5px;color:var(--ink-soft)}
+.qask .qq{font-family:"Newsreader",Georgia,serif;font-size:34px;font-weight:600;line-height:1.2;word-break:break-word}
+.qask .qq.ko{font-family:inherit;font-size:23px;font-weight:600}
+.qask .qq.sm{font-family:inherit;font-size:16.5px;font-weight:500;line-height:1.65}
+.qask .qq.sm u{text-decoration:none;background:var(--mark);border-radius:3px;padding:0 7px;font-weight:700}
+.qask .qplay{border:1px solid var(--rule);background:#fff;border-radius:999px;
+  padding:13px 20px;font-size:14px;color:var(--ink);align-self:center;display:inline-flex;align-items:center;gap:8px}
+.qask .qplay svg{width:20px;height:20px}
+.qopts{display:grid;gap:8px;margin-top:12px}
+.qopts button{border:1px solid var(--rule);background:#fff;border-radius:11px;
+  padding:13px 14px;font-size:15.5px;text-align:left;line-height:1.4}
+.qopts button.en{font-family:"Newsreader",Georgia,serif;font-size:19px;font-weight:600}
+.qopts button.right{background:#E7F6EF;border-color:var(--accent);font-weight:600}
+.qopts button.wrong{background:#FCECEA;border-color:#D98A7E}
+.qnext{width:100%;margin-top:12px;border:0;border-radius:11px;background:var(--ink);
+  color:#fff;padding:14px;font-size:15px;font-weight:600}
+.qwhy{margin-top:11px;background:var(--paper);border:1px solid var(--rule);
+  border-radius:11px;padding:12px 14px;font-size:14px;line-height:1.6;color:var(--ink-soft)}
+.qwhy b{color:var(--ink);font-family:"Newsreader",Georgia,serif;font-size:17px}
+.qwhy .ex{display:block;margin-top:6px}
+.qwhy mark{background:var(--mark);border-radius:3px;padding:0 2px;color:var(--ink)}
+.qdone{background:var(--paper);border:1px solid var(--rule);border-radius:14px;padding:26px 18px;text-align:center}
+.qdone .big{font-size:44px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.qdone .big span{font-size:20px;color:#8A98AB}
+.qdone .tit{font-size:18px;font-weight:700;margin-top:8px}
+.qdone .sub{color:var(--ink-soft);font-size:14px;margin-top:5px;line-height:1.6}
+.qdone .wl{text-align:left;margin-top:16px;font-size:13.5px;line-height:1.9;color:var(--ink-soft)}
+.qdone .wl b{color:var(--ink);font-family:"Newsreader",Georgia,serif;font-size:16px}
+
+/* 말하기 */
+.spsent{background:var(--paper);border:1px solid var(--rule);border-radius:14px;
+  padding:22px 18px;font-size:19px;line-height:1.8;text-align:center;letter-spacing:-.01em}
+.spsent .tw{padding:0 2px;border-radius:4px}
+.spsent .tw.hit{background:#CDEBD8}
+.spsent .tw.no{color:#B9C4D1}
+.spmeta{font-size:12px;color:var(--ink-soft);margin:9px 2px 0;text-align:center}
+.sprow{display:flex;gap:8px;margin-top:13px}
+.sprow button{flex:1;border:1px solid var(--rule);background:#fff;border-radius:11px;
+  padding:14px 4px;font-size:14px;display:flex;align-items:center;justify-content:center;gap:7px}
+.sprow button svg{width:18px;height:18px}
+.sprow .mic{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;flex:1.5}
+.sprow .mic.rec{background:#C0392B;border-color:#C0392B;animation:pulse 1.1s ease-in-out infinite}
+.spscore{margin-top:15px;text-align:center}
+.spscore .num{font-size:40px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;color:#C0392B}
+.spscore .num.ok{color:var(--accent)}
+.spscore .msg{font-size:14.5px;color:var(--ink-soft);margin-top:5px}
+.spheard{margin-top:9px;font-size:12.5px;color:#9AA8BC;text-align:center;word-break:break-word}
+.spnote{margin:12px 4px 0;font-size:12px;color:var(--ink-soft);line-height:1.65;text-align:center}
+.spbar{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink-soft);margin:0 2px 10px}
+.spbar .qbar{flex:1;height:6px;border-radius:99px;background:#E3EAF0;overflow:hidden}
+.spbar .qbar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+
+/* 축하 */
+.party{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:20px;
+  background:rgba(27,42,65,.55);opacity:0;transition:opacity .22s}
+.party.go{opacity:1}
+.pbox{background:#fff;border-radius:18px;padding:28px 32px;text-align:center;
+  transform:scale(.9);transition:transform .22s}
+.party.go .pbox{transform:scale(1)}
+.pemo{font-size:46px;line-height:1}
+.ptit{font-size:19px;font-weight:700;margin-top:9px}
+.psub{font-size:13px;color:var(--ink-soft);margin-top:5px}
+
 /* ---------- 인쇄(A4) ---------- */
 #print{display:none}
 @page{size:A4 portrait;margin:16mm 14mm}
 @media print{
-  header,.bar,main,#card{display:none !important}
+  header,.bar,main,#card,#today,#quiz,#speak,.pracnav,.party{display:none !important}
   body{background:#fff;font-size:10pt;height:auto;display:block;overflow:visible}
   #scrollArea{overflow:visible;height:auto;flex:none}
   header{position:static}
@@ -314,7 +440,16 @@ body.makemode .tools{display:none}
 
 <div id="scrollArea">
 
+<section id="today"></section>
+
 <main id="list"></main>
+
+<div class="pracnav" id="pracnav" hidden>
+  <button data-prac="card"  aria-pressed="true">카드</button>
+  <button data-prac="quiz"  aria-pressed="false">퀴즈</button>
+  <button data-prac="speak" aria-pressed="false">말하기</button>
+  <button data-prac="make"  aria-pressed="false">문장</button>
+</div>
 
 <section id="card">
   <div class="flip" id="flip"></div>
@@ -324,7 +459,12 @@ body.makemode .tools{display:none}
     <button id="next">다음</button>
   </div>
   <div class="pos" id="pos"></div>
+  <button class="qnext" id="cardKnow">알아요 ✓</button>
 </section>
+
+<section id="quiz"></section>
+
+<section id="speak"></section>
 
 <section id="maker">
   <p class="mk-help">한국어로 말하거나 쓰면, 단어장에서 쓸 수 있는 단어를 찾아 줍니다. 문장은 직접 만들어 보세요.</p>
@@ -352,11 +492,11 @@ body.makemode .tools{display:none}
 </div><!-- /scrollArea -->
 
 <nav class="bar">
-  <button id="mList" aria-pressed="true">목록</button>
-  <button id="mCard" aria-pressed="false">카드</button>
-  <button id="mMake" aria-pressed="false">문장</button>
-  <button id="mRead" aria-pressed="false">본문</button>
-  <button id="mSet"  aria-pressed="false">설정</button>
+  <button id="mToday" aria-pressed="true">오늘</button>
+  <button id="mList"  aria-pressed="false">목록</button>
+  <button id="mPrac"  aria-pressed="false">연습</button>
+  <button id="mRead"  aria-pressed="false">본문</button>
+  <button id="mSet"   aria-pressed="false">설정</button>
 </nav>
 
 <div id="print"></div>
@@ -2473,6 +2613,19 @@ let learned = new Set(JSON.parse(store.get("learned")||"[]"));
 })();
 const saveLearned = ()=> store.set("learned", JSON.stringify([...learned]));
 
+/* ---------- 외움 3단계 ----------
+   0 아직 · 1 봤다 · 2 안다 · 3 말한다
+   예전 '외움' 기록은 전부 2(안다)로 옮긴다. learned 집합은 그대로 두어
+   예전 기기·백업 코드·동기화 서버와 계속 맞물리게 한다. */
+let stageMap = (()=>{ try{ return JSON.parse(store.get("stage")||"{}"); }catch(e){ return {}; } })();
+(function migrateStage(){
+  let ch=false;
+  learned.forEach(id=>{ if(!stageMap[id]){ stageMap[id]=2; ch=true; } });
+  if(ch) store.set("stage", JSON.stringify(stageMap));
+})();
+const saveStage = ()=> store.set("stage", JSON.stringify(stageMap));
+const stageOf = id => stageMap[id] || 0;
+
 /* ---------- 상태 ---------- */
 const esc = t => t.replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const mark = t => esc(t).replace(/\*\*(.+?)\*\*/g, "<mark>$1</mark>");
@@ -2486,6 +2639,11 @@ const ICON_TODO = SVG(`<circle cx="12" cy="12" r="7.6"/>`);
 const ICON_DONE = SVG(`<path d="M5 12.6l4.5 4.5L19.2 7.2"/>`);
 const ICON_SOUND = SVG(`<path d="M4 9.3h3.3L12 5.4v13.2L7.3 14.7H4a1 1 0 0 1-1-1v-3.4a1 1 0 0 1 1-1Z"/>
   <path d="M15.6 9.4a3.7 3.7 0 0 1 0 5.2"/><path d="M18.2 6.8a7.4 7.4 0 0 1 0 10.4"/>`);
+const ICON_MIC = SVG(`<rect x="9" y="2.5" width="6" height="11" rx="3"/>
+  <path d="M5.5 11a6.5 6.5 0 0 0 13 0"/><path d="M12 17.5V21"/>`);
+/* 말한다 — 말풍선 안의 체크 */
+const ICON_SPEAK = SVG(`<path d="M20.5 12.1c0 3.9-3.8 7-8.5 7-1 0-2-.1-2.9-.4L4 20.3l1.3-3.4a6.4 6.4 0 0 1-1.8-4.4c0-3.9 3.8-7 8.5-7s8.5 3.1 8.5 6.6Z"/>
+  <path d="M8.8 12.1l2.3 2.2 4.1-4.4"/>`);
 
 /* 교재 난이도. 시리즈(Seed < Sprout) → 시리즈 번호 → 급(A < B) → 급 번호 순.
    이름이 "Seed2(A1)" 꼴이 아니면 맨 뒤로 보낸다. */
@@ -2528,20 +2686,25 @@ const CATS = (()=>{
 const FILTERS = [
   {id:"todo", label:"안 외운 것", ic:ICON_TODO},
   {id:"done", label:"외운 것",    ic:ICON_DONE},
+  {id:"said", label:"말한 것",    ic:ICON_SPEAK},
   {id:"all",  label:"전체",      ic:ICON_ALL}
 ];
-const DEFAULT_FILTER = "todo";          // 앱을 켜면 안 외운 것부터
+const DEFAULT_FILTER = "todo";          // 목록을 열면 안 외운 것부터
 /* 외움 여부와 교재를 따로 두고 둘 다 동시에 건다 */
 let fState=DEFAULT_FILTER, fBook=null;
-let query="", hide=false, mode="list", ci=0, revealed=false;
+let query="", hide=false, mode="today", ci=0, revealed=false;
 
-
+/* 연습 탭 안의 네 가지 모드 */
+const PRACS = ["card","quiz","speak","make"];
+let lastPrac = "card";
 
 function visible(){
   const q = query.trim().toLowerCase();
-  return WORDS.filter((d,i)=>{
-    if(fState==="done" && !learned.has(key(d))) return false;
-    if(fState==="todo" &&  learned.has(key(d))) return false;
+  return WORDS.filter(d=>{
+    const st = stageMap[d.id] || 0;
+    if(fState==="done" && st<2) return false;
+    if(fState==="todo" && st>=2) return false;
+    if(fState==="said" && st<3) return false;
     if(fBook && d.b!==fBook) return false;
     if(!q) return true;
     return (d.w+" "+d.m+" "+d.s).toLowerCase().includes(q);
@@ -2552,7 +2715,8 @@ function visible(){
 function renderList(){
   const rows = visible();
   const el = document.getElementById("list");
-  document.getElementById("count").textContent = `${WORDS.length}단어 · 외움 ${learned.size}`;
+  document.getElementById("count").textContent =
+    `${WORDS.length}단어 · 외움 ${learned.size} · 말함 ${saidCount()}`;
 
   if(!rows.length){
     el.innerHTML = `<div class="empty">${WORDS.length ? "찾는 단어가 없어요." :
@@ -2560,15 +2724,15 @@ function renderList(){
     return;
   }
   el.innerHTML = rows.map(d=>{
-    const on = learned.has(key(d));
-    return `<article class="entry ${on?"done":""} ${hide?"hide":""}">
+    const st = stageOf(d.id), on = st>=2, s3 = st>=3;
+    return `<article class="entry ${on?"done":""} ${s3?"spoken":""} ${hide?"hide":""}">
       <div class="w">${esc(d.w)}</div>
       <div class="m">${esc(d.m)}</div>
       <div class="s">${mark(d.s)}</div>
-      
+
       <div class="side">
-        <button class="mini ${on?"on":""}" data-done="${esc(key(d))}"
-                aria-label="${on?"외움 해제":"외움 표시"}">${on?ICON_CHECK:ICON_TODO}</button>
+        <button class="mini ${on?"on":""} ${s3?"s3":""}" data-done="${esc(d.id)}"
+                aria-label="${s3?"말한 단어":on?"외움 해제":"외움 표시"}">${s3?ICON_SPEAK:on?ICON_CHECK:ICON_TODO}</button>
         <button class="mini" data-say="${esc(d.w)}" aria-label="발음 듣기">${ICON_SOUND}</button>
       </div>
     </article>`;
@@ -2580,9 +2744,18 @@ function renderCard(){
   const rows = visible();
   const flip = document.getElementById("flip");
   if(!rows.length){ flip.innerHTML=`<div class="veil">보여줄 단어가 없어요.</div>`;
-                    document.getElementById("pos").textContent=""; return; }
+                    document.getElementById("pos").textContent="";
+                    document.getElementById("cardKnow").hidden=true; return; }
+  document.getElementById("cardKnow").hidden=false;
   if(ci>=rows.length) ci=0;
   const d = rows[ci];
+  touch(d.id);                       // 카드에 한 번 나온 단어는 '봤다'로
+  const kb = document.getElementById("cardKnow");
+  const kn = stageOf(d.id)>=2;
+  kb.textContent = stageOf(d.id)>=3 ? "말할 수 있어요 🗣" : kn ? "외움 해제" : "알아요 ✓";
+  kb.style.background = kn ? "#fff" : "var(--ink)";
+  kb.style.color = kn ? "var(--ink-soft)" : "#fff";
+  kb.style.border = kn ? "1px solid var(--rule)" : "0";
   flip.innerHTML =
     `<button class="fw sp" data-say="${esc(d.w)}" aria-label="${esc(d.w)} 발음 듣기">${esc(d.w)}<i class="spk">${ICON_SOUND}</i></button>` +
     (revealed
@@ -2742,14 +2915,22 @@ function readLesson(id){
 }
 
 function render(){
+  document.getElementById("today").classList.toggle("on", mode==="today");
   document.getElementById("list").style.display = mode==="list" ? "" : "none";
+  document.getElementById("pracnav").hidden = !PRACS.includes(mode);
   document.getElementById("card").classList.toggle("on", mode==="card");
+  document.getElementById("quiz").classList.toggle("on", mode==="quiz");
+  document.getElementById("speak").classList.toggle("on", mode==="speak");
   document.getElementById("maker").classList.toggle("on", mode==="make");
   document.getElementById("reader").classList.toggle("on", mode==="read");
   document.getElementById("settings").classList.toggle("on", mode==="set");
+  /* 검색창과 필터는 목록·카드에서만 쓴다 */
   document.body.classList.toggle("makemode", mode!=="list" && mode!=="card");
-  if(mode==="list") renderList();
+  if(mode==="today") renderToday();
+  else if(mode==="list") renderList();
   else if(mode==="card") renderCard();
+  else if(mode==="quiz") renderQuiz();
+  else if(mode==="speak") renderSpeak();
   else if(mode==="make") renderMaker();
   else if(mode==="read") renderReader();
   else renderSettings();
@@ -2813,10 +2994,7 @@ document.getElementById("q").addEventListener("input", e=>{ query=e.target.value
 
 document.getElementById("list").addEventListener("click", e=>{
   const dn=e.target.closest("[data-done]"), sy=e.target.closest("[data-say]");
-  if(dn){ const w=dn.dataset.done;
-          if(learned.has(w)){ learned.delete(w); pendingDel.add(w); }
-          else { learned.add(w); pendingDel.delete(w); }
-          saveLearned(); savePendingDel(); render(); syncPush(); }
+  if(dn){ toggleKnow(dn.dataset.done); render(); }
   if(sy) say(sy.dataset.say);
 });
 
@@ -2833,24 +3011,37 @@ document.getElementById("flip").addEventListener("click", e=>{
   revealed=!revealed; renderCard();
 });
 document.getElementById("reveal").addEventListener("click", ()=>{ revealed=!revealed; renderCard(); });
+document.getElementById("cardKnow").addEventListener("click", ()=>{
+  const rows=visible(); if(!rows.length) return;
+  toggleKnow(rows[Math.min(ci, rows.length-1)].id);
+  renderCard();
+});
 document.getElementById("prev").addEventListener("click", ()=>{
   const n=visible().length; if(!n) return; ci=(ci-1+n)%n; revealed=false; renderCard(); });
 document.getElementById("next").addEventListener("click", ()=>{
   const n=visible().length; if(!n) return; ci=(ci+1)%n; revealed=false; renderCard(); });
 
+document.getElementById("mToday").addEventListener("click", ()=>setMode("today"));
 document.getElementById("mList").addEventListener("click", ()=>setMode("list"));
-document.getElementById("mCard").addEventListener("click", ()=>setMode("card"));
-document.getElementById("mMake").addEventListener("click", ()=>setMode("make"));
+document.getElementById("mPrac").addEventListener("click", ()=>setMode(lastPrac));
 document.getElementById("mRead").addEventListener("click", ()=>setMode("read"));
 document.getElementById("mSet").addEventListener("click", ()=>setMode("set"));
+document.getElementById("pracnav").addEventListener("click", e=>{
+  const b=e.target.closest("[data-prac]"); if(b) setMode(b.dataset.prac);
+});
 function setMode(m){
-  if(mode==="read" && m!=="read" && "speechSynthesis" in window) speechSynthesis.cancel();
+  if(mode!==m && "speechSynthesis" in window) speechSynthesis.cancel();
+  if(spOn) spStop();                       // 다른 화면으로 가면 녹음을 멈춘다
+  if(PRACS.includes(m)) lastPrac = m;
   mode=m; revealed=false;
-  document.getElementById("mList").setAttribute("aria-pressed", m==="list");
-  document.getElementById("mCard").setAttribute("aria-pressed", m==="card");
-  document.getElementById("mMake").setAttribute("aria-pressed", m==="make");
-  document.getElementById("mRead").setAttribute("aria-pressed", m==="read");
-  document.getElementById("mSet").setAttribute("aria-pressed", m==="set");
+  const press=(id,v)=>document.getElementById(id).setAttribute("aria-pressed", v);
+  press("mToday", m==="today");
+  press("mList",  m==="list");
+  press("mPrac",  PRACS.includes(m));
+  press("mRead",  m==="read");
+  press("mSet",   m==="set");
+  document.querySelectorAll("#pracnav button").forEach(b=>
+    b.setAttribute("aria-pressed", b.dataset.prac===m));
   render();
 }
 const hideBtn=document.getElementById("mHide");
@@ -3061,7 +3252,26 @@ function applyRemote(o){
   (o.l||[]).forEach(x=>{ if(!pendingDel.has(x) && !learned.has(x)){ learned.add(x); changed=true; } });
   (o.c||[]).forEach(x=>{ if(!unlocked.has(x)){ unlocked.add(x); changed=true; } });
   Object.entries(o.r||{}).forEach(([k,v])=>{ if(!reacts[k]){ reacts[k]=v; changed=true; } });
-  if(changed){ saveLearned(); saveCities(); saveReacts(); }
+  /* 단계·복습일정·말한 문장·연속 기록 — 늘 더 앞선 쪽을 남긴다 */
+  Object.entries(o.st||{}).forEach(([k,v])=>{
+    if(pendingDel.has(k)) return;
+    if((stageMap[k]||0)<v){ stageMap[k]=v; changed=true; } });
+  Object.entries(o.sp||{}).forEach(([k,v])=>{ if((spoken[k]||0)<v){ spoken[k]=v; changed=true; } });
+  Object.entries(o.sr||{}).forEach(([k,v])=>{
+    if(!v || typeof v.n!=="number") return;
+    if(!srs[k] || srs[k].n<v.n){ srs[k]=v; changed=true; } });
+  const k=o.sk;
+  if(k){
+    if((k.best||0)>(streak.best||0)){ streak.best=k.best; changed=true; }
+    if((k.last||"")>(streak.last||"")){ streak.n=k.n||0; streak.last=k.last; changed=true; }
+    (k.days||[]).forEach(x=>{ if(!streak.days.includes(x)){ streak.days.push(x); changed=true; } });
+    streak.days.sort(); streak.days=streak.days.slice(-120);
+  }
+  /* 단계가 2 이상이면 외움 집합에도 반영해 둔다 */
+  Object.entries(stageMap).forEach(([id,v])=>{
+    if(v>=2 && !pendingDel.has(id) && !learned.has(id)){ learned.add(id); changed=true; } });
+  learned.forEach(id=>{ if(!stageMap[id]){ stageMap[id]=2; changed=true; } });
+  if(changed){ saveLearned(); saveCities(); saveReacts(); saveStage(); saveSpoken(); saveSrs(); saveStreak(); }
   return changed;
 }
 
@@ -3084,7 +3294,8 @@ function syncPush(){
     try{
       const r=await fetch("/api/sync",{method:"POST",
         headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({l:[...learned], c:[...unlocked], r:reacts, del:[...pendingDel]})});
+        body:JSON.stringify({l:[...learned], c:[...unlocked], r:reacts, del:[...pendingDel],
+                             st:stageMap, sp:spoken, sr:srs, sk:streak})});
       if(r.status===503){ syncState="서버 연결 전"; renderIfSet(); return; }
       if(!r.ok) throw 0;
       pendingDel.clear(); savePendingDel();
@@ -3101,7 +3312,7 @@ if(syncOn) syncPull();
 /* ---------- 기록 옮기기 ----------
    아이폰은 사파리와 홈 화면 앱의 저장 공간을 따로 쓴다.
    한쪽에서 코드를 내보내 다른 쪽에서 불러오면 기록이 합쳐진다. */
-const UPDATED="2026-11-01";
+const UPDATED="2026-11-05";
 let booksOpen=false;
 function bookList(){
   const m={};
@@ -3115,6 +3326,9 @@ function renderSettings(){
       <div><span>최종 업데이트</span><b>${UPDATED}</b></div>
       <div><span>단어</span><b>${WORDS.length}개</b></div>
       <div><span>외운 단어</span><b>${learned.size}개</b></div>
+      <div><span>말할 수 있는 단어</span><b>${saidCount()}개</b></div>
+      <div><span>말한 문장</span><b>${Object.keys(spoken).length}개</b></div>
+      <div><span>연속 기록</span><b>${streak.n}일 <i class="ar" style="font-style:normal;color:#9AA8BC">(최고 ${streak.best}일)</i></b></div>
       <div class="fold" id="bookRow"><span>교재</span><b>${bookList().length}권 <i class="ar">${booksOpen?"▾":"▸"}</i></b></div>
       ${booksOpen ? bookList().map(([b,n])=>
         `<div class="sub"><span>${esc(b)}</span><b>${n}개</b></div>`).join("") : ""}
@@ -3143,13 +3357,18 @@ function renderSettings(){
 }
 
 function makeCode(){
-  return btoa(JSON.stringify({v:1, l:[...learned], c:[...unlocked], r:reacts}));
+  return btoa(unescape(encodeURIComponent(JSON.stringify({
+    v:2, l:[...learned], c:[...unlocked], r:reacts,
+    st:stageMap, sp:spoken, sr:srs, sk:streak}))));
 }
 function applyCode(code){
-  const o=JSON.parse(atob(code.trim()));
+  let txt;
+  try{ txt=decodeURIComponent(escape(atob(code.trim()))); }catch(e){ txt=atob(code.trim()); }
+  const o=JSON.parse(txt);
   (o.l||[]).forEach(x=>learned.add(x));
   (o.c||[]).forEach(x=>unlocked.add(x));
   Object.entries(o.r||{}).forEach(([k,v])=>{ if(!reacts[k]) reacts[k]=v; });
+  applyRemote(o);                       // 단계·복습·말한 문장·연속 기록까지 합친다
   saveLearned(); saveCities(); saveReacts();
 }
 document.getElementById("settings").addEventListener("click", e=>{
@@ -3178,10 +3397,453 @@ document.getElementById("settings").addEventListener("click", e=>{
 let reacts = (()=>{ try{ return JSON.parse(store.get("reacts")||"{}"); }catch(e){ return {}; } })();
 const saveReacts = ()=> store.set("reacts", JSON.stringify(reacts));
 
+/* ======================================================================
+   오늘의 미션 · 복습 큐 · 퀴즈 · 따라 말하기
+====================================================================== */
+
+/* ---------- 날짜 (기기 시간 기준 하루) ---------- */
+const DAY = 86400000;
+function ymd(dt){
+  const d = dt || new Date();
+  return new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+}
+const saidCount = ()=> Object.keys(stageMap).filter(k=>stageMap[k]>=3).length;
+
+/* ---------- 단계 바꾸기 ---------- */
+function setStage(id, st){
+  const prev = stageOf(id);
+  if(prev===st) return;
+  if(st<=0) delete stageMap[id]; else stageMap[id]=st;
+  if(st>=2){ learned.add(id); pendingDel.delete(id); }
+  else if(prev>=2){ learned.delete(id); pendingDel.add(id); }
+  saveStage(); saveLearned(); savePendingDel();
+}
+/* 화면에 한 번이라도 나온 단어는 '봤다'로 올려 둔다 */
+function touch(id){ if(stageOf(id)===0){ stageMap[id]=1; saveStage(); } }
+
+function toggleKnow(id){
+  if(stageOf(id)>=2){ setStage(id,0); delete srs[id]; saveSrs(); }
+  else { setStage(id,2); schedule(id,true); bump("nw", id); }
+  syncPush();
+}
+
+/* ---------- 복습 큐 (1·3·7·21·60일) ---------- */
+const SRS = [1,3,7,21,60];
+let srs = (()=>{ try{ return JSON.parse(store.get("srs")||"{}"); }catch(e){ return {}; } })();
+const saveSrs = ()=> store.set("srs", JSON.stringify(srs));
+function schedule(id, ok){
+  const cur = srs[id];
+  const n = ok ? Math.min((cur ? cur.n : -1)+1, SRS.length-1) : 0;
+  srs[id] = {n, d: ymd(new Date(Date.now() + SRS[n]*DAY))};
+  saveSrs();
+}
+/* 이미 외워 둔 옛 단어들에 복습 날짜를 한 번만 깔아 준다.
+   전부 오늘로 몰리지 않도록 단어 이름으로 30일에 고르게 흩뿌린다. */
+(function seedSrs(){
+  if(store.get("srs_v")==="1") return;
+  let ch=false;
+  Object.keys(stageMap).forEach(id=>{
+    if(stageMap[id]<2 || srs[id]) return;
+    let h=0; for(let i=0;i<id.length;i++) h=(h*31+id.charCodeAt(i))>>>0;
+    srs[id] = {n:2, d: ymd(new Date(Date.now() + (h%30)*DAY))};
+    ch=true;
+  });
+  if(ch) saveSrs();
+  store.set("srs_v","1");
+})();
+
+/* 외운 단어 중 다시 꺼내 볼 때가 된 것 */
+function dueWords(){
+  const t = ymd();
+  return WORDS.filter(d=>{
+    if(stageOf(d.id)<2) return false;
+    const r = srs[d.id];
+    return !r || r.d <= t;
+  });
+}
+
+/* ---------- 말한 문장 ---------- */
+let spoken = (()=>{ try{ return JSON.parse(store.get("spoken")||"{}"); }catch(e){ return {}; } })();
+const saveSpoken = ()=> store.set("spoken", JSON.stringify(spoken));
+
+/* ---------- 오늘의 미션 ---------- */
+/* 한 판(12문제)에서 두 개까지 틀려도 하루치가 채워지도록 목표는 10 */
+const QUIZ_N=12, G_NEW=10, G_QZ=10, G_SPK=3;
+const freshDaily = ()=>({d:ymd(), nw:0, qz:0, sp:0, stamp:false, ids:[], sids:[]});
+let daily = (()=>{ try{ return JSON.parse(store.get("daily")||"null"); }catch(e){ return null; } })();
+if(!daily || daily.d!==ymd()) daily = freshDaily();
+if(!daily.ids) daily.ids=[];
+if(!daily.sids) daily.sids=[];
+const saveDaily = ()=> store.set("daily", JSON.stringify(daily));
+
+let streak = (()=>{ try{ return JSON.parse(store.get("streak")||"null"); }catch(e){ return null; } })()
+          || {n:0, best:0, last:"", days:[]};
+if(!streak.days) streak.days=[];
+const saveStreak = ()=> store.set("streak", JSON.stringify(streak));
+
+function rollDay(){ if(daily.d!==ymd()){ daily = freshDaily(); saveDaily(); } }
+function bump(k, id){
+  rollDay();
+  if(k==="nw"){ if(daily.ids.includes(id)) return; daily.ids.push(id); }
+  if(k==="sp"){ if(daily.sids.includes(id)) return; daily.sids.push(id); }
+  daily[k]++; saveDaily(); checkStamp();
+}
+function checkStamp(){
+  if(daily.stamp) return;
+  if(daily.nw<G_NEW || daily.qz<G_QZ || daily.sp<G_SPK) return;
+  daily.stamp = true;
+  const t = ymd(), y = ymd(new Date(Date.now()-DAY));
+  if(!streak.days.includes(t)) streak.days.push(t);
+  streak.days.sort(); streak.days = streak.days.slice(-120);
+  streak.n = (streak.last===y) ? streak.n+1 : 1;
+  streak.last = t;
+  streak.best = Math.max(streak.best||0, streak.n);
+  saveDaily(); saveStreak(); syncPush();
+  party("오늘 미션 완료!", `${streak.n}일 연속 · 최고 ${streak.best}일`);
+}
+function party(title, sub){
+  const el = document.createElement("div");
+  el.className = "party";
+  el.innerHTML = `<div class="pbox"><div class="pemo">🎉</div>
+    <div class="ptit">${esc(title)}</div><div class="psub">${esc(sub||"")}</div></div>`;
+  document.body.appendChild(el);
+  requestAnimationFrame(()=>el.classList.add("go"));
+  const close = ()=>{ el.classList.remove("go"); setTimeout(()=>el.remove(), 260); };
+  el.addEventListener("click", close);
+  setTimeout(close, 2800);
+}
+
+/* ---------- 오늘 화면 ---------- */
+function bookStats(){
+  const m = {};
+  WORDS.forEach(d=>{
+    const b = d.b || "기타";
+    const o = m[b] || (m[b] = {n:0, k:0, s:0});
+    o.n++;
+    const st = stageOf(d.id);
+    if(st>=2) o.k++;
+    if(st>=3) o.s++;
+  });
+  return BOOKS.filter(b=>m[b]).map(b=>Object.assign({b}, m[b]));
+}
+function barHTML(n,k,s){
+  const pk = n ? Math.round(k/n*100) : 0, ps = n ? Math.round(s/n*100) : 0;
+  return `<div class="pbar"><i class="k" style="width:${pk}%"></i><i class="s" style="width:${ps}%"></i></div>`;
+}
+let progOpen=false, saidOpen=false;
+
+function renderToday(){
+  rollDay();
+  const tot = WORDS.length;
+  const kn  = Object.keys(stageMap).filter(k=>stageMap[k]>=2).length;
+  const sk  = saidCount();
+  const due = dueWords().length;
+  const ms = (lb,v,g)=>`<div class="ms ${v>=g?"ok":""}">
+      <div class="n">${Math.min(v,g)}<span>/${g}</span></div><div class="lb">${lb}</div></div>`;
+  let wk="";
+  for(let i=6;i>=0;i--){
+    const d = ymd(new Date(Date.now()-i*DAY));
+    wk += `<i class="${streak.days.includes(d)?"on":""}"></i>`;
+  }
+  const bs = bookStats();
+  const said = WORDS.filter(d=>spoken[d.id]).slice(0,40);
+
+  document.getElementById("today").innerHTML = `
+    <div class="tcard">
+      <h3>오늘의 미션${daily.stamp?` <em class="stamp">완료 ✓</em>`:""}</h3>
+      <div class="miss3">${ms("새 단어",daily.nw,G_NEW)}${ms("퀴즈",daily.qz,G_QZ)}${ms("말하기",daily.sp,G_SPK)}</div>
+      <div class="streak"><b>${streak.n}일 연속</b><span>최고 ${streak.best||0}일</span><span class="wk">${wk}</span></div>
+      <div class="go3">
+        <button data-go="quiz">퀴즈 풀기</button>
+        <button data-go="speak">따라 말하기</button>
+        <button data-go="card">카드 넘기기</button>
+      </div>
+    </div>
+
+    <div class="tcard">
+      <h3>진도</h3>
+      <div class="ptot"><b>${kn}</b> / ${tot} 외움 &nbsp;·&nbsp; <b>${sk}</b>개는 말할 수 있어요</div>
+      ${barHTML(tot,kn,sk)}
+      <div class="plegend"><span><i class="lk"></i>외움</span><span><i class="ls"></i>말함</span>
+        <span>복습할 때가 된 단어 ${due>999?"999+":due}개</span></div>
+      <button class="fold2" data-fold="prog">교재별 진도 ${bs.length}권 <i>${progOpen?"▾":"▸"}</i></button>
+      ${progOpen ? bs.map(x=>`<div class="prow"><span>${esc(x.b)}</span>
+        <b>${Math.round(x.k/x.n*100)}%</b>${barHTML(x.n,x.k,x.s)}</div>`).join("") : ""}
+    </div>
+
+    <div class="tcard">
+      <h3>내가 말할 수 있는 문장</h3>
+      <div class="ptot"><b>${Object.keys(spoken).length}</b>문장</div>
+      ${said.length
+        ? `<button class="fold2" data-fold="said">모아 보기 <i>${saidOpen?"▾":"▸"}</i></button>
+           ${saidOpen ? `<div class="slist">${said.map(d=>
+               `<p><b>${spoken[d.id]}점</b>${esc(marksOf(d.s).plain)}</p>`).join("")}</div>` : ""}`
+        : `<p class="spnote" style="text-align:left;margin:2px 0 0">따라 말하기에서 80점을 넘으면 여기에 쌓여요.</p>`}
+    </div>`;
+}
+document.getElementById("today").addEventListener("click", e=>{
+  const g = e.target.closest("[data-go]");
+  if(g){ setMode(g.dataset.go); return; }
+  const f = e.target.closest("[data-fold]");
+  if(f){ if(f.dataset.fold==="prog") progOpen=!progOpen; else saidOpen=!saidOpen; renderToday(); }
+});
+
+/* ---------- 퀴즈 ---------- */
+let quiz = null;
+function shuffle(a){
+  a = a.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    const t = a[i]; a[i]=a[j]; a[j]=t;
+  }
+  return a;
+}
+/* 복습할 때가 된 단어 → 외운 단어 → 본 단어 → 나머지 순으로 채운다 */
+function quizPool(n){
+  const seen = new Set(), out = [];
+  const add = arr => arr.forEach(d=>{ if(out.length<n && !seen.has(d.id)){ seen.add(d.id); out.push(d); } });
+  add(shuffle(dueWords()));
+  add(shuffle(WORDS.filter(d=>stageOf(d.id)>=2)));
+  add(shuffle(WORDS.filter(d=>stageOf(d.id)===1)));
+  add(shuffle(WORDS));
+  return out;
+}
+/* 헷갈리게, 같은 교재에서 먼저 고른다 */
+function distract(d, f, n){
+  const same = WORDS.filter(x=>x.b===d.b && x.id!==d.id && x[f]!==d[f]);
+  const pool = shuffle(same.length>=12 ? same : WORDS.filter(x=>x.id!==d.id && x[f]!==d[f]));
+  const out = [], used = new Set([d[f]]);
+  for(const x of pool){
+    if(out.length>=n) break;
+    if(used.has(x[f])) continue;
+    used.add(x[f]); out.push(x[f]);
+  }
+  return out;
+}
+function makeQ(d){
+  const types = ["meaning","word","listen"];
+  const mk = marksOf(d.s);
+  if(mk.spans.length && mk.plain.split(/\s+/).length<=18) types.push("blank","blank");
+  const t = types[Math.floor(Math.random()*types.length)];
+  if(t==="meaning") return {d,t, sub:"무슨 뜻일까?", ask:d.w,
+                            opts:shuffle([d.m, ...distract(d,"m",3)]), ans:d.m};
+  if(t==="listen")  return {d,t, sub:"듣고 뜻을 고르세요", say:d.w,
+                            opts:shuffle([d.m, ...distract(d,"m",3)]), ans:d.m};
+  if(t==="word")    return {d,t, sub:"영어로 뭘까?", ask:d.m, ko:true, en:true,
+                            opts:shuffle([d.w, ...distract(d,"w",3)]), ans:d.w};
+  const sp = mk.spans[0], word = mk.plain.slice(sp[0], sp[1]);
+  return {d, t, sub:"빈칸에 들어갈 말은?", sm:true, en:true,
+          ask: mk.plain.slice(0,sp[0])+"____"+mk.plain.slice(sp[1]),
+          opts: shuffle([word, ...distract(d,"w",3)]), ans: word};
+}
+function startQuiz(){
+  const pool = quizPool(QUIZ_N);
+  quiz = pool.length ? {qs: pool.map(makeQ), i:0, pick:null, right:0, wrong:[]} : null;
+  renderQuiz();
+}
+function answerQ(o){
+  if(!quiz || quiz.pick!=null) return;
+  const q = quiz.qs[quiz.i];
+  quiz.pick = o;
+  const ok = (o===q.ans);
+  touch(q.d.id);
+  if(stageOf(q.d.id)>=2) schedule(q.d.id, ok);   // 외운 단어만 복습 일정을 움직인다
+  if(ok){ quiz.right++; bump("qz"); } else quiz.wrong.push(q.d);
+  syncPush();
+  renderQuiz();
+}
+function renderQuiz(){
+  const el = document.getElementById("quiz");
+  if(!quiz){
+    el.innerHTML = `<div class="qdone"><div class="pemo">🧠</div>
+      <div class="tit">퀴즈 ${QUIZ_N}문제</div>
+      <div class="sub">복습할 때가 된 단어부터 나와요.<br>
+        뜻 고르기 · 영어 고르기 · 듣고 고르기 · 빈칸 채우기</div></div>
+      <button class="qnext" data-q="start">시작하기</button>`;
+    return;
+  }
+  if(quiz.i >= quiz.qs.length){
+    const n = quiz.qs.length, r = quiz.right;
+    el.innerHTML = `<div class="qdone">
+      <div class="big">${r}<span> / ${n}</span></div>
+      <div class="sub">${r===n ? "다 맞았어요! 대단한데?"
+        : r>=Math.ceil(n*0.7) ? "잘했어요!" : "틀린 건 곧 다시 나올 거예요."}</div>
+      ${quiz.wrong.length?`<div class="wl">${quiz.wrong.map(d=>
+        `<div><b>${esc(d.w)}</b> — ${esc(d.m)}</div>`).join("")}</div>`:""}
+      </div>
+      <button class="qnext" data-q="start">한 판 더</button>`;
+    return;
+  }
+  const q = quiz.qs[quiz.i], pick = quiz.pick;
+  if(q.t==="listen" && pick==null && !q.played){ q.played=true; setTimeout(()=>say(q.say), 320); }
+  const ask = q.t==="listen"
+    ? `<button class="qplay" data-say="${esc(q.say)}">${ICON_SOUND}소리 듣기</button>`
+    : `<div class="qq ${q.sm?"sm":q.ko?"ko":""}">${
+         q.sm ? esc(q.ask).replace("____","<u>____</u>") : esc(q.ask)}</div>`;
+  const opts = q.opts.map(o=>{
+    let cls = q.en ? "en" : "";
+    if(pick!=null){ if(o===q.ans) cls += " right"; else if(o===pick) cls += " wrong"; }
+    return `<button class="${cls}" data-opt="${esc(o)}">${esc(o)}</button>`;
+  }).join("");
+  const why = pick==null ? "" :
+    `<div class="qwhy"><b>${esc(q.d.w)}</b> — ${esc(q.d.m)}<span class="ex">${mark(q.d.s)}</span></div>`;
+  const next = pick==null ? "" :
+    `<button class="qnext" data-q="next">${quiz.i+1<quiz.qs.length?"다음":"결과 보기"}</button>`;
+  el.innerHTML = `
+    <div class="qtop"><span>${quiz.i+1} / ${quiz.qs.length}</span>
+      <span class="qbar"><i style="width:${Math.round(quiz.i/quiz.qs.length*100)}%"></i></span>
+      <span>맞힘 ${quiz.right}</span></div>
+    <div class="qask"><div class="qs">${esc(q.sub)}</div>${ask}</div>
+    <div class="qopts">${opts}</div>${why}${next}`;
+}
+document.getElementById("quiz").addEventListener("click", e=>{
+  const sy = e.target.closest("[data-say]"); if(sy){ say(sy.dataset.say); return; }
+  const op = e.target.closest("[data-opt]"); if(op){ answerQ(op.dataset.opt); return; }
+  const bt = e.target.closest("[data-q]");   if(!bt) return;
+  if(bt.dataset.q==="start"){ startQuiz(); return; }
+  quiz.i++; quiz.pick=null; renderQuiz();
+});
+
+/* ---------- 따라 말하기 ----------
+   예문을 들려주고, 아이가 따라 말한 것을 받아적어 단어 단위로 맞춰 본다.
+   마이크를 쓸 수 없는 기기에서는 스스로 확인하는 버튼으로 바뀐다. */
+const SRClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+let spk=null, spRec=null, spOn=false;
+
+const plainOf = d => marksOf(d.s).plain;
+const nrm = w => w.toLowerCase().replace(/[^a-z0-9]/g,"");
+
+function speakPool(){
+  const a=[], b=[], c=[];
+  WORDS.forEach(d=>{
+    const n = plainOf(d).split(/\s+/).filter(Boolean).length;
+    if(n<3 || n>14) return;                 // 너무 짧거나 긴 문장은 뺀다
+    if(spoken[d.id]) c.push(d);
+    else if(stageOf(d.id)>=2) a.push(d);
+    else b.push(d);
+  });
+  return [...shuffle(a), ...shuffle(b), ...shuffle(c)];
+}
+function grade(sent, heard){
+  const disp = sent.split(/\s+/).filter(Boolean);
+  const tgt  = disp.map(nrm);
+  const H    = String(heard||"").split(/\s+/).map(nrm).filter(Boolean);
+  const hit  = disp.map(()=>false);
+  let j = 0;
+  for(let i=0;i<tgt.length;i++){
+    if(!tgt[i]){ hit[i]=true; continue; }
+    const k = H.indexOf(tgt[i], j);
+    if(k>=0){ hit[i]=true; j=k+1; }
+  }
+  const rest = H.slice();                   // 순서가 어긋난 것도 한 번 더 본다
+  for(let i=0;i<tgt.length;i++){
+    if(hit[i] || !tgt[i]) continue;
+    const k = rest.indexOf(tgt[i]);
+    if(k>=0){ hit[i]=true; rest.splice(k,1); }
+  }
+  const total = tgt.filter(Boolean).length;
+  const got   = hit.filter((h,i)=>h && tgt[i]).length;
+  return {disp, hit, score: total ? Math.round(got/total*100) : 0};
+}
+const spCur = ()=> spk.list[spk.i % spk.list.length];
+function spStop(){ spOn=false; try{ if(spRec) spRec.stop(); }catch(e){} }
+function spStart(){
+  if(!spk) return;
+  if(spOn){ spStop(); renderSpeak(); return; }
+  if(!SRClass){ spk.err="noSR"; renderSpeak(); return; }
+  try{
+    spRec = new SRClass();
+    spRec.lang="en-US"; spRec.interimResults=false; spRec.maxAlternatives=1; spRec.continuous=false;
+    spRec.onresult = ev=>{ let t=""; for(const r of ev.results) t += r[0].transcript + " "; spJudge(t); };
+    spRec.onerror = ev=>{
+      spOn=false;
+      spk.err = (ev.error==="not-allowed"||ev.error==="service-not-allowed") ? "noMic"
+              : (ev.error==="no-speech") ? "noSpeech" : "fail";
+      renderSpeak();
+    };
+    spRec.onend = ()=>{ spOn=false; renderSpeak(); };
+    spk.err=null; spk.res=null; spk.heard=null;
+    spRec.start(); spOn=true;
+    renderSpeak();
+  }catch(e){ spOn=false; spk.err="noSR"; renderSpeak(); }
+}
+function spJudge(text){
+  const d = spCur();
+  const r = grade(plainOf(d), text);
+  spk.heard = String(text).trim(); spk.res = r; spk.err = null;
+  touch(d.id);
+  if(r.score>=80) spPass(d, r.score);
+  renderSpeak();
+}
+function spPass(d, score){
+  spoken[d.id] = Math.max(spoken[d.id]||0, score); saveSpoken();
+  if(stageOf(d.id)<3) setStage(d.id, 3);
+  schedule(d.id, true);
+  bump("sp", d.id);
+  syncPush();
+}
+function spNext(){
+  spk.i = (spk.i+1) % spk.list.length;
+  spk.res=null; spk.heard=null; spk.err=null;
+  renderSpeak();
+}
+function renderSpeak(){
+  const el = document.getElementById("speak");
+  if(!spk) spk = {list: speakPool(), i:0, res:null, heard:null, err:null};
+  if(!spk.list.length){ el.innerHTML = `<div class="rd-empty">말하기에 쓸 만한 문장이 없어요.</div>`; return; }
+  const d = spCur(), res = spk.res, best = spoken[d.id];
+  const body = res
+    ? res.disp.map((w,i)=>`<span class="tw ${res.hit[i]?"hit":"no"}">${esc(w)}</span>`).join(" ")
+    : esc(plainOf(d));
+  const NOTE = {
+    noSR:"이 브라우저에서는 마이크로 받아적기가 안 돼요. 소리를 듣고 따라 말한 뒤 아래 버튼을 눌러 주세요.",
+    noMic:"마이크가 막혀 있어요. 설정 → Safari → 마이크를 허용하거나, 아래 버튼으로 직접 확인해 주세요.",
+    noSpeech:"소리가 안 들렸어요. 한 번 더 해 볼까요?",
+    fail:"잘 안 들렸어요. 조용한 곳에서 다시 해 볼까요?"
+  };
+  const selfOK = !SRClass || spk.err==="noSR" || spk.err==="noMic";
+  const score = !res ? "" : `<div class="spscore">
+      <div class="num ${res.score>=80?"ok":""}">${res.score}<span style="font-size:18px">점</span></div>
+      <div class="msg">${res.score>=80 ? "통과! 이 문장은 이제 말할 수 있어요 🗣"
+        : res.score>=55 ? "거의 다 왔어요. 회색 단어를 또박또박!" : "천천히 한 번 더 들어 볼까요?"}</div>
+      ${spk.heard?`<div class="spheard">들린 말: ${esc(spk.heard)}</div>`:""}
+    </div>`;
+  el.innerHTML = `
+    <div class="spbar"><span>오늘 ${daily.sp} / ${G_SPK}</span>
+      <span class="qbar"><i style="width:${Math.min(100, daily.sp/G_SPK*100)}%"></i></span>
+      <span>모은 문장 ${Object.keys(spoken).length}</span></div>
+    <div class="spsent">${body}</div>
+    <div class="spmeta">${esc(d.w)} · ${esc(d.m)} · ${esc(d.b||"")} ${esc(d.l||"")}${best?` · 최고 ${best}점`:""}</div>
+    <div class="sprow">
+      <button data-sp="play">${ICON_SOUND}듣기</button>
+      <button class="mic ${spOn?"rec":""}" data-sp="mic">${ICON_MIC}${spOn?"듣는 중…":"따라 말하기"}</button>
+    </div>
+    <div class="sprow">
+      ${selfOK?`<button data-sp="self">따라 말했어요 ✓</button>`:""}
+      <button data-sp="next">다음 문장 →</button>
+    </div>
+    ${score}
+    <p class="spnote">${spk.err ? NOTE[spk.err]
+      : "듣기를 누르고 똑같이 따라 말해 보세요. 80점을 넘으면 통과예요."}</p>`;
+}
+document.getElementById("speak").addEventListener("click", e=>{
+  const b = e.target.closest("[data-sp]"); if(!b || !spk) return;
+  const d = spCur();
+  if(b.dataset.sp==="play"){ say(plainOf(d)); return; }
+  if(b.dataset.sp==="mic"){ spStart(); return; }
+  if(b.dataset.sp==="next"){ spNext(); return; }
+  if(b.dataset.sp==="self"){
+    const disp = plainOf(d).split(/\s+/).filter(Boolean);
+    spk.res = {disp, hit: disp.map(()=>true), score:100};
+    spk.heard = null; spk.err = null;
+    spPass(d, 100); renderSpeak();
+  }
+});
+
 document.getElementById("printBtn").addEventListener("click", ()=>{ renderPrint(); window.print(); });
 window.addEventListener("beforeprint", renderPrint);
 
-render();
+setMode(mode);
 </script>
 </body>
 </html>

@@ -14,14 +14,45 @@ async function kv(path, opts = {}) {
   return r.json();
 }
 
+const EMPTY = { l: [], c: [], r: {}, st: {}, sp: {}, sr: {}, sk: { n: 0, best: 0, last: "", days: [] } };
+
 async function read() {
   const j = await kv(`get/${KEY}`);
-  if (!j || !j.result) return { l: [], c: [], r: {} };
+  if (!j || !j.result) return { ...EMPTY };
   try {
-    return JSON.parse(j.result);
+    return { ...EMPTY, ...JSON.parse(j.result) };
   } catch {
-    return { l: [], c: [], r: {} };
+    return { ...EMPTY };
   }
+}
+
+// 단계·점수는 큰 값, 복습 일정은 더 앞선 단계를 남긴다.
+function mergeMax(a = {}, b = {}, del) {
+  const out = { ...a };
+  for (const [k, v] of Object.entries(b)) {
+    if ((out[k] || 0) < v) out[k] = v;
+  }
+  if (del) for (const k of del) delete out[k];
+  return out;
+}
+function mergeSrs(a = {}, b = {}, del) {
+  const out = { ...a };
+  for (const [k, v] of Object.entries(b)) {
+    if (!v || typeof v.n !== "number") continue;
+    if (!out[k] || out[k].n < v.n) out[k] = v;
+  }
+  if (del) for (const k of del) delete out[k];
+  return out;
+}
+function mergeStreak(a = {}, b = {}) {
+  const days = [...new Set([...(a.days || []), ...(b.days || [])])].sort().slice(-120);
+  const later = (b.last || "") > (a.last || "") ? b : a;
+  return {
+    n: later.n || 0,
+    last: later.last || "",
+    best: Math.max(a.best || 0, b.best || 0),
+    days,
+  };
 }
 
 export default async function handler(req, res) {
@@ -44,6 +75,10 @@ export default async function handler(req, res) {
         l: [...new Set([...(cur.l || []), ...(body.l || [])])].filter((x) => !del.has(x)),
         c: [...new Set([...(cur.c || []), ...(body.c || [])])],
         r: { ...(cur.r || {}), ...(body.r || {}) },
+        st: mergeMax(cur.st, body.st, del),
+        sp: mergeMax(cur.sp, body.sp),
+        sr: mergeSrs(cur.sr, body.sr, del),
+        sk: mergeStreak(cur.sk, body.sk),
       };
 
       await kv(`set/${KEY}`, {
