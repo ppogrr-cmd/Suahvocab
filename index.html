@@ -67,7 +67,24 @@ main{padding:0 16px}
 .item.on .box{background:var(--acc);border-color:var(--acc);color:#0b2a20}
 .not .item.on .box{background:var(--acc2);border-color:var(--acc2);color:#0b1a33}
 .item .nm{flex:1;font-size:16px;line-height:1.35}
-.item.on .nm{color:var(--mut)}
+.item.on .nm .t{color:var(--mut)}
+.item .nm small{display:block;color:var(--mut);font-size:13px;margin-top:2px}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.tags i{font-style:normal;font-size:11px;padding:2px 7px;border-radius:99px;background:var(--card2);color:var(--acc2)}
+.scroll{overflow-x:auto;margin:0 -4px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:8px 7px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--card)}
+thead th{color:var(--mut);font-weight:600;font-size:12px}
+td.hi{color:var(--warn);font-weight:700}
+td.tg{color:var(--acc2)}
+td small{color:var(--mut);font-size:11px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.form label{font-size:12px;color:var(--mut);display:flex;flex-direction:column;gap:4px}
+.form input,.form select{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;color:var(--tx);width:100%;min-width:0;font-size:15px}
+details summary{cursor:pointer;color:var(--mut);font-size:15px;font-weight:600;list-style:none}
+details summary::after{content:" ▾"}
+details[open] summary{margin-bottom:10px}
 .tag{font-size:11px;padding:3px 8px;border-radius:99px;background:var(--card2);color:var(--mut)}
 
 /* 습관 관리 */
@@ -149,6 +166,13 @@ nav button.on{color:var(--tx)}
     <div class="grid" id="heat"></div>
   </div>
   <div class="card"><h2>습관별 30일 달성률</h2><div id="perHabit"></div></div>
+  <div class="card"><h2>검진 추적 <span>빨간 숫자 = 목표 밖</span></h2><div id="ckTable"></div><div class="empty" id="ckSince" style="margin-top:10px;font-size:13px"></div></div>
+  <div class="card"><h2>병원 할 일 <span>한 번만</span></h2><div id="taskList"></div></div>
+  <div class="card"><details><summary>검진 결과 추가</summary>
+    <div class="form" id="ckForm"></div>
+    <button class="btn full" id="ckSave">결과 저장</button>
+    <div class="empty" style="font-size:12px;margin-top:8px">같은 연도를 다시 저장하면 덮어써요. 빈칸은 ‘—’로 남아요.</div>
+  </details></div>
   <div class="card"><h2>습관 관리</h2>
     <div id="habList"></div>
     <div class="seg" id="kindSeg"><button data-k="do" class="on">To-do</button><button data-k="not">Not To-do</button></div>
@@ -164,6 +188,11 @@ nav button.on{color:var(--tx)}
     <button class="btn ghost full" id="chPin">PIN 바꾸기</button>
     <button class="btn ghost full" id="lockMe">이 기기 잠그기</button>
     <button class="btn danger full" id="lockAll">모든 기기 로그아웃</button>
+  </div>
+  <div class="card"><h2>데이터 가져오기</h2>
+    <div class="empty">JSON 파일로 습관·검진 기록·병원 할 일을 한 번에 넣어요. 같은 항목은 파일 내용으로 바뀌고, 체크 기록은 그대로예요.</div>
+    <input type="file" id="impFile" accept=".json,application/json" class="hide">
+    <button class="btn ghost full" id="impBtn">파일 고르기</button>
   </div>
   <div class="card"><h2>동기화</h2>
     <div class="empty" id="syncInfo"></div>
@@ -183,14 +212,18 @@ nav button.on{color:var(--tx)}
 "use strict";
 var $=function(id){return document.getElementById(id)};
 var LS="cr-data";
-var D={habits:{},log:{}};
-try{var s=JSON.parse(localStorage.getItem(LS)||"null"); if(s&&s.habits) D=s}catch(e){}
-var dirty={habits:{},log:{}}, hasDirty=false, lastSync=0, syncing=false;
-try{var dd=JSON.parse(localStorage.getItem(LS+"-dirty")||"null"); if(dd&&dd.habits){dirty=dd; hasDirty=true}}catch(e){}
+var MAPS=["habits","checkups","tasks"];
+function blankData(){return {habits:{},checkups:{},tasks:{},log:{}}}
+function fill(o){var b=blankData(); for(var k in b) if(!o[k]) o[k]=b[k]; return o}
+var D=blankData();
+try{var s=JSON.parse(localStorage.getItem(LS)||"null"); if(s&&s.habits) D=fill(s)}catch(e){}
+var dirty=blankData(), hasDirty=false, lastSync=0, syncing=false;
+try{var dd=JSON.parse(localStorage.getItem(LS+"-dirty")||"null"); if(dd&&dd.habits){dirty=fill(dd); hasDirty=true}}catch(e){}
 
 function saveLocal(){
   try{localStorage.setItem(LS,JSON.stringify(D)); localStorage.setItem(LS+"-dirty",JSON.stringify(dirty))}catch(e){}
 }
+function esc(x){return String(x==null?"":x).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function toast(m){var t=$("toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toast.h); toast.h=setTimeout(function(){t.classList.remove("on")},1800)}
 
 /* ---------- 날짜 ---------- */
@@ -208,11 +241,12 @@ function label(k){
 
 /* ---------- 데이터 ---------- */
 function habits(){
-  return Object.keys(D.habits).map(function(id){var h=D.habits[id]; return {id:id,name:h.name,kind:h.kind,on:h.on,o:h.o||0}})
+  return Object.keys(D.habits).map(function(id){var h=D.habits[id]; return {id:id,name:h.name,kind:h.kind,on:h.on,o:h.o||0,sub:h.sub||"",tags:h.tags||[]}})
     .filter(function(h){return h.on}).sort(function(a,b){return a.o-b.o});
 }
 function done(day,id){var l=D.log[day]; return !!(l&&l[id]&&l[id].v)}
-function setHabit(id,h){h.t=Date.now(); D.habits[id]=h; dirty.habits[id]=h; touch()}
+function setItem(map,id,h){h.t=Date.now(); D[map][id]=h; dirty[map][id]=h; touch()}
+function setHabit(id,h){setItem("habits",id,h)}
 function setLog(day,id,v){
   var e={v:v?1:0,t:Date.now()};
   (D.log[day]=D.log[day]||{})[id]=e; (dirty.log[day]=dirty.log[day]||{})[id]=e; touch();
@@ -222,8 +256,8 @@ function touch(){hasDirty=true; saveLocal(); clearTimeout(touch.h); touch.h=setT
 /* 같은 항목은 나중에 고친 쪽을 남긴다 (서버와 같은 규칙) */
 function newer(a,b){return !a||(b&&(b.t||0)>(a.t||0))}
 function mergeIn(srv){
-  var k; for(k in srv.habits) if(newer(D.habits[k],srv.habits[k])) D.habits[k]=srv.habits[k];
-  for(var day in srv.log){ D.log[day]=D.log[day]||{};
+  var k; MAPS.forEach(function(m){ var src=srv[m]||{}; for(var k in src) if(newer(D[m][k],src[k])) D[m][k]=src[k]; });
+  for(var day in (srv.log||{})){ D.log[day]=D.log[day]||{};
     for(k in srv.log[day]) if(newer(D.log[day][k],srv.log[day][k])) D.log[day][k]=srv.log[day][k]; }
 }
 
@@ -237,8 +271,8 @@ function syncLabel(t){$("sync").textContent=t}
 function push(){
   if(syncing) {clearTimeout(touch.h); touch.h=setTimeout(push,700); return}
   syncing=true; syncLabel("저장 중…");
-  var send=hasDirty?dirty:{habits:{},log:{}};
-  var sentDirty=dirty; dirty={habits:{},log:{}}; hasDirty=false;
+  var send=hasDirty?dirty:blankData();
+  var sentDirty=dirty; dirty=blankData(); hasDirty=false;
   return api("/api/data",{body:send}).then(function(j){
     syncing=false;
     if(j._s===401){restoreDirty(sentDirty); return showLock()}
@@ -247,7 +281,7 @@ function push(){
   }).catch(function(){syncing=false; restoreDirty(sentDirty); syncLabel("오프라인 · 기기에 저장됨")});
 }
 function restoreDirty(d){
-  var k; for(k in d.habits) if(!dirty.habits[k]) dirty.habits[k]=d.habits[k];
+  var k; MAPS.forEach(function(m){ for(var k in d[m]) if(!dirty[m][k]) dirty[m][k]=d[m][k]; });
   for(var day in d.log){dirty.log[day]=dirty.log[day]||{}; for(k in d.log[day]) if(!dirty.log[day][k]) dirty.log[day][k]=d.log[day][k]}
   hasDirty=true; saveLocal();
 }
@@ -313,8 +347,9 @@ function render(){
     arr.forEach(function(h){
       var on=done(cur,h.id), b=document.createElement("button");
       b.className="item"+(on?" on":"");
-      b.innerHTML='<span class="box">'+(on?"✓":"")+'</span><span class="nm"></span>';
-      b.querySelector(".nm").textContent=h.name;
+      b.innerHTML='<span class="box">'+(on?"✓":"")+'</span><span class="nm"><span class="t"></span>'+(h.sub?'<small></small>':'')+
+        (h.tags.length?'<span class="tags">'+h.tags.map(function(t){return '<i>'+esc(t)+'</i>'}).join("")+'</span>':'')+'</span>';
+      b.querySelector(".t").textContent=h.name; if(h.sub) b.querySelector("small").textContent=h.sub;
       b.onclick=function(){setLog(cur,h.id,!done(cur,h.id)); render()};
       el.appendChild(b);
     });
@@ -353,6 +388,7 @@ function renderHealth(hs){
       row.querySelector(".n").textContent=x.name; ph.appendChild(row);
     });
   }
+  renderCheckup(); renderTasks();
   /* 관리 목록 */
   var hl=$("habList"); hl.innerHTML="";
   if(!hs.length) hl.innerHTML='<div class="empty">건강검진 결과를 보고 할 것(To-do)과 참을 것(Not To-do)을 정해 넣어 보세요.</div>';
@@ -369,6 +405,89 @@ function renderHealth(hs){
     hl.appendChild(r);
   });
 }
+
+/* ---------- 검진 추적 ---------- */
+var METRICS=[
+ {k:"tc",l:"총콜레스테롤",u:"mg/dL",tg:"<200",max:199},
+ {k:"ldl",l:"LDL",u:"mg/dL",tg:"<130",max:129.9},
+ {k:"tg",l:"중성지방",u:"mg/dL",tg:"<150",max:149},
+ {k:"hdl",l:"HDL",u:"mg/dL",tg:"≥60",min:60},
+ {k:"got",l:"GOT",u:"IU/L",tg:"≤40",max:40},
+ {k:"gpt",l:"GPT",u:"IU/L",tg:"≤35",max:35},
+ {k:"ggt",l:"감마GTP",u:"IU/L",tg:"≤63",max:63},
+ {k:"sbp",l:"수축기 혈압",u:"mmHg",tg:"<120",max:119},
+ {k:"dbp",l:"이완기 혈압",u:"mmHg",tg:"<80",max:79},
+ {k:"fbs",l:"공복혈당",u:"mg/dL",tg:"≤99",max:99},
+ {k:"hba1c",l:"당화혈색소",u:"%",tg:"≤5.6",max:5.6},
+ {k:"uric",l:"요산",u:"mg/dL",tg:"≤7.0",max:7},
+ {k:"weight",l:"체중",u:"kg",tg:""},
+ {k:"bmi",l:"BMI",u:"",tg:"<23",max:22.9}
+];
+function outOf(m,v){if(v==null||v==="")return false; if(m.max!=null&&v>m.max)return true; if(m.min!=null&&v<m.min)return true; return false}
+function renderCheckup(){
+  var ys=Object.keys(D.checkups).filter(function(y){return !D.checkups[y].del}).sort().reverse();
+  var el=$("ckTable");
+  if(!ys.length){el.innerHTML='<div class="empty">아직 검진 기록이 없어요. 아래 ‘검진 결과 추가’나 설정의 가져오기로 넣어 주세요.</div>'; $("ckSince").textContent=""; return}
+  var h='<div class="scroll"><table><thead><tr><th>항목</th><th>목표</th>'+ys.map(function(y){return "<th>"+esc(y)+"</th>"}).join("")+"</tr></thead><tbody>";
+  METRICS.forEach(function(m){
+    h+="<tr><td>"+m.l+(m.u?" <small>"+m.u+"</small>":"")+'</td><td class="tg">'+m.tg+"</td>";
+    ys.forEach(function(y){var v=D.checkups[y][m.k]; h+='<td class="'+(outOf(m,v)?"hi":"")+'">'+(v==null?"—":esc(v))+"</td>"});
+    h+="</tr>";
+  });
+  h+='<tr><td>헬리코박터</td><td class="tg">음성</td>'+ys.map(function(y){var v=D.checkups[y].hp; return '<td class="'+(v==="양성"?"hi":"")+'">'+esc(v||"—")+"</td>"}).join("")+"</tr>";
+  el.innerHTML=h+"</tbody></table></div>";
+  /* 마지막 검진 이후 습관 달성률 */
+  var last=D.checkups[ys[0]], since=last.date, hs=habits();
+  if(since&&hs.length){
+    var ks=Object.keys(D.log).filter(function(k){return k>since}), a=ks.length?Math.round(ks.reduce(function(s,k){return s+rate(k,hs)},0)/ks.length*100):null;
+    $("ckSince").textContent=since+" 검진 이후 체크한 날 "+ks.length+"일 · 평균 달성률 "+(a==null?"—":a+"%")+". 다음 검진 결과와 나란히 볼 거예요.";
+  } else $("ckSince").textContent="";
+}
+function renderTasks(){
+  var el=$("taskList"), ts=Object.keys(D.tasks).map(function(id){var t=D.tasks[id]; return {id:id,title:t.title,sub:t.sub,done:t.done,o:t.o||0,del:t.del}})
+    .filter(function(t){return !t.del}).sort(function(a,b){return (a.done-b.done)||(a.o-b.o)});
+  if(!ts.length){el.innerHTML='<div class="empty">병원 할 일이 없어요.</div>'; return}
+  el.innerHTML="";
+  ts.forEach(function(t){
+    var b=document.createElement("button"); b.className="item"+(t.done?" on":"");
+    b.innerHTML='<span class="box">'+(t.done?"✓":"")+'</span><span class="nm"><span class="t"></span>'+(t.sub?"<small></small>":"")+"</span>";
+    b.querySelector(".t").textContent=t.title; if(t.sub) b.querySelector("small").textContent=t.sub;
+    b.onclick=function(){setItem("tasks",t.id,Object.assign({},D.tasks[t.id],{done:!t.done})); render()};
+    el.appendChild(b);
+  });
+}
+(function(){
+  var f=$("ckForm"), y=new Date().getFullYear();
+  var h='<label>연도<input id="c-year" inputmode="numeric" value="'+y+'"></label><label>검진일<input id="c-date" type="date"></label>';
+  METRICS.forEach(function(m){h+='<label>'+m.l+'<input id="c-'+m.k+'" inputmode="decimal"></label>'});
+  h+='<label>헬리코박터<select id="c-hp"><option value="">미검사</option><option>음성</option><option>양성</option></select></label>';
+  f.innerHTML=h;
+  $("c-year").onchange=function(){ var c=D.checkups[this.value.trim()]; if(!c) return;
+    $("c-date").value=c.date||""; $("c-hp").value=c.hp||"";
+    METRICS.forEach(function(m){$("c-"+m.k).value=c[m.k]==null?"":c[m.k]}); toast(this.value+"년 기록을 불러왔어요") };
+  $("ckSave").onclick=function(){
+    var yr=$("c-year").value.trim(); if(!/^\d{4}$/.test(yr)){toast("연도를 4자리로 넣어 주세요"); return}
+    var doc={year:+yr,date:$("c-date").value||null,hp:$("c-hp").value||null};
+    METRICS.forEach(function(m){var v=parseFloat($("c-"+m.k).value); doc[m.k]=isFinite(v)?v:null});
+    setItem("checkups",yr,doc); render(); toast(yr+"년 결과를 저장했어요");
+  };
+})();
+
+/* ---------- 가져오기 ---------- */
+$("impBtn").onclick=function(){$("impFile").click()};
+$("impFile").onchange=function(){
+  var file=this.files[0]; if(!file) return; var rd=new FileReader();
+  rd.onload=function(){
+    try{
+      var j=JSON.parse(rd.result), n=0;
+      MAPS.forEach(function(m){ var src=j[m]||{}; for(var id in src){ setItem(m,id,Object.assign({},src[id])); n++ } });
+      if(!n) throw 0;
+      render(); toast(n+"개 항목을 가져왔어요");
+    }catch(e){toast("파일을 읽지 못했어요")}
+    $("impFile").value="";
+  };
+  rd.readAsText(file);
+};
 
 /* ---------- 이벤트 ---------- */
 $("prev").onclick=function(){cur=shift(cur,-1); render()};

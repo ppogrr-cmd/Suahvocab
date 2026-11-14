@@ -3,7 +3,8 @@
 import { P, kv, kvReady, isAuthed, body } from "./_lib.js";
 
 const KEY = `${P}data`;
-const EMPTY = { habits: {}, log: {} };
+const MAPS = ["habits", "checkups", "tasks"]; // 항목 단위로 병합하는 묶음
+const EMPTY = { habits: {}, checkups: {}, tasks: {}, log: {} };
 
 function newer(a, b) {
   return !a || (b && (b.t || 0) > (a.t || 0));
@@ -18,7 +19,9 @@ function mergeMap(a = {}, b = {}) {
 function merge(cur, inc) {
   const log = { ...(cur.log || {}) };
   for (const [day, items] of Object.entries(inc.log || {})) log[day] = mergeMap(log[day], items);
-  return { habits: mergeMap(cur.habits, inc.habits), log };
+  const out = { log };
+  for (const m of MAPS) out[m] = mergeMap(cur[m], inc[m]);
+  return out;
 }
 
 async function read() {
