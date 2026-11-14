@@ -215,6 +215,7 @@ nav button.on{color:var(--tx)}
     <button class="addmeal" id="mealAdd">＋ 먹은 음식 사진 올리기</button>
     <div id="mealList"></div>
     <div class="card"><h2>최근 7일 기록 <span>끼니 수</span></h2><div class="wkm" id="mealWeek"></div></div>
+    <div class="card"><h2>이번 주 술 <span>월~일 · 목표 주 2일 이하</span></h2><div id="drinkWeek"></div></div>
     <div class="card"><h2>Claude에게 조언받기</h2>
       <div class="empty">최근 14일 식사 사진·메모와 습관 체크 기록을 파일 하나로 묶어요. Claude 대화에 첨부하고 “식단 봐줘”라고 하면 돼요.</div>
       <button class="btn ghost full" id="mealExport">파일 만들기</button>
@@ -598,6 +599,14 @@ function renderMeals(){
     var dk=mealsOf(k).some(function(m){return drinkTxt(m.drinks)});
     wk+='<div class="'+(k===mcur?"sel":"")+'" data-k="'+k+'">'+W[d.getDay()]+"<b>"+mealsOf(k).length+"</b>"+(dk?'<span style="color:#f0b35a">술</span>':'&nbsp;')+"</div>"}
   $("mealWeek").innerHTML=wk;
+  /* 이번 주(월~일) 술 합계 */
+  var tp=t.split("-"), td=new Date(+tp[0],tp[1]-1,+tp[2]), mon=shift(t,-((td.getDay()+6)%7)), tot={}, dd=0;
+  for(var j=0;j<7;j++){ var kk=shift(mon,j), any=false; if(kk>t) break;
+    mealsOf(kk).forEach(function(m){ for(var x in (m.drinks||{})) if(m.drinks[x]>0){ tot[x]=(tot[x]||0)+m.drinks[x]; any=true } });
+    if(any) dd++ }
+  var over=dd>2;
+  $("drinkWeek").innerHTML='<div class="stat"><span>마신 날</span><b style="color:'+(over?"var(--warn)":"var(--acc)")+'">'+dd+'일'+(over?" · 목표 넘음":"")+'</b></div>'+
+    (Object.keys(tot).length?'<div class="stat"><span>마신 양</span><b>'+esc(drinkTxt(tot))+'</b></div>':'<div class="empty" style="padding-top:8px">이번 주는 아직 술 기록이 없어요.</div>');
   Array.prototype.forEach.call($("mealWeek").children,function(x){x.onclick=function(){mcur=x.dataset.k; render()}});
 }
 /* 술: 주종 누르고 잔수는 끌거나 −/+ */
