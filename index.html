@@ -114,6 +114,20 @@ details[open] summary{margin-bottom:10px}
 .bar{height:6px;background:var(--bg);border-radius:9px;margin-top:6px;overflow:hidden}
 .bar b{display:block;height:100%;background:var(--acc);border-radius:9px}
 
+/* 식사 */
+.addmeal{width:100%;background:var(--acc);color:#0b2a20;font-weight:700;border-radius:var(--r);padding:16px;font-size:17px;margin-bottom:14px}
+.meal{background:var(--card);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
+.meal img{display:block;width:100%;max-height:360px;object-fit:cover;background:var(--card2)}
+.meal .bd{padding:12px 14px 14px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{padding:7px 12px;border-radius:99px;background:var(--bg);color:var(--mut);font-size:14px}
+.chips button.on{background:var(--card2);color:var(--tx);font-weight:600}
+.meal .meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:var(--mut);font-size:13px}
+.meal input{width:100%;margin-top:10px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px;color:var(--tx);font-size:15px}
+.meal .x{color:var(--mut);font-size:13px;padding:4px 6px}
+.wkm{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;font-size:12px;color:var(--mut)}
+.wkm b{display:block;font-size:17px;color:var(--tx);margin-top:2px}
+.wkm .sel b{color:var(--acc)}
 /* 아래 탭 */
 nav{position:fixed;left:0;right:0;bottom:0;background:rgba(15,27,45,.96);backdrop-filter:blur(10px);
   border-top:1px solid var(--line);display:flex;padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
@@ -181,6 +195,25 @@ nav button.on{color:var(--tx)}
   </div>
 </main></section>
 
+<!-- 식사 -->
+<section id="v-meal" class="hide">
+  <div class="datebar">
+    <button id="mprev" aria-label="이전 날">‹</button>
+    <b id="mlabel"></b>
+    <button id="mnext" aria-label="다음 날">›</button>
+  </div>
+  <main>
+    <input type="file" id="mealFile" accept="image/*" class="hide">
+    <button class="addmeal" id="mealAdd">＋ 먹은 음식 사진 올리기</button>
+    <div id="mealList"></div>
+    <div class="card"><h2>최근 7일 기록 <span>끼니 수</span></h2><div class="wkm" id="mealWeek"></div></div>
+    <div class="card"><h2>Claude에게 조언받기</h2>
+      <div class="empty">최근 14일 식사 사진·메모와 습관 체크 기록을 파일 하나로 묶어요. Claude 대화에 첨부하고 “식단 봐줘”라고 하면 돼요.</div>
+      <button class="btn ghost full" id="mealExport">파일 만들기</button>
+    </div>
+  </main>
+</section>
+
 <!-- 설정 -->
 <section id="v-set" class="hide"><main>
   <div class="card"><h2>잠금</h2>
@@ -202,6 +235,7 @@ nav button.on{color:var(--tx)}
 
 <nav>
   <button data-v="today" class="on"><span class="ic">☀︎</span>오늘</button>
+  <button data-v="meal"><span class="ic">◉</span>식사</button>
   <button data-v="health"><span class="ic">♥︎</span>건강</button>
   <button data-v="set"><span class="ic">⚙︎</span>설정</button>
 </nav>
@@ -212,8 +246,8 @@ nav button.on{color:var(--tx)}
 "use strict";
 var $=function(id){return document.getElementById(id)};
 var LS="cr-data";
-var MAPS=["habits","checkups","tasks"];
-function blankData(){return {habits:{},checkups:{},tasks:{},log:{}}}
+var MAPS=["habits","checkups","tasks","meals"];
+function blankData(){return {habits:{},checkups:{},tasks:{},meals:{},log:{}}}
 function fill(o){var b=blankData(); for(var k in b) if(!o[k]) o[k]=b[k]; return o}
 var D=blankData();
 try{var s=JSON.parse(localStorage.getItem(LS)||"null"); if(s&&s.habits) D=fill(s)}catch(e){}
@@ -358,7 +392,7 @@ function render(){
   var n=hs.filter(function(h){return done(cur,h.id)}).length, tot=hs.length, p=tot?Math.round(n/tot*100):0;
   $("pct").textContent=p+"%"; $("pctSub").textContent=tot?n+" / "+tot+"개 지켰어요":"습관을 추가하면 시작돼요";
   $("ringv").setAttribute("stroke-dashoffset",(226.2*(1-p/100)).toFixed(1));
-  renderHealth(hs);
+  renderHealth(hs); renderMeals();
   $("syncInfo").textContent=lastSync?"마지막 동기화: "+new Date(lastSync).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"}):"아직 이번에 맞추지 않았어요";
 }
 function rate(day,hs){if(!hs.length) return 0; return hs.filter(function(h){return done(day,h.id)}).length/hs.length}
@@ -489,6 +523,104 @@ $("impFile").onchange=function(){
   rd.readAsText(file);
 };
 
+/* ---------- 식사 ---------- */
+var SLOTS=["아침","점심","저녁","간식"], mcur=today(), pendImg={};
+try{pendImg=JSON.parse(localStorage.getItem(LS+"-pimg")||"{}")}catch(e){}
+function savePend(){try{localStorage.setItem(LS+"-pimg",JSON.stringify(pendImg))}catch(e){toast("기기 저장 공간이 부족해요")}}
+function autoSlot(d){var h=d.getHours(); return h<10?"아침":h<15?"점심":h<21?"저녁":"간식"}
+function hhmm(ms){var d=new Date(ms); return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")}
+function mealsOf(day){return Object.keys(D.meals).map(function(id){var m=D.meals[id]; return Object.assign({id:id},m)})
+  .filter(function(m){return !m.del&&m.day===day}).sort(function(a,b){return (a.at||0)-(b.at||0)})}
+function imgSrc(id){return pendImg[id]||("/api/meal?id="+id)}
+function resize(file){
+  return new Promise(function(ok,no){
+    var url=URL.createObjectURL(file), im=new Image();
+    im.onload=function(){
+      var M=900, w=im.naturalWidth, h=im.naturalHeight, r=Math.min(1,M/Math.max(w,h));
+      var c=document.createElement("canvas"); c.width=Math.round(w*r); c.height=Math.round(h*r);
+      c.getContext("2d").drawImage(im,0,0,c.width,c.height); URL.revokeObjectURL(url);
+      var q=.72, d=c.toDataURL("image/jpeg",q); while(d.length>450000&&q>.35){q-=.1; d=c.toDataURL("image/jpeg",q)}
+      ok(d);
+    };
+    im.onerror=function(){URL.revokeObjectURL(url); no()}; im.src=url;
+  });
+}
+function uploadImg(id){
+  var img=pendImg[id]; if(!img) return Promise.resolve();
+  return api("/api/meal",{body:{id:id,img:img}}).then(function(j){
+    if(j._s===200){delete pendImg[id]; savePend()} else if(j._s===401) showLock();
+  }).catch(function(){});
+}
+function flushImgs(){Object.keys(pendImg).forEach(uploadImg)}
+$("mealAdd").onclick=function(){$("mealFile").click()};
+$("mealFile").onchange=function(){
+  var f=this.files[0]; this.value=""; if(!f) return;
+  toast("사진 줄이는 중…");
+  resize(f).then(function(d){
+    var now=new Date(), id="m"+now.getTime().toString(36)+Math.random().toString(36).slice(2,6);
+    var at=mcur===today()?now.getTime():new Date(mcur+"T12:00:00").getTime();
+    pendImg[id]=d; savePend();
+    setItem("meals",id,{day:mcur,slot:mcur===today()?autoSlot(now):"점심",at:at,memo:""});
+    render(); toast("올렸어요. 메모는 적고 싶을 때만"); uploadImg(id);
+  }).catch(function(){toast("사진을 읽지 못했어요")});
+};
+function renderMeals(){
+  var ae=document.activeElement; if(ae&&ae.tagName==="INPUT"&&$("mealList").contains(ae)) return;
+  $("mlabel").textContent=label(mcur); $("mnext").disabled=mcur>=today();
+  var el=$("mealList"), ms=mealsOf(mcur); el.innerHTML="";
+  if(!ms.length) el.innerHTML='<div class="card empty">이 날 올린 사진이 없어요. 먹기 전에 한 장 찍어 올려 주세요.</div>';
+  ms.forEach(function(m){
+    var c=document.createElement("div"); c.className="meal";
+    c.innerHTML='<img alt="" loading="lazy"><div class="bd"><div class="meta"><span class="tm"></span><button class="x">삭제</button></div><div class="chips"></div><input placeholder="메모 (예: 회식, 반 공기, 소주 3잔)" maxlength="80"></div>';
+    c.querySelector("img").src=imgSrc(m.id);
+    c.querySelector(".tm").textContent=hhmm(m.at)+(pendImg[m.id]?" · 사진 올리는 중":"");
+    var ch=c.querySelector(".chips");
+    SLOTS.forEach(function(s){var b=document.createElement("button"); b.textContent=s; if(s===m.slot) b.className="on";
+      b.onclick=function(){setItem("meals",m.id,Object.assign({},D.meals[m.id],{slot:s})); render()}; ch.appendChild(b)});
+    var inp=c.querySelector("input"); inp.value=m.memo||"";
+    inp.onchange=function(){setItem("meals",m.id,Object.assign({},D.meals[m.id],{memo:inp.value.trim()})); toast("메모 저장")};
+    c.querySelector(".x").onclick=function(){ if(!confirm("이 사진을 지울까요?")) return;
+      setItem("meals",m.id,Object.assign({},D.meals[m.id],{del:true})); delete pendImg[m.id]; savePend();
+      fetch("/api/meal?id="+m.id,{method:"DELETE",credentials:"same-origin"}).catch(function(){}); render()};
+    el.appendChild(c);
+  });
+  var wk="", t=today();
+  for(var i=6;i>=0;i--){var k=shift(t,-i), p=k.split("-"), d=new Date(+p[0],p[1]-1,+p[2]);
+    wk+='<div class="'+(k===mcur?"sel":"")+'" data-k="'+k+'">'+W[d.getDay()]+"<b>"+mealsOf(k).length+"</b></div>"}
+  $("mealWeek").innerHTML=wk;
+  Array.prototype.forEach.call($("mealWeek").children,function(x){x.onclick=function(){mcur=x.dataset.k; render()}});
+}
+$("mprev").onclick=function(){mcur=shift(mcur,-1); render()};
+$("mnext").onclick=function(){if(mcur<today()){mcur=shift(mcur,1); render()}};
+function toDataURL(id){
+  if(pendImg[id]) return Promise.resolve(pendImg[id]);
+  return fetch("/api/meal?id="+id,{credentials:"same-origin"}).then(function(r){ if(!r.ok) return null; return r.blob() })
+    .then(function(b){ if(!b) return null; return new Promise(function(ok){var fr=new FileReader(); fr.onload=function(){ok(fr.result)}; fr.readAsDataURL(b)}) })
+    .catch(function(){return null});
+}
+$("mealExport").onclick=function(){
+  var btn=this; btn.disabled=true; btn.textContent="묶는 중…";
+  var t=today(), days=[]; for(var i=13;i>=0;i--) days.push(shift(t,-i));
+  var hs=habits(), list=[];
+  days.forEach(function(k){ mealsOf(k).forEach(function(m){list.push(m)}) });
+  Promise.all(list.map(function(m){return toDataURL(m.id)})).then(function(imgs){
+    var byId={}; list.forEach(function(m,i){byId[m.id]=imgs[i]});
+    var out={app:"Cheol's Routine",made:new Date().toISOString(),range:[days[0],t],
+      guide:"최근 14일 식사 사진·메모와 매일 습관 체크. 검진 수치는 checkups. 식단 조언 요청용.",
+      checkups:D.checkups,
+      habits:hs.map(function(h){return {id:h.id,name:h.name,kind:h.kind}}),
+      days:days.map(function(k){return {day:k,
+        checked:hs.filter(function(h){return done(k,h.id)}).map(function(h){return h.name}),
+        meals:mealsOf(k).map(function(m){return {time:hhmm(m.at),slot:m.slot,memo:m.memo||"",img:byId[m.id]||null}})}})};
+    var name="cheols-meals-"+t.replace(/-/g,"")+".json";
+    var file=new File([JSON.stringify(out)],name,{type:"application/json"});
+    btn.disabled=false; btn.textContent="파일 만들기";
+    if(navigator.canShare&&navigator.canShare({files:[file]})) return navigator.share({files:[file],title:name}).catch(function(){});
+    var a=document.createElement("a"); a.href=URL.createObjectURL(file); a.download=name; document.body.appendChild(a); a.click(); a.remove();
+    toast(list.length+"끼 기록을 묶었어요");
+  });
+};
+
 /* ---------- 이벤트 ---------- */
 $("prev").onclick=function(){cur=shift(cur,-1); render()};
 $("next").onclick=function(){if(cur<today()){cur=shift(cur,1); render()}};
@@ -503,11 +635,11 @@ function addHabit(){
 }
 $("habAdd").onclick=addHabit;
 $("habName").onkeydown=function(e){if(e.key==="Enter") addHabit()};
-var TITLES={today:"오늘",health:"건강",set:"설정"};
+var TITLES={today:"오늘",meal:"식사",health:"건강",set:"설정"};
 Array.prototype.forEach.call(document.querySelectorAll("nav button"),function(b){b.onclick=function(){
   var v=b.dataset.v;
   document.querySelectorAll("nav button").forEach(function(x){x.classList.toggle("on",x===b)});
-  ["today","health","set"].forEach(function(x){$("v-"+x).classList.toggle("hide",x!==v)});
+  ["today","meal","health","set"].forEach(function(x){$("v-"+x).classList.toggle("hide",x!==v)});
   $("title").textContent=TITLES[v]; window.scrollTo(0,0);
 }});
 $("lockMe").onclick=function(){ if(!confirm("이 기기를 잠글까요? 다음에 열 때 PIN을 다시 넣어야 해요.")) return;
@@ -523,7 +655,7 @@ function pull(){
   return api("/api/data").then(function(j){
     if(j._s===401) return showLock();
     if(j._s!==200){syncLabel("오프라인 · 기기에 저장됨"); return}
-    mergeIn(j); saveLocal(); lastSync=Date.now(); render();
+    mergeIn(j); saveLocal(); lastSync=Date.now(); render(); flushImgs();
     if(hasDirty) return push(); syncLabel("동기화됨");
   }).catch(function(){syncLabel("오프라인 · 기기에 저장됨")});
 }
