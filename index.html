@@ -128,6 +128,14 @@ details[open] summary{margin-bottom:10px}
 .wkm{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;font-size:12px;color:var(--mut)}
 .wkm b{display:block;font-size:17px;color:var(--tx);margin-top:2px}
 .wkm .sel b{color:var(--acc)}
+.drk{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+.drk .hd{font-size:13px;color:var(--mut);margin-bottom:8px;display:flex;justify-content:space-between}
+.drk .chips button{font-size:13px;padding:6px 11px}
+.drow{display:flex;align-items:center;gap:8px;margin-top:10px}
+.drow .k{width:52px;font-size:14px;font-weight:600}
+.drow input[type=range]{flex:1;margin:0;padding:0;border:0;background:none;accent-color:#f0b35a;height:28px}
+.drow .st{width:34px;height:34px;border-radius:10px;background:var(--bg);font-size:18px;flex:none}
+.drow .n{width:40px;text-align:right;font-weight:700;color:#f0b35a;font-variant-numeric:tabular-nums}
 /* 아래 탭 */
 nav{position:fixed;left:0;right:0;bottom:0;background:rgba(15,27,45,.96);backdrop-filter:blur(10px);
   border-top:1px solid var(--line);display:flex;padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
@@ -571,13 +579,14 @@ function renderMeals(){
   if(!ms.length) el.innerHTML='<div class="card empty">이 날 올린 사진이 없어요. 먹기 전에 한 장 찍어 올려 주세요.</div>';
   ms.forEach(function(m){
     var c=document.createElement("div"); c.className="meal";
-    c.innerHTML='<img alt="" loading="lazy"><div class="bd"><div class="meta"><span class="tm"></span><button class="x">삭제</button></div><div class="chips"></div><input placeholder="메모 (예: 회식, 반 공기, 소주 3잔)" maxlength="80"></div>';
+    c.innerHTML='<img alt="" loading="lazy"><div class="bd"><div class="meta"><span class="tm"></span><button class="x">삭제</button></div><div class="chips"></div><div class="drk"></div><input placeholder="메모 (예: 회식, 반 공기)" maxlength="80"></div>';
     c.querySelector("img").src=imgSrc(m.id);
     c.querySelector(".tm").textContent=hhmm(m.at)+(pendImg[m.id]?" · 사진 올리는 중":"");
     var ch=c.querySelector(".chips");
     SLOTS.forEach(function(s){var b=document.createElement("button"); b.textContent=s; if(s===m.slot) b.className="on";
       b.onclick=function(){setItem("meals",m.id,Object.assign({},D.meals[m.id],{slot:s})); render()}; ch.appendChild(b)});
-    var inp=c.querySelector("input"); inp.value=m.memo||"";
+    drinkUI(c.querySelector(".drk"),m);
+    var inp=c.querySelector("input[maxlength]"); inp.value=m.memo||"";
     inp.onchange=function(){setItem("meals",m.id,Object.assign({},D.meals[m.id],{memo:inp.value.trim()})); toast("메모 저장")};
     c.querySelector(".x").onclick=function(){ if(!confirm("이 사진을 지울까요?")) return;
       setItem("meals",m.id,Object.assign({},D.meals[m.id],{del:true})); delete pendImg[m.id]; savePend();
@@ -586,9 +595,42 @@ function renderMeals(){
   });
   var wk="", t=today();
   for(var i=6;i>=0;i--){var k=shift(t,-i), p=k.split("-"), d=new Date(+p[0],p[1]-1,+p[2]);
-    wk+='<div class="'+(k===mcur?"sel":"")+'" data-k="'+k+'">'+W[d.getDay()]+"<b>"+mealsOf(k).length+"</b></div>"}
+    var dk=mealsOf(k).some(function(m){return drinkTxt(m.drinks)});
+    wk+='<div class="'+(k===mcur?"sel":"")+'" data-k="'+k+'">'+W[d.getDay()]+"<b>"+mealsOf(k).length+"</b>"+(dk?'<span style="color:#f0b35a">술</span>':'&nbsp;')+"</div>"}
   $("mealWeek").innerHTML=wk;
   Array.prototype.forEach.call($("mealWeek").children,function(x){x.onclick=function(){mcur=x.dataset.k; render()}});
+}
+/* 술: 주종 누르고 잔수는 끌거나 −/+ */
+var DRINKS=["소주","맥주","와인","막걸리","하이볼","위스키"], DMAX=14;
+function drinkTxt(dr){return Object.keys(dr||{}).filter(function(k){return dr[k]>0}).map(function(k){return k+" "+dr[k]+"잔"}).join(" · ")}
+function setDrinks(id,dr){setItem("meals",id,Object.assign({},D.meals[id],{drinks:dr}))}
+function drinkUI(box,m){
+  var dr=Object.assign({},m.drinks||{}), open=Object.keys(dr).filter(function(k){return dr[k]>0});
+  box.innerHTML='<div class="hd"><span>술</span><span class="sum"></span></div><div class="chips"></div><div class="rows"></div>';
+  var sum=box.querySelector(".sum"); function upd(){sum.textContent=drinkTxt(dr)||"안 마심"}
+  upd();
+  var ch=box.querySelector(".chips"), rows=box.querySelector(".rows");
+  DRINKS.forEach(function(k){
+    var b=document.createElement("button"); b.textContent=k; if(open.indexOf(k)>=0) b.className="on";
+    b.onclick=function(){
+      if(dr[k]>0){ delete dr[k] } else { dr[k]=k==="소주"?3:k==="와인"?2:1 }
+      setDrinks(m.id,dr); render();
+    };
+    ch.appendChild(b);
+  });
+  open.forEach(function(k){
+    var r=document.createElement("div"); r.className="drow";
+    r.innerHTML='<span class="k"></span><button class="st">−</button><input type="range" min="0" max="'+DMAX+'" step="1"><button class="st">+</button><span class="n"></span>';
+    r.querySelector(".k").textContent=k;
+    var rg=r.querySelector("input"), n=r.querySelector(".n"), bs=r.querySelectorAll(".st");
+    function show(){n.textContent=dr[k]+"잔"; rg.value=dr[k]; upd()}
+    function commit(){ if(!(dr[k]>0)) delete dr[k]; setDrinks(m.id,Object.assign({},dr)); if(!(dr[k]>0)) {rg.blur(); render()} }
+    rg.oninput=function(){dr[k]=+rg.value; show()};
+    rg.onchange=function(){commit(); rg.blur()};
+    bs[0].onclick=function(){dr[k]=Math.max(0,(dr[k]||0)-1); show(); commit()};
+    bs[1].onclick=function(){dr[k]=Math.min(DMAX,(dr[k]||0)+1); show(); commit()};
+    show(); rows.appendChild(r);
+  });
 }
 $("mprev").onclick=function(){mcur=shift(mcur,-1); render()};
 $("mnext").onclick=function(){if(mcur<today()){mcur=shift(mcur,1); render()}};
@@ -611,7 +653,7 @@ $("mealExport").onclick=function(){
       habits:hs.map(function(h){return {id:h.id,name:h.name,kind:h.kind}}),
       days:days.map(function(k){return {day:k,
         checked:hs.filter(function(h){return done(k,h.id)}).map(function(h){return h.name}),
-        meals:mealsOf(k).map(function(m){return {time:hhmm(m.at),slot:m.slot,memo:m.memo||"",img:byId[m.id]||null}})}})};
+        meals:mealsOf(k).map(function(m){return {time:hhmm(m.at),slot:m.slot,memo:m.memo||"",drinks:m.drinks||{},img:byId[m.id]||null}})}})};
     var name="cheols-meals-"+t.replace(/-/g,"")+".json";
     var file=new File([JSON.stringify(out)],name,{type:"application/json"});
     btn.disabled=false; btn.textContent="파일 만들기";
