@@ -2,29 +2,430 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#1f2a4d">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1b2d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Routine">
 <link rel="apple-touch-icon" href="icon.png">
-<title>Candy’s Voca — 새 주소로 이동</title>
+<link rel="icon" href="icon.png">
+<title>Cheol’s Routine</title>
 <style>
-  body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:-apple-system,system-ui,sans-serif;
-    background:linear-gradient(180deg,#dff4ff,#f4f7ff);color:#1f2a4d;text-align:center;padding:24px}
-  a{color:#3b5bdb;font-weight:700}
+:root{
+  --bg:#0f1b2d;--card:#17263d;--card2:#1e3150;--line:#2a3f60;--tx:#eef3fb;--mut:#8fa3bf;
+  --acc:#4fd1a5;--acc2:#7aa8ff;--warn:#ff8a7a;--r:16px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard",system-ui,sans-serif}
+body{min-height:100vh;padding:env(safe-area-inset-top) 0 calc(78px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input{font:inherit}
+.hide{display:none!important}
+
+/* 잠금 화면 */
+#lock{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:24px;z-index:50}
+#lock h1{margin:0 0 4px;font-size:24px;letter-spacing:-.3px}
+#lock .sub{color:var(--mut);font-size:14px;min-height:20px;margin-bottom:22px;text-align:center}
+.dots{display:flex;gap:14px;margin-bottom:30px}
+.dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--mut)}
+.dots i.on{background:var(--acc);border-color:var(--acc)}
+.dots.shake{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.pad{display:grid;grid-template-columns:repeat(3,76px);gap:14px}
+.pad button{height:76px;border-radius:50%;background:var(--card);font-size:28px;font-weight:500}
+.pad button:active{background:var(--card2)}
+.pad .fn{background:none;font-size:15px;color:var(--mut)}
+
+/* 머리 */
+header{padding:18px 20px 8px;display:flex;align-items:flex-end;justify-content:space-between}
+header h1{margin:0;font-size:22px;letter-spacing:-.4px}
+header .sync{font-size:12px;color:var(--mut)}
+.datebar{display:flex;align-items:center;justify-content:space-between;margin:6px 16px 14px;
+  background:var(--card);border-radius:var(--r);padding:6px}
+.datebar button{width:44px;height:40px;font-size:22px;border-radius:12px}
+.datebar button:disabled{opacity:.25}
+.datebar b{font-size:16px}
+
+main{padding:0 16px}
+.card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.card h2{margin:0 0 12px;font-size:15px;color:var(--mut);font-weight:600;display:flex;justify-content:space-between}
+.empty{color:var(--mut);font-size:14px;line-height:1.6}
+
+/* 진행률 */
+.prog{display:flex;align-items:center;gap:16px}
+.ring{width:84px;height:84px;flex:none}
+.ring circle{fill:none;stroke-width:9}
+.prog .big{font-size:30px;font-weight:700}
+.prog .small{color:var(--mut);font-size:13px;margin-top:2px}
+
+/* 체크 목록 */
+.item{display:flex;align-items:center;gap:12px;padding:13px 4px;border-top:1px solid var(--line);width:100%;text-align:left}
+.item:first-of-type{border-top:0}
+.box{width:28px;height:28px;border-radius:9px;border:2px solid var(--line);flex:none;display:grid;place-items:center;font-size:16px}
+.item.on .box{background:var(--acc);border-color:var(--acc);color:#0b2a20}
+.not .item.on .box{background:var(--acc2);border-color:var(--acc2);color:#0b1a33}
+.item .nm{flex:1;font-size:16px;line-height:1.35}
+.item.on .nm{color:var(--mut)}
+.tag{font-size:11px;padding:3px 8px;border-radius:99px;background:var(--card2);color:var(--mut)}
+
+/* 습관 관리 */
+.row{display:flex;gap:8px;margin-top:10px}
+.row input{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;color:var(--tx)}
+.seg{display:flex;background:var(--bg);border-radius:12px;padding:3px;margin-top:10px}
+.seg button{flex:1;padding:9px;border-radius:9px;font-size:14px;color:var(--mut)}
+.seg button.on{background:var(--card2);color:var(--tx);font-weight:600}
+.btn{background:var(--acc);color:#0b2a20;font-weight:700;border-radius:12px;padding:12px 16px}
+.btn.ghost{background:var(--card2);color:var(--tx);font-weight:600}
+.btn.danger{background:none;color:var(--warn);border:1px solid #5a3333}
+.btn.full{width:100%;margin-top:10px}
+.hab{display:flex;align-items:center;gap:10px;padding:12px 0;border-top:1px solid var(--line)}
+.hab:first-of-type{border-top:0}
+.hab .nm{flex:1}
+.hab .x{color:var(--mut);font-size:13px;padding:6px 8px}
+
+/* 기록 표 */
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:8px}
+.grid i{aspect-ratio:1;border-radius:6px;background:var(--bg)}
+.grid i.l1{background:#1f5a4a}.grid i.l2{background:#2f8a6e}.grid i.l3{background:var(--acc)}
+.grid i.today{outline:2px solid var(--tx);outline-offset:1px}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;font-size:11px;color:var(--mut);text-align:center}
+.stat{display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid var(--line);font-size:15px}
+.stat:first-of-type{border-top:0}
+.stat span{color:var(--mut)}
+.bar{height:6px;background:var(--bg);border-radius:9px;margin-top:6px;overflow:hidden}
+.bar b{display:block;height:100%;background:var(--acc);border-radius:9px}
+
+/* 아래 탭 */
+nav{position:fixed;left:0;right:0;bottom:0;background:rgba(15,27,45,.96);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);display:flex;padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+nav button{flex:1;padding:8px 0;font-size:12px;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button .ic{font-size:21px}
+nav button.on{color:var(--tx)}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--card2);padding:10px 16px;
+  border-radius:12px;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:60}
+.toast.on{opacity:1}
 </style>
-<script>
-/* 단어장은 suahstudy.vercel.app/voca 로 옮겼다.
-   이 기기에 저장된 기록(외움 표시 등)을 들고 새 주소로 넘어간다. */
-(function(){
-  var d={};
-  try{ for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); d[k]=localStorage.getItem(k) } }catch(e){}
-  location.replace("https://suahstudy.vercel.app/voca/#mig="+encodeURIComponent(JSON.stringify(d)));
-})();
-</script>
 </head>
 <body>
-<div>
-  <p>Candy’s Voca가 새 주소로 이사했어요.</p>
-  <p><a href="https://suahstudy.vercel.app/voca/">suahstudy.vercel.app/voca</a></p>
-</div>
+
+<!-- 잠금 -->
+<section id="lock">
+  <h1>Cheol’s Routine</h1>
+  <div class="sub" id="lockMsg">불러오는 중…</div>
+  <div class="dots" id="dots"></div>
+  <div class="pad hide" id="pad"></div>
+</section>
+
+<header>
+  <h1 id="title">오늘</h1>
+  <div class="sync" id="sync"></div>
+</header>
+
+<!-- 오늘 -->
+<section id="v-today">
+  <div class="datebar">
+    <button id="prev" aria-label="이전 날">‹</button>
+    <b id="dlabel"></b>
+    <button id="next" aria-label="다음 날">›</button>
+  </div>
+  <main>
+    <div class="card"><div class="prog">
+      <svg class="ring" viewBox="0 0 84 84"><circle cx="42" cy="42" r="36" stroke="#22344f"/>
+        <circle id="ringv" cx="42" cy="42" r="36" stroke="#4fd1a5" stroke-linecap="round"
+          stroke-dasharray="226.2" stroke-dashoffset="226.2" transform="rotate(-90 42 42)"/></svg>
+      <div><div class="big" id="pct">0%</div><div class="small" id="pctSub"></div></div>
+    </div></div>
+    <div class="card"><h2>To-do <span>해낸 것</span></h2><div id="listDo"></div></div>
+    <div class="card not"><h2>Not To-do <span>참은 것</span></h2><div id="listNot"></div></div>
+  </main>
+</section>
+
+<!-- 건강 -->
+<section id="v-health" class="hide"><main>
+  <div class="card"><h2>최근 5주 <span id="streak"></span></h2>
+    <div class="wk"><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span></div>
+    <div class="grid" id="heat"></div>
+  </div>
+  <div class="card"><h2>습관별 30일 달성률</h2><div id="perHabit"></div></div>
+  <div class="card"><h2>습관 관리</h2>
+    <div id="habList"></div>
+    <div class="seg" id="kindSeg"><button data-k="do" class="on">To-do</button><button data-k="not">Not To-do</button></div>
+    <div class="row"><input id="habName" placeholder="예) 물 2L 마시기 / 야식 안 먹기" maxlength="40">
+      <button class="btn" id="habAdd">추가</button></div>
+  </div>
+</main></section>
+
+<!-- 설정 -->
+<section id="v-set" class="hide"><main>
+  <div class="card"><h2>잠금</h2>
+    <div class="empty">이 기기는 PIN을 한 번 넣은 뒤 1년 동안 그냥 열려요. 기간이 지나거나 아래에서 잠그면 다시 PIN을 물어봐요.</div>
+    <button class="btn ghost full" id="chPin">PIN 바꾸기</button>
+    <button class="btn ghost full" id="lockMe">이 기기 잠그기</button>
+    <button class="btn danger full" id="lockAll">모든 기기 로그아웃</button>
+  </div>
+  <div class="card"><h2>동기화</h2>
+    <div class="empty" id="syncInfo"></div>
+    <button class="btn ghost full" id="syncNow">지금 맞추기</button>
+  </div>
+</main></section>
+
+<nav>
+  <button data-v="today" class="on"><span class="ic">☀︎</span>오늘</button>
+  <button data-v="health"><span class="ic">♥︎</span>건강</button>
+  <button data-v="set"><span class="ic">⚙︎</span>설정</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+var LS="cr-data";
+var D={habits:{},log:{}};
+try{var s=JSON.parse(localStorage.getItem(LS)||"null"); if(s&&s.habits) D=s}catch(e){}
+var dirty={habits:{},log:{}}, hasDirty=false, lastSync=0, syncing=false;
+try{var dd=JSON.parse(localStorage.getItem(LS+"-dirty")||"null"); if(dd&&dd.habits){dirty=dd; hasDirty=true}}catch(e){}
+
+function saveLocal(){
+  try{localStorage.setItem(LS,JSON.stringify(D)); localStorage.setItem(LS+"-dirty",JSON.stringify(dirty))}catch(e){}
+}
+function toast(m){var t=$("toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toast.h); toast.h=setTimeout(function(){t.classList.remove("on")},1800)}
+
+/* ---------- 날짜 ---------- */
+function key(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function today(){return key(new Date())}
+function shift(k,n){var p=k.split("-"); var d=new Date(+p[0],p[1]-1,+p[2]+n); return key(d)}
+var cur=today();
+var W=["일","월","화","수","목","금","토"];
+function label(k){
+  if(k===today()) return "오늘";
+  if(k===shift(today(),-1)) return "어제";
+  var p=k.split("-"), d=new Date(+p[0],p[1]-1,+p[2]);
+  return (d.getMonth()+1)+"월 "+d.getDate()+"일 ("+W[d.getDay()]+")";
+}
+
+/* ---------- 데이터 ---------- */
+function habits(){
+  return Object.keys(D.habits).map(function(id){var h=D.habits[id]; return {id:id,name:h.name,kind:h.kind,on:h.on,o:h.o||0}})
+    .filter(function(h){return h.on}).sort(function(a,b){return a.o-b.o});
+}
+function done(day,id){var l=D.log[day]; return !!(l&&l[id]&&l[id].v)}
+function setHabit(id,h){h.t=Date.now(); D.habits[id]=h; dirty.habits[id]=h; touch()}
+function setLog(day,id,v){
+  var e={v:v?1:0,t:Date.now()};
+  (D.log[day]=D.log[day]||{})[id]=e; (dirty.log[day]=dirty.log[day]||{})[id]=e; touch();
+}
+function touch(){hasDirty=true; saveLocal(); clearTimeout(touch.h); touch.h=setTimeout(push,700)}
+
+/* 같은 항목은 나중에 고친 쪽을 남긴다 (서버와 같은 규칙) */
+function newer(a,b){return !a||(b&&(b.t||0)>(a.t||0))}
+function mergeIn(srv){
+  var k; for(k in srv.habits) if(newer(D.habits[k],srv.habits[k])) D.habits[k]=srv.habits[k];
+  for(var day in srv.log){ D.log[day]=D.log[day]||{};
+    for(k in srv.log[day]) if(newer(D.log[day][k],srv.log[day][k])) D.log[day][k]=srv.log[day][k]; }
+}
+
+/* ---------- 서버 ---------- */
+function api(path,opt){
+  opt=opt||{}; opt.credentials="same-origin";
+  if(opt.body){opt.method="POST"; opt.headers={"Content-Type":"application/json"}; opt.body=JSON.stringify(opt.body)}
+  return fetch(path,opt).then(function(r){return r.json().catch(function(){return {}}).then(function(j){j._s=r.status; return j})});
+}
+function syncLabel(t){$("sync").textContent=t}
+function push(){
+  if(syncing) {clearTimeout(touch.h); touch.h=setTimeout(push,700); return}
+  syncing=true; syncLabel("저장 중…");
+  var send=hasDirty?dirty:{habits:{},log:{}};
+  var sentDirty=dirty; dirty={habits:{},log:{}}; hasDirty=false;
+  return api("/api/data",{body:send}).then(function(j){
+    syncing=false;
+    if(j._s===401){restoreDirty(sentDirty); return showLock()}
+    if(j._s!==200){restoreDirty(sentDirty); syncLabel("오프라인 · 기기에 저장됨"); return}
+    mergeIn(j); saveLocal(); lastSync=Date.now(); syncLabel("동기화됨"); render();
+  }).catch(function(){syncing=false; restoreDirty(sentDirty); syncLabel("오프라인 · 기기에 저장됨")});
+}
+function restoreDirty(d){
+  var k; for(k in d.habits) if(!dirty.habits[k]) dirty.habits[k]=d.habits[k];
+  for(var day in d.log){dirty.log[day]=dirty.log[day]||{}; for(k in d.log[day]) if(!dirty.log[day][k]) dirty.log[day][k]=d.log[day][k]}
+  hasDirty=true; saveLocal();
+}
+
+/* ---------- 잠금 ---------- */
+var mode="login", entry="", first="";
+function buildPad(){
+  var p=$("pad"); p.innerHTML="";
+  [1,2,3,4,5,6,7,8,9,"",0,"⌫"].forEach(function(n){
+    var b=document.createElement("button"); b.textContent=n;
+    if(n==="") {b.className="fn"; b.disabled=true}
+    if(n==="⌫") b.className="fn";
+    b.onclick=function(){
+      if(n==="⌫") entry=entry.slice(0,-1); else if(n!=="") entry+=String(n);
+      dots(); if(entry.length===6) submit();
+    };
+    p.appendChild(b);
+  });
+}
+function dots(){var h=""; for(var i=0;i<6;i++) h+='<i class="'+(i<entry.length?"on":"")+'"></i>'; $("dots").innerHTML=h}
+function shake(m){var d=$("dots"); d.classList.remove("shake"); void d.offsetWidth; d.classList.add("shake"); entry=""; dots(); $("lockMsg").textContent=m}
+var changeOld="";
+function submit(){
+  var pin=entry;
+  if(mode==="setup1"){first=pin; entry=""; dots(); mode="setup2"; $("lockMsg").textContent="한 번 더 눌러 확인해 주세요"; return}
+  if(mode==="setup2"){
+    if(pin!==first){mode="setup1"; return shake("서로 달라요. 처음부터 다시 만들어 주세요")}
+    return api("/api/auth",{body:{action:"setup",pin:pin}}).then(function(j){
+      if(j.ok){hideLock(); toast("PIN을 만들었어요")} else if(j.error==="already-set"){mode="login"; shake("이미 PIN이 있어요. PIN을 넣어 주세요")} else shake("다시 시도해 주세요");
+    });
+  }
+  if(mode==="change1"){changeOld=pin; entry=""; dots(); mode="change2"; $("lockMsg").textContent="새 PIN 6자리"; return}
+  if(mode==="change2"){first=pin; entry=""; dots(); mode="change3"; $("lockMsg").textContent="새 PIN 한 번 더"; return}
+  if(mode==="change3"){
+    if(pin!==first){mode="change2"; return shake("서로 달라요. 새 PIN을 다시 넣어 주세요")}
+    return api("/api/auth",{body:{action:"change",pin:changeOld,next:pin}}).then(function(j){
+      if(j.ok){hideLock(); toast("PIN을 바꿨어요. 다른 기기는 다시 PIN을 넣어야 해요")}
+      else {mode="change1"; shake(j.error==="locked"?lockedMsg(j):"지금 PIN이 틀렸어요. 지금 PIN부터 다시")}
+    });
+  }
+  return api("/api/auth",{body:{action:"login",pin:pin}}).then(function(j){
+    if(j.ok){hideLock(); pull()}
+    else if(j.error==="locked") shake(lockedMsg(j));
+    else shake("PIN이 틀렸어요"+(j.left>=0?" · 남은 기회 "+j.left+"번":""));
+  });
+}
+function lockedMsg(j){return "여러 번 틀려서 잠시 막혔어요 · "+Math.ceil((j.wait||900)/60)+"분 뒤 다시"}
+function showLock(m,msg){
+  mode=m||"login"; entry=""; dots(); $("pad").classList.remove("hide");
+  $("lockMsg").textContent=msg||(mode==="login"?"PIN 6자리를 넣어 주세요":"");
+  $("lock").classList.remove("hide");
+}
+function hideLock(){$("lock").classList.add("hide"); entry=""}
+
+/* ---------- 화면 ---------- */
+function render(){
+  $("dlabel").textContent=label(cur);
+  $("next").disabled=cur>=today();
+  var hs=habits(), dos=hs.filter(function(h){return h.kind!=="not"}), nots=hs.filter(function(h){return h.kind==="not"});
+  function list(el,arr,kind){
+    if(!arr.length){el.innerHTML='<div class="empty">'+(kind==="not"?"참을 것":"할 일")+'이 아직 없어요. 건강 탭에서 추가해 주세요.</div>'; return}
+    el.innerHTML="";
+    arr.forEach(function(h){
+      var on=done(cur,h.id), b=document.createElement("button");
+      b.className="item"+(on?" on":"");
+      b.innerHTML='<span class="box">'+(on?"✓":"")+'</span><span class="nm"></span>';
+      b.querySelector(".nm").textContent=h.name;
+      b.onclick=function(){setLog(cur,h.id,!done(cur,h.id)); render()};
+      el.appendChild(b);
+    });
+  }
+  list($("listDo"),dos,"do"); list($("listNot"),nots,"not");
+  var n=hs.filter(function(h){return done(cur,h.id)}).length, tot=hs.length, p=tot?Math.round(n/tot*100):0;
+  $("pct").textContent=p+"%"; $("pctSub").textContent=tot?n+" / "+tot+"개 지켰어요":"습관을 추가하면 시작돼요";
+  $("ringv").setAttribute("stroke-dashoffset",(226.2*(1-p/100)).toFixed(1));
+  renderHealth(hs);
+  $("syncInfo").textContent=lastSync?"마지막 동기화: "+new Date(lastSync).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"}):"아직 이번에 맞추지 않았어요";
+}
+function rate(day,hs){if(!hs.length) return 0; return hs.filter(function(h){return done(day,h.id)}).length/hs.length}
+function renderHealth(hs){
+  /* 5주 달력: 이번 주 월요일 기준 */
+  var t=today(), p=t.split("-"), d=new Date(+p[0],p[1]-1,+p[2]), dow=(d.getDay()+6)%7;
+  var start=shift(t,-dow-28), h="";
+  for(var i=0;i<35;i++){
+    var k=shift(start,i), r=k>t?-1:rate(k,hs);
+    var c=r<0?"":r>=1?"l3":r>=.6?"l2":r>0?"l1":"";
+    h+='<i class="'+c+(k===t?" today":"")+'" '+(r<0?'style="opacity:.25"':'')+'></i>';
+  }
+  $("heat").innerHTML=h;
+  /* 연속 기록: 하루 달성률 80% 이상인 날이 이어진 수 (오늘 미완료면 어제부터) */
+  var s=0, k2=rate(t,hs)>=.8?t:shift(t,-1);
+  while(hs.length&&rate(k2,hs)>=.8&&s<999){s++; k2=shift(k2,-1)}
+  $("streak").textContent=s?"🔥 "+s+"일 연속":"";
+  /* 습관별 30일 */
+  var ph=$("perHabit");
+  if(!hs.length){ph.innerHTML='<div class="empty">아직 습관이 없어요.</div>'}
+  else{ ph.innerHTML="";
+    hs.forEach(function(x){
+      var c=0; for(var j=0;j<30;j++) if(done(shift(t,-j),x.id)) c++;
+      var pc=Math.round(c/30*100), row=document.createElement("div");
+      row.className="stat"; row.style.display="block";
+      row.innerHTML='<div style="display:flex;justify-content:space-between"><b class="n" style="font-weight:500"></b><span>'+c+'일 · '+pc+'%</span></div><div class="bar"><b style="width:'+pc+'%;'+(x.kind==="not"?"background:var(--acc2)":"")+'"></b></div>';
+      row.querySelector(".n").textContent=x.name; ph.appendChild(row);
+    });
+  }
+  /* 관리 목록 */
+  var hl=$("habList"); hl.innerHTML="";
+  if(!hs.length) hl.innerHTML='<div class="empty">건강검진 결과를 보고 할 것(To-do)과 참을 것(Not To-do)을 정해 넣어 보세요.</div>';
+  hs.forEach(function(x,idx){
+    var r=document.createElement("div"); r.className="hab";
+    r.innerHTML='<span class="tag">'+(x.kind==="not"?"Not":"To-do")+'</span><span class="nm"></span><button class="x up">↑</button><button class="x del">삭제</button>';
+    r.querySelector(".nm").textContent=x.name;
+    r.querySelector(".up").onclick=function(){ if(idx===0) return; var a=hs[idx-1];
+      var ho=D.habits[x.id], ha=D.habits[a.id], ox=ho.o||0, oa=ha.o||0;
+      if(ox===oa) ox=oa+1;
+      setHabit(x.id,Object.assign({},ho,{o:oa})); setHabit(a.id,Object.assign({},ha,{o:ox})); render()};
+    r.querySelector(".del").onclick=function(){ if(!confirm("‘"+x.name+"’을(를) 목록에서 뺄까요? 지난 기록은 남아요.")) return;
+      setHabit(x.id,Object.assign({},D.habits[x.id],{on:false})); render()};
+    hl.appendChild(r);
+  });
+}
+
+/* ---------- 이벤트 ---------- */
+$("prev").onclick=function(){cur=shift(cur,-1); render()};
+$("next").onclick=function(){if(cur<today()){cur=shift(cur,1); render()}};
+var kind="do";
+Array.prototype.forEach.call($("kindSeg").children,function(b){b.onclick=function(){
+  kind=b.dataset.k; Array.prototype.forEach.call($("kindSeg").children,function(x){x.classList.toggle("on",x===b)})}});
+function addHabit(){
+  var nm=$("habName").value.trim(); if(!nm) return;
+  var mx=0; Object.keys(D.habits).forEach(function(k){mx=Math.max(mx,D.habits[k].o||0)});
+  setHabit("h"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),{name:nm,kind:kind,on:true,o:mx+1});
+  $("habName").value=""; render(); toast("추가했어요");
+}
+$("habAdd").onclick=addHabit;
+$("habName").onkeydown=function(e){if(e.key==="Enter") addHabit()};
+var TITLES={today:"오늘",health:"건강",set:"설정"};
+Array.prototype.forEach.call(document.querySelectorAll("nav button"),function(b){b.onclick=function(){
+  var v=b.dataset.v;
+  document.querySelectorAll("nav button").forEach(function(x){x.classList.toggle("on",x===b)});
+  ["today","health","set"].forEach(function(x){$("v-"+x).classList.toggle("hide",x!==v)});
+  $("title").textContent=TITLES[v]; window.scrollTo(0,0);
+}});
+$("lockMe").onclick=function(){ if(!confirm("이 기기를 잠글까요? 다음에 열 때 PIN을 다시 넣어야 해요.")) return;
+  api("/api/auth",{body:{action:"logout"}}).then(function(){showLock()})};
+$("lockAll").onclick=function(){ if(!confirm("모든 기기(이 기기 포함)를 로그아웃할까요? 휴대폰을 잃어버렸을 때 쓰는 기능이에요.")) return;
+  api("/api/auth",{body:{action:"logout-all"}}).then(function(j){ if(j.ok) showLock("login","모든 기기를 로그아웃했어요"); else toast("실패했어요")})};
+$("chPin").onclick=function(){showLock("change1","지금 PIN 6자리")};
+$("syncNow").onclick=function(){pull().then(function(){toast("맞췄어요")})};
+
+/* 다른 기기에서 고친 내용 가져오기 */
+function pull(){
+  syncLabel("맞추는 중…");
+  return api("/api/data").then(function(j){
+    if(j._s===401) return showLock();
+    if(j._s!==200){syncLabel("오프라인 · 기기에 저장됨"); return}
+    mergeIn(j); saveLocal(); lastSync=Date.now(); render();
+    if(hasDirty) return push(); syncLabel("동기화됨");
+  }).catch(function(){syncLabel("오프라인 · 기기에 저장됨")});
+}
+document.addEventListener("visibilitychange",function(){
+  if(document.visibilityState==="visible"){ if(cur>today()) cur=today(); if(Date.now()-lastSync>30000 && $("lock").classList.contains("hide")) pull() }
+});
+
+/* ---------- 시작 ---------- */
+buildPad(); dots(); render();
+api("/api/auth").then(function(j){
+  if(j._s===503){ $("lockMsg").textContent="저장소(KV)가 연결되지 않았어요. Vercel에서 Storage를 연결해 주세요."; return }
+  if(j._s!==200){ $("lockMsg").textContent="서버에 닿지 않아요. 잠시 뒤 다시 열어 주세요."; return }
+  if(!j.hasPin) return showLock("setup1","처음이에요. 쓸 PIN 6자리를 만들어 주세요");
+  if(!j.authed) return showLock("login");
+  hideLock(); pull();
+}).catch(function(){
+  /* 이미 쓰던 기기가 오프라인이면 기기 안 기록으로 열고, 연결되면 맞춘다 */
+  if(Object.keys(D.habits).length){ hideLock(); syncLabel("오프라인 · 기기에 저장됨") }
+  else $("lockMsg").textContent="오프라인이에요. 연결되면 다시 열어 주세요.";
+});
+})();
+</script>
 </body>
 </html>
