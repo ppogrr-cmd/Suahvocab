@@ -238,10 +238,10 @@ nav button.on{color:var(--tx)}
     <div id="mealList"></div>
     <div class="card"><h2>최근 7일 기록 <span>끼니 수</span></h2><div class="wkm" id="mealWeek"></div></div>
     <div class="card"><h2>이번 주 술 <span>월~일 · 목표 주 2일 이하</span></h2><div id="drinkWeek"></div></div>
-    <div class="card"><h2>Claude 조언 <span id="advWhen"></span></h2>
+    <div class="card"><h2>Claude 피드백 <span id="advWhen"></span></h2>
       <div id="advBody" class="adv"></div>
-      <button class="btn full" id="advBtn">최근 14일 조언 받기</button>
-      <button class="btn ghost full hide" id="mealExport">파일로 묶기 (API 키 없을 때)</button>
+      <button class="btn full" id="mealExport">14일 기록 파일로 Claude에 보내기</button>
+      <button class="btn ghost full hide" id="advBtn">앱에서 바로 조언 받기 (API)</button>
     </div>
   </main>
 </section>
@@ -690,10 +690,9 @@ function renderMeals(){
   $("drinkWeek").innerHTML='<div class="stat"><span>마신 날</span><b style="color:'+(over?"var(--warn)":"var(--acc)")+'">'+dd+'일'+(over?" · 목표 넘음":"")+'</b></div>'+
     (Object.keys(tot).length?'<div class="stat"><span>마신 양</span><b>'+esc(drinkTxt(tot))+'</b></div>':'<div class="empty" style="padding-top:8px">이번 주는 아직 술 기록이 없어요.</div>');
   /* 조언 칸 */
-  $("advBtn").classList.toggle("hide",!aiOn); $("mealExport").classList.toggle("hide",aiOn);
-  if(!aiOn){ $("advBody").innerHTML='<div class="empty">Vercel에 ANTHROPIC_API_KEY를 넣으면 사진마다 요리를 판별하고, 이 버튼으로 바로 조언을 받을 수 있어요.</div>'; $("advWhen").textContent="" }
-  else if(lastAdv){ $("advBody").innerHTML=mdLite(lastAdv.text); var ad=new Date(lastAdv.at); $("advWhen").textContent=(ad.getMonth()+1)+"/"+ad.getDate()+" "+hhmm(lastAdv.at) }
-  else { $("advBody").innerHTML='<div class="empty">사진이 며칠 쌓이면 눌러 보세요. 사진 판별 결과·술·메모·습관 체크·검진 수치를 함께 봐요.</div>'; $("advWhen").textContent="" }
+  $("advBtn").classList.toggle("hide",!aiOn);
+  if(lastAdv){ $("advBody").innerHTML=mdLite(lastAdv.text); var ad=new Date(lastAdv.at); $("advWhen").textContent=(ad.getMonth()+1)+"/"+ad.getDate()+" "+hhmm(lastAdv.at) }
+  else { $("advBody").innerHTML='<div class="empty">사진이 며칠 쌓이면 버튼을 눌러 파일을 Claude 대화에 보내고 “식단 봐줘”라고 하세요. 피드백은 대화에서 받고, 데스크탑이 켜져 있으면 여기에도 올려둘게요.</div>'; $("advWhen").textContent="" }
   Array.prototype.forEach.call($("mealWeek").children,function(x){x.onclick=function(){mcur=x.dataset.k; render()}});
 }
 /* 술: 주종 누르고 잔수는 끌거나 −/+ */
@@ -748,10 +747,10 @@ $("mealExport").onclick=function(){
       habits:hs.map(function(h){return {id:h.id,name:h.name,kind:h.kind}}),
       days:days.map(function(k){return {day:k,
         checked:hs.filter(function(h){return done(k,h.id)}).map(function(h){return h.name}),
-        meals:mealsOf(k).map(function(m){return {time:hhmm(m.at),slot:m.slot,memo:m.memo||"",drinks:m.drinks||{},img:byId[m.id]||null}})}})};
+        meals:mealsOf(k).map(function(m){return {id:m.id,time:hhmm(m.at),slot:m.slot,memo:m.memo||"",drinks:m.drinks||{},dish:(m.ai&&m.ai.dish)||"",img:byId[m.id]||null}})}})};
     var name="cheols-meals-"+t.replace(/-/g,"")+".json";
     var file=new File([JSON.stringify(out)],name,{type:"application/json"});
-    btn.disabled=false; btn.textContent="파일 만들기";
+    btn.disabled=false; btn.textContent="14일 기록 파일로 Claude에 보내기";
     if(navigator.canShare&&navigator.canShare({files:[file]})) return navigator.share({files:[file],title:name}).catch(function(){});
     var a=document.createElement("a"); a.href=URL.createObjectURL(file); a.download=name; document.body.appendChild(a); a.click(); a.remove();
     toast(list.length+"끼 기록을 묶었어요");

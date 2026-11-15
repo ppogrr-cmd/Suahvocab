@@ -1,7 +1,8 @@
 // Cheol's Routine — 최근 14일 식사·술·습관으로 Claude 조언 받기
 // GET  /api/advice → { ai, last:{text,at}|null }
 // POST /api/advice → 새 조언 만들기 (ANTHROPIC_API_KEY 필요)
-import { P, kv, kvReady, isAuthed } from "./_lib.js";
+// PUT  /api/advice { text } → 대화에서 받은 피드백을 앱에 올려두기
+import { P, kv, kvReady, isAuthed, body } from "./_lib.js";
 import { aiReady, advise, loadData } from "./_ai.js";
 
 const KEY = `${P}advice`;
@@ -22,6 +23,13 @@ export default async function handler(req, res) {
       const last = { text, at: Date.now() };
       await kv(["SET", KEY, JSON.stringify(last)]);
       return res.status(200).json({ ai: true, last });
+    }
+    if (req.method === "PUT") {
+      const text = String(body(req).text || "").trim().slice(0, 6000);
+      if (!text) return res.status(400).json({ error: "empty" });
+      const last = { text, at: Date.now(), from: "chat" };
+      await kv(["SET", KEY, JSON.stringify(last)]);
+      return res.status(200).json({ ai: aiReady(), last });
     }
     return res.status(405).json({ error: "method-not-allowed" });
   } catch (e) {
