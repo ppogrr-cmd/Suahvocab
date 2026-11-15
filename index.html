@@ -152,6 +152,12 @@ details[open] summary{margin-bottom:10px}
 .meal .info .none{color:var(--mut)}
 .meal .acts2{display:flex;gap:8px;margin-top:10px}
 .meal .acts2 button{flex:1;padding:10px;border-radius:10px;background:var(--bg);font-size:14px;color:var(--mut)}
+.meal .info .ai{color:var(--tx);font-weight:600}
+.meal .info .ai small{display:block;font-weight:400;color:var(--acc2);font-size:13px;margin-top:2px}
+.meal .info .wait{color:var(--mut);font-size:13px}
+.meal .info .retry{color:var(--acc2);font-size:13px;padding:4px 0;text-decoration:underline}
+.adv{font-size:15px;line-height:1.65;white-space:pre-wrap}
+.adv b{color:var(--acc)}
 /* 아래 탭 */
 nav{position:fixed;left:0;right:0;bottom:0;background:rgba(15,27,45,.96);backdrop-filter:blur(10px);
   border-top:1px solid var(--line);display:flex;padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
@@ -232,9 +238,10 @@ nav button.on{color:var(--tx)}
     <div id="mealList"></div>
     <div class="card"><h2>최근 7일 기록 <span>끼니 수</span></h2><div class="wkm" id="mealWeek"></div></div>
     <div class="card"><h2>이번 주 술 <span>월~일 · 목표 주 2일 이하</span></h2><div id="drinkWeek"></div></div>
-    <div class="card"><h2>Claude에게 조언받기</h2>
-      <div class="empty">최근 14일 식사 사진·메모와 습관 체크 기록을 파일 하나로 묶어요. Claude 대화에 첨부하고 “식단 봐줘”라고 하면 돼요.</div>
-      <button class="btn ghost full" id="mealExport">파일 만들기</button>
+    <div class="card"><h2>Claude 조언 <span id="advWhen"></span></h2>
+      <div id="advBody" class="adv"></div>
+      <button class="btn full" id="advBtn">최근 14일 조언 받기</button>
+      <button class="btn ghost full hide" id="mealExport">파일로 묶기 (API 키 없을 때)</button>
     </div>
   </main>
 </section>
@@ -583,7 +590,7 @@ function resize(file){
 function uploadImg(id){
   var img=pendImg[id]; if(!img) return Promise.resolve();
   return api("/api/meal",{body:{id:id,img:img}}).then(function(j){
-    if(j._s===200){delete pendImg[id]; savePend()} else if(j._s===401) showLock();
+    if(j._s===200){delete pendImg[id]; savePend(); gotAi(id,j); render()} else if(j._s===401) showLock();
   }).catch(function(){});
 }
 function flushImgs(){Object.keys(pendImg).forEach(uploadImg)}
@@ -597,6 +604,30 @@ $("mealFile").onchange=function(){
     openSheet({id:id,isNew:true,img:d,day:mcur,at:at,slot:mcur===today()?autoSlot(now):"점심",memo:"",drinks:{}});
   }).catch(function(){toast("사진을 읽지 못했어요")});
 };
+/* AI 요리 판별 */
+var aiOn=false, aiTried={}, aiFail={}, lastAdv=null;
+function gotAi(id,j){
+  if(j.ai&&D.meals[id]){ setItem("meals",id,Object.assign({},D.meals[id],{ai:j.ai})); delete aiFail[id] }
+  else if(j.aiError&&j.aiError!=="no-key") aiFail[id]=true;
+}
+function identifyAgain(id){
+  aiTried[id]=true; delete aiFail[id]; render();
+  return api("/api/meal?id="+id,{method:"PUT"}).then(function(j){
+    if(j._s===200) gotAi(id,j); else aiFail[id]=true; render();
+  }).catch(function(){aiFail[id]=true; render()});
+}
+function loadAdvice(){
+  return api("/api/advice").then(function(j){ if(j._s!==200) return; aiOn=!!j.ai; lastAdv=j.last; render() }).catch(function(){});
+}
+function mdLite(t){ return esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>") }
+$("advBtn").onclick=function(){
+  var b=this; b.disabled=true; b.textContent="Claude가 보는 중… (10~30초)";
+  api("/api/advice",{method:"POST"}).then(function(j){
+    b.disabled=false; b.textContent="최근 14일 조언 받기";
+    if(j._s===200){ lastAdv=j.last; render() } else toast(j.error==="no-key"?"API 키가 아직 없어요":"조언을 받지 못했어요");
+  }).catch(function(){ b.disabled=false; b.textContent="최근 14일 조언 받기"; toast("연결이 안 돼요") });
+};
+
 /* 등록·수정 확인 창: 저장 버튼을 눌러야 반영된다 */
 var draft=null;
 function openSheet(d){ draft=d; $("toast").classList.remove("on"); $("shImg").src=d.img||imgSrc(d.id); $("shMemo").value=d.memo||"";
@@ -631,7 +662,13 @@ function renderMeals(){
     c.querySelector("img").src=imgSrc(m.id);
     c.querySelector(".tm").textContent=(m.slot||"")+" · "+hhmm(m.at)+(pendImg[m.id]?" · 사진 올리는 중":"");
     var dt=drinkTxt(m.drinks), info=c.querySelector(".info");
-    info.innerHTML=(dt?'<div class="dk"></div>':'')+(m.memo?'<div class="mm"></div>':'')+(!dt&&!m.memo?'<div class="none">메모·술 기록 없음</div>':'');
+    var aiH="";
+    if(m.ai) aiH='<div class="ai"><span class="dn"></span>'+(m.ai.comment?'<small></small>':'')+'</div>';
+    else if(aiOn&&!pendImg[m.id]) aiH=aiFail[m.id]?'<button class="retry">요리 판별 실패 · 다시 해보기</button>':'<div class="wait">Claude가 요리를 보는 중…</div>';
+    info.innerHTML=aiH+(dt?'<div class="dk"></div>':'')+(m.memo?'<div class="mm"></div>':'')+(!m.ai&&!aiH&&!dt&&!m.memo?'<div class="none">메모·술 기록 없음</div>':'');
+    if(m.ai){ info.querySelector(".dn").textContent=m.ai.dish; if(m.ai.comment) info.querySelector(".ai small").textContent=m.ai.comment }
+    var rt=info.querySelector(".retry"); if(rt) rt.onclick=function(){identifyAgain(m.id)};
+    if(!m.ai&&aiOn&&!pendImg[m.id]&&!aiTried[m.id]&&!aiFail[m.id]){ aiTried[m.id]=true; setTimeout(function(){identifyAgain(m.id)},0) }
     if(dt) info.querySelector(".dk").textContent="술 "+dt; if(m.memo) info.querySelector(".mm").textContent=m.memo;
     c.querySelector(".ed").onclick=function(){ openSheet({id:m.id,isNew:false,day:m.day,at:m.at,slot:m.slot,memo:m.memo||"",drinks:Object.assign({},m.drinks||{})}) };
     c.querySelector(".x").onclick=function(){ if(!confirm("이 사진을 지울까요?")) return;
@@ -652,6 +689,11 @@ function renderMeals(){
   var over=dd>2;
   $("drinkWeek").innerHTML='<div class="stat"><span>마신 날</span><b style="color:'+(over?"var(--warn)":"var(--acc)")+'">'+dd+'일'+(over?" · 목표 넘음":"")+'</b></div>'+
     (Object.keys(tot).length?'<div class="stat"><span>마신 양</span><b>'+esc(drinkTxt(tot))+'</b></div>':'<div class="empty" style="padding-top:8px">이번 주는 아직 술 기록이 없어요.</div>');
+  /* 조언 칸 */
+  $("advBtn").classList.toggle("hide",!aiOn); $("mealExport").classList.toggle("hide",aiOn);
+  if(!aiOn){ $("advBody").innerHTML='<div class="empty">Vercel에 ANTHROPIC_API_KEY를 넣으면 사진마다 요리를 판별하고, 이 버튼으로 바로 조언을 받을 수 있어요.</div>'; $("advWhen").textContent="" }
+  else if(lastAdv){ $("advBody").innerHTML=mdLite(lastAdv.text); var ad=new Date(lastAdv.at); $("advWhen").textContent=(ad.getMonth()+1)+"/"+ad.getDate()+" "+hhmm(lastAdv.at) }
+  else { $("advBody").innerHTML='<div class="empty">사진이 며칠 쌓이면 눌러 보세요. 사진 판별 결과·술·메모·습관 체크·검진 수치를 함께 봐요.</div>'; $("advWhen").textContent="" }
   Array.prototype.forEach.call($("mealWeek").children,function(x){x.onclick=function(){mcur=x.dataset.k; render()}});
 }
 /* 술: 주종 누르고 잔수는 끌거나 −/+ */
@@ -750,7 +792,7 @@ function pull(){
   return api("/api/data").then(function(j){
     if(j._s===401) return showLock();
     if(j._s!==200){syncLabel("오프라인 · 기기에 저장됨"); return}
-    mergeIn(j); saveLocal(); lastSync=Date.now(); render(); flushImgs();
+    mergeIn(j); saveLocal(); lastSync=Date.now(); render(); flushImgs(); loadAdvice();
     if(hasDirty) return push(); syncLabel("동기화됨");
   }).catch(function(){syncLabel("오프라인 · 기기에 저장됨")});
 }
