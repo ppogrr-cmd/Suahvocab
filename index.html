@@ -136,6 +136,22 @@ details[open] summary{margin-bottom:10px}
 .drow input[type=range]{flex:1;margin:0;padding:0;border:0;background:none;accent-color:#f0b35a;height:28px}
 .drow .st{width:34px;height:34px;border-radius:10px;background:var(--bg);font-size:18px;flex:none}
 .drow .n{width:40px;text-align:right;font-weight:700;color:#f0b35a;font-variant-numeric:tabular-nums}
+.sheet{position:fixed;inset:0;background:rgba(5,10,20,.72);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet .pn{background:var(--card);width:100%;max-width:560px;border-radius:20px 20px 0 0;max-height:92vh;overflow:auto;
+  padding:0 0 calc(14px + env(safe-area-inset-bottom))}
+.sheet .pn img{display:block;width:100%;max-height:42vh;object-fit:cover;background:var(--card2)}
+.sheet .bd{padding:14px 16px}
+.sheet h3{margin:0 0 12px;font-size:17px;display:flex;justify-content:space-between;align-items:baseline}
+.sheet h3 span{font-size:13px;color:var(--mut);font-weight:400}
+.sheet .memo{width:100%;margin-top:12px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--tx);font-size:16px}
+.sheet .acts{display:flex;gap:10px;margin-top:14px}
+.sheet .acts .btn{flex:1;padding:14px;font-size:16px}
+.meal .info{font-size:15px;line-height:1.5}
+.meal .info .dk{color:#f0b35a;font-weight:600}
+.meal .info .mm{color:var(--tx)}
+.meal .info .none{color:var(--mut)}
+.meal .acts2{display:flex;gap:8px;margin-top:10px}
+.meal .acts2 button{flex:1;padding:10px;border-radius:10px;background:var(--bg);font-size:14px;color:var(--mut)}
 /* 아래 탭 */
 nav{position:fixed;left:0;right:0;bottom:0;background:rgba(15,27,45,.96);backdrop-filter:blur(10px);
   border-top:1px solid var(--line);display:flex;padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
@@ -248,6 +264,16 @@ nav button.on{color:var(--tx)}
   <button data-v="health"><span class="ic">♥︎</span>건강</button>
   <button data-v="set"><span class="ic">⚙︎</span>설정</button>
 </nav>
+<div class="sheet hide" id="sheet"><div class="pn">
+  <img id="shImg" alt="">
+  <div class="bd">
+    <h3><b id="shTitle">식사 등록</b><span id="shWhen"></span></h3>
+    <div class="chips" id="shSlot"></div>
+    <div class="drk" id="shDrk"></div>
+    <input class="memo" id="shMemo" placeholder="메모 (예: 회식, 반 공기)" maxlength="80">
+    <div class="acts"><button class="btn ghost" id="shCancel">취소</button><button class="btn" id="shOk">등록</button></div>
+  </div>
+</div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -568,10 +594,31 @@ $("mealFile").onchange=function(){
   resize(f).then(function(d){
     var now=new Date(), id="m"+now.getTime().toString(36)+Math.random().toString(36).slice(2,6);
     var at=mcur===today()?now.getTime():new Date(mcur+"T12:00:00").getTime();
-    pendImg[id]=d; savePend();
-    setItem("meals",id,{day:mcur,slot:mcur===today()?autoSlot(now):"점심",at:at,memo:""});
-    render(); toast("올렸어요. 메모는 적고 싶을 때만"); uploadImg(id);
+    openSheet({id:id,isNew:true,img:d,day:mcur,at:at,slot:mcur===today()?autoSlot(now):"점심",memo:"",drinks:{}});
   }).catch(function(){toast("사진을 읽지 못했어요")});
+};
+/* 등록·수정 확인 창: 저장 버튼을 눌러야 반영된다 */
+var draft=null;
+function openSheet(d){ draft=d; $("toast").classList.remove("on"); $("shImg").src=d.img||imgSrc(d.id); $("shMemo").value=d.memo||"";
+  $("shTitle").textContent=d.isNew?"식사 등록":"식사 수정"; $("shOk").textContent=d.isNew?"등록":"저장";
+  $("shWhen").textContent=label(d.day)+" "+hhmm(d.at); drawSheet(); $("sheet").classList.remove("hide");
+  document.body.style.overflow="hidden" }
+function closeSheet(){ draft=null; $("sheet").classList.add("hide"); document.body.style.overflow="" }
+function drawSheet(){
+  var ch=$("shSlot"); ch.innerHTML="";
+  SLOTS.forEach(function(s){var b=document.createElement("button"); b.textContent=s; if(s===draft.slot) b.className="on";
+    b.onclick=function(){draft.slot=s; drawSheet()}; ch.appendChild(b)});
+  drinkUI($("shDrk"),draft.drinks,drawSheet);
+}
+$("shCancel").onclick=function(){ if(draft&&draft.isNew&&!confirm("이 사진을 등록하지 않고 닫을까요?")) return; closeSheet() };
+$("sheet").onclick=function(e){ if(e.target===this) $("shCancel").onclick() };
+$("shOk").onclick=function(){
+  var d=draft; if(!d) return;
+  var dr={}; for(var k in d.drinks) if(d.drinks[k]>0) dr[k]=d.drinks[k];
+  var rec=Object.assign({},d.isNew?{}:D.meals[d.id],{day:d.day,at:d.at,slot:d.slot,memo:$("shMemo").value.trim(),drinks:dr});
+  if(d.isNew){ pendImg[d.id]=d.img; savePend() }
+  setItem("meals",d.id,rec); closeSheet(); render();
+  toast(d.isNew?"등록했어요":"저장했어요"); if(d.isNew) uploadImg(d.id);
 };
 function renderMeals(){
   var ae=document.activeElement; if(ae&&ae.tagName==="INPUT"&&$("mealList").contains(ae)) return;
@@ -580,15 +627,13 @@ function renderMeals(){
   if(!ms.length) el.innerHTML='<div class="card empty">이 날 올린 사진이 없어요. 먹기 전에 한 장 찍어 올려 주세요.</div>';
   ms.forEach(function(m){
     var c=document.createElement("div"); c.className="meal";
-    c.innerHTML='<img alt="" loading="lazy"><div class="bd"><div class="meta"><span class="tm"></span><button class="x">삭제</button></div><div class="chips"></div><div class="drk"></div><input placeholder="메모 (예: 회식, 반 공기)" maxlength="80"></div>';
+    c.innerHTML='<img alt="" loading="lazy"><div class="bd"><div class="meta"><span class="tm"></span></div><div class="info"></div><div class="acts2"><button class="ed">수정</button><button class="x">삭제</button></div></div>';
     c.querySelector("img").src=imgSrc(m.id);
-    c.querySelector(".tm").textContent=hhmm(m.at)+(pendImg[m.id]?" · 사진 올리는 중":"");
-    var ch=c.querySelector(".chips");
-    SLOTS.forEach(function(s){var b=document.createElement("button"); b.textContent=s; if(s===m.slot) b.className="on";
-      b.onclick=function(){setItem("meals",m.id,Object.assign({},D.meals[m.id],{slot:s})); render()}; ch.appendChild(b)});
-    drinkUI(c.querySelector(".drk"),m);
-    var inp=c.querySelector("input[maxlength]"); inp.value=m.memo||"";
-    inp.onchange=function(){setItem("meals",m.id,Object.assign({},D.meals[m.id],{memo:inp.value.trim()})); toast("메모 저장")};
+    c.querySelector(".tm").textContent=(m.slot||"")+" · "+hhmm(m.at)+(pendImg[m.id]?" · 사진 올리는 중":"");
+    var dt=drinkTxt(m.drinks), info=c.querySelector(".info");
+    info.innerHTML=(dt?'<div class="dk"></div>':'')+(m.memo?'<div class="mm"></div>':'')+(!dt&&!m.memo?'<div class="none">메모·술 기록 없음</div>':'');
+    if(dt) info.querySelector(".dk").textContent="술 "+dt; if(m.memo) info.querySelector(".mm").textContent=m.memo;
+    c.querySelector(".ed").onclick=function(){ openSheet({id:m.id,isNew:false,day:m.day,at:m.at,slot:m.slot,memo:m.memo||"",drinks:Object.assign({},m.drinks||{})}) };
     c.querySelector(".x").onclick=function(){ if(!confirm("이 사진을 지울까요?")) return;
       setItem("meals",m.id,Object.assign({},D.meals[m.id],{del:true})); delete pendImg[m.id]; savePend();
       fetch("/api/meal?id="+m.id,{method:"DELETE",credentials:"same-origin"}).catch(function(){}); render()};
@@ -612,9 +657,8 @@ function renderMeals(){
 /* 술: 주종 누르고 잔수는 끌거나 −/+ */
 var DRINKS=["소주","맥주","와인","막걸리","하이볼","위스키"], DMAX=14;
 function drinkTxt(dr){return Object.keys(dr||{}).filter(function(k){return dr[k]>0}).map(function(k){return k+" "+dr[k]+"잔"}).join(" · ")}
-function setDrinks(id,dr){setItem("meals",id,Object.assign({},D.meals[id],{drinks:dr}))}
-function drinkUI(box,m){
-  var dr=Object.assign({},m.drinks||{}), open=Object.keys(dr).filter(function(k){return dr[k]>0});
+function drinkUI(box,dr,redraw){
+  var open=Object.keys(dr).filter(function(k){return dr[k]>0});
   box.innerHTML='<div class="hd"><span>술</span><span class="sum"></span></div><div class="chips"></div><div class="rows"></div>';
   var sum=box.querySelector(".sum"); function upd(){sum.textContent=drinkTxt(dr)||"안 마심"}
   upd();
@@ -623,7 +667,7 @@ function drinkUI(box,m){
     var b=document.createElement("button"); b.textContent=k; if(open.indexOf(k)>=0) b.className="on";
     b.onclick=function(){
       if(dr[k]>0){ delete dr[k] } else { dr[k]=k==="소주"?3:k==="와인"?2:1 }
-      setDrinks(m.id,dr); render();
+      redraw();
     };
     ch.appendChild(b);
   });
@@ -633,7 +677,7 @@ function drinkUI(box,m){
     r.querySelector(".k").textContent=k;
     var rg=r.querySelector("input"), n=r.querySelector(".n"), bs=r.querySelectorAll(".st");
     function show(){n.textContent=dr[k]+"잔"; rg.value=dr[k]; upd()}
-    function commit(){ if(!(dr[k]>0)) delete dr[k]; setDrinks(m.id,Object.assign({},dr)); if(!(dr[k]>0)) {rg.blur(); render()} }
+    function commit(){ if(!(dr[k]>0)){ delete dr[k]; redraw() } }
     rg.oninput=function(){dr[k]=+rg.value; show()};
     rg.onchange=function(){commit(); rg.blur()};
     bs[0].onclick=function(){dr[k]=Math.max(0,(dr[k]||0)-1); show(); commit()};
