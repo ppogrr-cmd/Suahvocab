@@ -158,6 +158,18 @@ details[open] summary{margin-bottom:10px}
 .meal .info .retry{color:var(--acc2);font-size:13px;padding:4px 0;text-decoration:underline}
 .adv{font-size:15px;line-height:1.65;white-space:pre-wrap}
 .adv b{color:var(--acc)}
+.dday .big2{font-size:24px;font-weight:700;color:#f0b35a;line-height:1.35}
+.dday .ok{font-size:22px;font-weight:700;color:var(--acc)}
+.dday .no{font-size:17px;color:var(--mut)}
+.dday .mm{color:var(--tx);margin-top:6px;font-size:15px}
+.dday .src{color:var(--mut);font-size:12px;margin-top:4px}
+.acts3{display:flex;gap:10px;margin-top:14px}
+.acts3 .btn{flex:1;padding:14px}
+.dgrid i.s{background:#1f4a3f}
+.dgrid i.l1{background:#6b5226}.dgrid i.l2{background:#b07f2e}.dgrid i.l3{background:#f0b35a}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--mut)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.legend i.s{background:#1f4a3f}.legend i.l1{background:#6b5226}.legend i.l2{background:#b07f2e}.legend i.l3{background:#f0b35a}
 /* 아래 탭 */
 nav{position:fixed;left:0;right:0;bottom:0;background:rgba(15,27,45,.96);backdrop-filter:blur(10px);
   border-top:1px solid var(--line);display:flex;padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
@@ -180,7 +192,7 @@ nav button.on{color:var(--tx)}
 </section>
 
 <header>
-  <h1 id="title">오늘</h1>
+  <h1 id="title">음주일지</h1>
   <div class="sync" id="sync"></div>
 </header>
 
@@ -192,24 +204,30 @@ nav button.on{color:var(--tx)}
     <button id="next" aria-label="다음 날">›</button>
   </div>
   <main>
-    <div class="card"><div class="prog">
-      <svg class="ring" viewBox="0 0 84 84"><circle cx="42" cy="42" r="36" stroke="#22344f"/>
-        <circle id="ringv" cx="42" cy="42" r="36" stroke="#4fd1a5" stroke-linecap="round"
-          stroke-dasharray="226.2" stroke-dashoffset="226.2" transform="rotate(-90 42 42)"/></svg>
-      <div><div class="big" id="pct">0%</div><div class="small" id="pctSub"></div></div>
-    </div></div>
-    <div class="card"><h2>To-do <span>해낸 것</span></h2><div id="listDo"></div></div>
-    <div class="card not"><h2>Not To-do <span>참은 것</span></h2><div id="listNot"></div></div>
+    <div class="card dday"><div id="dayRec"></div>
+      <div class="acts3"><button class="btn ghost" id="dNone">안 마셨어</button><button class="btn" id="dEdit">마셨어 · 기록하기</button></div>
+    </div>
+    <div class="card"><h2>이번 주 <span>월~일 · 목표 주 2일 이하</span></h2><div id="dWeek"></div></div>
+    <div class="card"><h2>최근 5주</h2>
+      <div class="wk"><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span></div>
+      <div class="grid dgrid" id="dHeat"></div>
+      <div class="legend"><span><i class="s"></i>안 마심</span><span><i class="l1"></i>1~3잔</span><span><i class="l2"></i>4~7잔</span><span><i class="l3"></i>8잔+</span></div>
+    </div>
+    <div class="card"><h2>이번 달 <span id="dMonthLbl"></span></h2><div id="dMonth"></div></div>
+    <div class="card"><h2>Claude 피드백 <span id="advWhen2"></span></h2>
+      <div class="adv" id="advBody2"></div>
+      <button class="btn ghost full" id="drinkExport">최근 30일 기록 파일로 Claude에 보내기</button>
+    </div>
   </main>
 </section>
 
 <!-- 건강 -->
 <section id="v-health" class="hide"><main>
-  <div class="card"><h2>최근 5주 <span id="streak"></span></h2>
+  <div class="card hide"><h2>최근 5주 <span id="streak"></span></h2>
     <div class="wk"><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span></div>
     <div class="grid" id="heat"></div>
   </div>
-  <div class="card"><h2>습관별 30일 달성률</h2><div id="perHabit"></div></div>
+  <div class="card hide"><h2>습관별 30일 달성률</h2><div id="perHabit"></div></div>
   <div class="card"><h2>검진 추적 <span>빨간 숫자 = 목표 밖</span></h2><div id="ckTable"></div><div class="empty" id="ckSince" style="margin-top:10px;font-size:13px"></div></div>
   <div class="card"><h2>병원 할 일 <span>한 번만</span></h2><div id="taskList"></div></div>
   <div class="card"><details><summary>검진 결과 추가</summary>
@@ -217,7 +235,7 @@ nav button.on{color:var(--tx)}
     <button class="btn full" id="ckSave">결과 저장</button>
     <div class="empty" style="font-size:12px;margin-top:8px">같은 연도를 다시 저장하면 덮어써요. 빈칸은 ‘—’로 남아요.</div>
   </details></div>
-  <div class="card"><h2>습관 관리</h2>
+  <div class="card hide"><h2>습관 관리</h2>
     <div id="habList"></div>
     <div class="seg" id="kindSeg"><button data-k="do" class="on">To-do</button><button data-k="not">Not To-do</button></div>
     <div class="row"><input id="habName" placeholder="예) 물 2L 마시기 / 야식 안 먹기" maxlength="40">
@@ -266,8 +284,7 @@ nav button.on{color:var(--tx)}
 </main></section>
 
 <nav>
-  <button data-v="today" class="on"><span class="ic">☀︎</span>오늘</button>
-  <button data-v="meal"><span class="ic">◉</span>식사</button>
+  <button data-v="today" class="on"><span class="ic">◐</span>음주일지</button>
   <button data-v="health"><span class="ic">♥︎</span>건강</button>
   <button data-v="set"><span class="ic">⚙︎</span>설정</button>
 </nav>
@@ -288,8 +305,8 @@ nav button.on{color:var(--tx)}
 "use strict";
 var $=function(id){return document.getElementById(id)};
 var LS="cr-data";
-var MAPS=["habits","checkups","tasks","meals"];
-function blankData(){return {habits:{},checkups:{},tasks:{},meals:{},log:{}}}
+var MAPS=["habits","checkups","tasks","meals","dlog"];
+function blankData(){return {habits:{},checkups:{},tasks:{},meals:{},dlog:{},log:{}}}
 function fill(o){var b=blankData(); for(var k in b) if(!o[k]) o[k]=b[k]; return o}
 var D=blankData();
 try{var s=JSON.parse(localStorage.getItem(LS)||"null"); if(s&&s.habits) D=fill(s)}catch(e){}
@@ -416,6 +433,10 @@ function hideLock(){$("lock").classList.add("hide"); entry=""}
 function render(){
   $("dlabel").textContent=label(cur);
   $("next").disabled=cur>=today();
+  renderDrink(); renderCheckup(); renderTasks(); renderMeals();
+  $("syncInfo").textContent=lastSync?"마지막 동기화: "+new Date(lastSync).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"}):"아직 이번에 맞추지 않았어요";
+}
+function oldRender(){
   var hs=habits(), dos=hs.filter(function(h){return h.kind!=="not"}), nots=hs.filter(function(h){return h.kind==="not"});
   function list(el,arr,kind){
     if(!arr.length){el.innerHTML='<div class="empty">'+(kind==="not"?"참을 것":"할 일")+'이 아직 없어요. 건강 탭에서 추가해 주세요.</div>'; return}
@@ -513,10 +534,11 @@ function renderCheckup(){
   h+='<tr><td>헬리코박터</td><td class="tg">음성</td>'+ys.map(function(y){var v=D.checkups[y].hp; return '<td class="'+(v==="양성"?"hi":"")+'">'+esc(v||"—")+"</td>"}).join("")+"</tr>";
   el.innerHTML=h+"</tbody></table></div>";
   /* 마지막 검진 이후 습관 달성률 */
-  var last=D.checkups[ys[0]], since=last.date, hs=habits();
-  if(since&&hs.length){
-    var ks=Object.keys(D.log).filter(function(k){return k>since}), a=ks.length?Math.round(ks.reduce(function(s,k){return s+rate(k,hs)},0)/ks.length*100):null;
-    $("ckSince").textContent=since+" 검진 이후 체크한 날 "+ks.length+"일 · 평균 달성률 "+(a==null?"—":a+"%")+". 다음 검진 결과와 나란히 볼 거예요.";
+  var last=D.checkups[ys[0]], since=last.date;
+  if(since){
+    var rec=0, drank=0, k=shift(since,1), t=today();
+    while(k<=t){ var st=dayState(k); if(st!=="none") rec++; if(st==="drank") drank++; k=shift(k,1) }
+    $("ckSince").textContent=since+" 검진 이후 음주 기록 "+rec+"일 중 마신 날 "+drank+"일. 다음 검진 결과와 나란히 볼 거예요.";
   } else $("ckSince").textContent="";
 }
 function renderTasks(){
@@ -630,7 +652,10 @@ $("advBtn").onclick=function(){
 
 /* 등록·수정 확인 창: 저장 버튼을 눌러야 반영된다 */
 var draft=null;
-function openSheet(d){ draft=d; $("toast").classList.remove("on"); $("shImg").src=d.img||imgSrc(d.id); $("shMemo").value=d.memo||"";
+function openSheet(d){ draft=d; $("toast").classList.remove("on");
+  var dk=d.kind==="drink"; $("shImg").classList.toggle("hide",dk); $("shSlot").classList.toggle("hide",dk);
+  if(dk){ $("shMemo").value=d.memo||""; $("shTitle").textContent="음주 기록"; $("shOk").textContent="저장"; $("shWhen").textContent=label(d.day);
+    drawSheet(); $("sheet").classList.remove("hide"); document.body.style.overflow="hidden"; return } $("shImg").src=d.img||imgSrc(d.id); $("shMemo").value=d.memo||"";
   $("shTitle").textContent=d.isNew?"식사 등록":"식사 수정"; $("shOk").textContent=d.isNew?"등록":"저장";
   $("shWhen").textContent=label(d.day)+" "+hhmm(d.at); drawSheet(); $("sheet").classList.remove("hide");
   document.body.style.overflow="hidden" }
@@ -641,11 +666,14 @@ function drawSheet(){
     b.onclick=function(){draft.slot=s; drawSheet()}; ch.appendChild(b)});
   drinkUI($("shDrk"),draft.drinks,drawSheet);
 }
-$("shCancel").onclick=function(){ if(draft&&draft.isNew&&!confirm("이 사진을 등록하지 않고 닫을까요?")) return; closeSheet() };
+$("shCancel").onclick=function(){ if(draft&&draft.isNew&&draft.kind!=="drink"&&!confirm("이 사진을 등록하지 않고 닫을까요?")) return; closeSheet() };
 $("sheet").onclick=function(e){ if(e.target===this) $("shCancel").onclick() };
 $("shOk").onclick=function(){
   var d=draft; if(!d) return;
   var dr={}; for(var k in d.drinks) if(d.drinks[k]>0) dr[k]=d.drinks[k];
+  if(d.kind==="drink"){
+    var none=!glasses(dr); setItem("dlog",d.day,{day:d.day,none:none,drinks:dr,memo:$("shMemo").value.trim()});
+    closeSheet(); render(); toast(none?"안 마심으로 저장했어요":"저장했어요"); return }
   var rec=Object.assign({},d.isNew?{}:D.meals[d.id],{day:d.day,at:d.at,slot:d.slot,memo:$("shMemo").value.trim(),drinks:dr});
   if(d.isNew){ pendImg[d.id]=d.img; savePend() }
   setItem("meals",d.id,rec); closeSheet(); render();
@@ -757,6 +785,66 @@ $("mealExport").onclick=function(){
   });
 };
 
+/* ---------- 음주일지 ---------- */
+function sumDr(a,b){ for(var k in (b||{})) if(b[k]>0) a[k]=(a[k]||0)+b[k]; return a }
+function glasses(dr){ var n=0; for(var k in dr) n+=dr[k]; return n }
+/* 그날 술: 음주일지 기록이 우선, 없으면 예전 식사 기록의 술 */
+function dayDrinks(k){
+  var e=D.dlog[k]; if(e&&!e.del) return e.none?{}:Object.assign({},e.drinks||{});
+  var t={}; mealsOf(k).forEach(function(m){sumDr(t,m.drinks)}); return t;
+}
+function dayState(k){ var e=D.dlog[k];
+  if(glasses(dayDrinks(k))>0) return "drank";
+  if(e&&!e.del&&e.none) return "sober"; return "none" }
+function renderDrink(){
+  var e=D.dlog[cur], dr=dayDrinks(cur), st=dayState(cur), el=$("dayRec");
+  if(st==="drank"){ el.innerHTML='<div class="big2"></div>'+(e&&e.memo?'<div class="mm"></div>':'')+(!(e&&!e.del)?'<div class="src">식사 기록에서 가져온 술</div>':'');
+    el.querySelector(".big2").textContent=drinkTxt(dr); if(e&&e.memo) el.querySelector(".mm").textContent=e.memo;
+    $("dEdit").textContent="수정"; }
+  else if(st==="sober"){ el.innerHTML='<div class="ok">안 마셨어요 ✓</div>'+(e.memo?'<div class="mm"></div>':''); if(e.memo) el.querySelector(".mm").textContent=e.memo; $("dEdit").textContent="마셨어 · 기록하기" }
+  else { el.innerHTML='<div class="no">'+label(cur)+' 기록이 아직 없어요</div>'; $("dEdit").textContent="마셨어 · 기록하기" }
+  $("dNone").classList.toggle("hide",st==="sober");
+  /* 이번 주 */
+  var t=today(), tp=t.split("-"), td=new Date(+tp[0],tp[1]-1,+tp[2]), mon=shift(t,-((td.getDay()+6)%7)), tot={}, dd=0, sob=0;
+  for(var j=0;j<7;j++){ var k=shift(mon,j); if(k>t) break; var s2=dayState(k); if(s2==="drank"){dd++; sumDr(tot,dayDrinks(k))} if(s2==="sober") sob++ }
+  var over=dd>2;
+  $("dWeek").innerHTML='<div class="stat"><span>마신 날</span><b style="color:'+(over?"var(--warn)":"var(--acc)")+'">'+dd+'일'+(over?" · 목표 넘음":"")+'</b></div>'+
+    '<div class="stat"><span>안 마신 날 (기록)</span><b>'+sob+'일</b></div>'+
+    '<div class="stat"><span>마신 양</span><b>'+(glasses(tot)?esc(drinkTxt(tot)):"—")+'</b></div>';
+  /* 5주 달력 */
+  var dow=(td.getDay()+6)%7, start=shift(t,-dow-28), h="";
+  for(var i=0;i<35;i++){ var k3=shift(start,i), c="";
+    if(k3<=t){ var s3=dayState(k3), g=glasses(dayDrinks(k3)); c=s3==="sober"?"s":s3==="drank"?(g>=8?"l3":g>=4?"l2":"l1"):"" }
+    h+='<i class="'+c+(k3===t?" today":"")+'" data-k="'+k3+'" '+(k3>t?'style="opacity:.25"':'')+'></i>' }
+  $("dHeat").innerHTML=h;
+  Array.prototype.forEach.call($("dHeat").children,function(x){ if(x.dataset.k<=t) x.onclick=function(){cur=x.dataset.k; render(); window.scrollTo(0,0)} });
+  /* 이번 달 */
+  var m1=t.slice(0,8)+"01", mt={}, md=0, k4=m1;
+  while(k4<=t){ if(dayState(k4)==="drank"){md++; sumDr(mt,dayDrinks(k4))} k4=shift(k4,1) }
+  $("dMonthLbl").textContent=(+t.slice(5,7))+"월";
+  $("dMonth").innerHTML='<div class="stat"><span>마신 날</span><b>'+md+'일</b></div><div class="stat"><span>마신 양</span><b>'+(glasses(mt)?esc(drinkTxt(mt)):"—")+'</b></div>';
+  /* 피드백 */
+  if(lastAdv){ $("advBody2").innerHTML=mdLite(lastAdv.text); var ad=new Date(lastAdv.at); $("advWhen2").textContent=(ad.getMonth()+1)+"/"+ad.getDate() }
+  else { $("advBody2").innerHTML='<div class="empty">기록이 쌓이면 아래 버튼으로 파일을 Claude 대화에 보내고 “음주 기록 봐줘”라고 하세요.</div>'; $("advWhen2").textContent="" }
+}
+$("dNone").onclick=function(){ setItem("dlog",cur,{day:cur,none:true,drinks:{},memo:(D.dlog[cur]&&D.dlog[cur].memo)||""}); render(); toast(label(cur)+" 안 마심으로 저장했어요") };
+$("dEdit").onclick=function(){
+  var e=D.dlog[cur];
+  openSheet({kind:"drink",day:cur,at:Date.now(),memo:(e&&!e.del&&e.memo)||"",drinks:dayDrinks(cur)});
+};
+$("drinkExport").onclick=function(){
+  var t=today(), days=[]; for(var i=29;i>=0;i--) days.push(shift(t,-i));
+  var out={app:"Cheol's Routine",kind:"음주일지",made:new Date().toISOString(),range:[days[0],t],
+    guide:"최근 30일 음주일지(주종별 잔수, 안 마신 날 표시)와 검진 수치·병원 할 일. 피드백 요청용.",
+    checkups:D.checkups, tasks:Object.keys(D.tasks).map(function(k){return D.tasks[k]}).filter(function(x){return !x.del}),
+    days:days.map(function(k){var e=D.dlog[k]; return {day:k,state:dayState(k),drinks:dayDrinks(k),memo:(e&&!e.del&&e.memo)||""}})};
+  var name="cheols-drinks-"+t.replace(/-/g,"")+".json";
+  var file=new File([JSON.stringify(out,null,1)],name,{type:"application/json"});
+  if(navigator.canShare&&navigator.canShare({files:[file]})) return navigator.share({files:[file],title:name}).catch(function(){});
+  var a=document.createElement("a"); a.href=URL.createObjectURL(file); a.download=name; document.body.appendChild(a); a.click(); a.remove();
+  toast("30일 기록을 묶었어요");
+};
+
 /* ---------- 이벤트 ---------- */
 $("prev").onclick=function(){cur=shift(cur,-1); render()};
 $("next").onclick=function(){if(cur<today()){cur=shift(cur,1); render()}};
@@ -771,7 +859,7 @@ function addHabit(){
 }
 $("habAdd").onclick=addHabit;
 $("habName").onkeydown=function(e){if(e.key==="Enter") addHabit()};
-var TITLES={today:"오늘",meal:"식사",health:"건강",set:"설정"};
+var TITLES={today:"음주일지",meal:"식사",health:"건강",set:"설정"};
 Array.prototype.forEach.call(document.querySelectorAll("nav button"),function(b){b.onclick=function(){
   var v=b.dataset.v;
   document.querySelectorAll("nav button").forEach(function(x){x.classList.toggle("on",x===b)});
