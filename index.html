@@ -170,6 +170,45 @@ details[open] summary{margin-bottom:10px}
 .legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--mut)}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
 .legend i.s{background:#1f4a3f}.legend i.l1{background:#6b5226}.legend i.l2{background:#b07f2e}.legend i.l3{background:#f0b35a}
+/* 독서 */
+.book{display:flex;gap:14px;background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:14px;align-items:center}
+.book img{width:78px;aspect-ratio:2/3;object-fit:cover;border-radius:3px 6px 6px 3px;box-shadow:0 6px 14px rgba(0,0,0,.35);flex:none;background:var(--card2)}
+.book .bi{flex:1;min-width:0}
+.book .bt{font-size:17px;font-weight:700;line-height:1.3}
+.book .ba{font-size:13px;color:var(--mut);margin-top:3px}
+.book .bp{font-size:13px;color:var(--acc);margin-top:10px}
+.book .bar{margin-top:6px}
+.book .btn{margin-top:10px;padding:10px 14px;font-size:14px}
+#reader{position:fixed;inset:0;z-index:45;display:flex;flex-direction:column;background:var(--rbg);color:var(--rfg);
+  --rbg:#141613;--rfg:#e4e2d8;--rmut:#8f907f;--racc:#e6b25c}
+#reader.paper{--rbg:#f4ecdc;--rfg:#33291d;--rmut:#8a7a62;--racc:#9a5f22}
+#reader.day{--rbg:#fbfaf7;--rfg:#1f201c;--rmut:#76786e;--racc:#2f7a52}
+.rbar{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 10px 8px;border-bottom:1px solid rgba(128,128,128,.25)}
+.rbar b{flex:1;text-align:center;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rbar button{padding:8px 10px;font-size:15px;color:var(--racc);border-radius:10px}
+.ropts{display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid rgba(128,128,128,.25)}
+.ropts button{flex:1;padding:9px 0;border-radius:10px;background:rgba(128,128,128,.15);font-size:14px}
+#rdBody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 22px 40vh;font-family:"Noto Serif KR","AppleMyungjo",serif;
+  font-size:var(--rfs,19px);line-height:1.85;word-break:keep-all}
+#rdBody p{margin:0 0 1em;text-indent:1em}
+#rdBody blockquote{margin:0 0 1em;padding:2px 0 2px 14px;border-left:3px solid var(--racc);color:var(--rmut);font-size:.92em}
+#rdBody .rh1{font-size:1.35em;margin:2.4em 0 1em;line-height:1.4;text-indent:0}
+#rdBody .rh1 small{display:block;font-size:.6em;color:var(--racc);margin-bottom:6px;font-family:-apple-system,sans-serif}
+#rdBody .rh2{font-size:1.18em;margin:2em 0 .8em;line-height:1.45}
+#rdBody .rh3{font-size:1.06em;margin:1.6em 0 .7em;line-height:1.5}
+#rdBody .rlabel{font-size:.75em;color:var(--racc);margin-top:2.2em;font-family:-apple-system,sans-serif;letter-spacing:.05em}
+#rdBody img{display:block;max-width:100%;margin:1.2em auto;border-radius:6px;background:#fff}
+#rdBody .rcov{width:62%;max-width:260px;margin:1em auto 2em;box-shadow:0 10px 28px rgba(0,0,0,.35)}
+.rfoot{display:flex;align-items:center;gap:10px;padding:8px 16px calc(8px + env(safe-area-inset-bottom));font-size:12px;color:var(--rmut);border-top:1px solid rgba(128,128,128,.25)}
+.rbarline{flex:1;height:3px;background:rgba(128,128,128,.25);border-radius:3px;overflow:hidden}
+.rbarline b{display:block;height:100%;width:0;background:var(--racc)}
+.toc{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;justify-content:flex-end}
+.tocin{width:min(86vw,380px);height:100%;background:var(--rbg);overflow:auto;padding:calc(12px + env(safe-area-inset-top)) 0 30px}
+.toch{display:flex;justify-content:space-between;align-items:center;padding:4px 18px 12px}
+.toch button{color:var(--racc);font-size:15px}
+#tocList button{display:block;width:100%;text-align:left;padding:11px 18px;font-size:15px;line-height:1.4;border-top:1px solid rgba(128,128,128,.15)}
+#tocList button.l2{padding-left:32px;font-size:14px;color:var(--rmut)}
+#tocList button.cur{color:var(--racc);font-weight:700}
 /* 아래 탭 */
 nav{position:fixed;left:0;right:0;bottom:0;background:rgba(15,27,45,.96);backdrop-filter:blur(10px);
   border-top:1px solid var(--line);display:flex;padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
@@ -264,6 +303,11 @@ nav button.on{color:var(--tx)}
   </main>
 </section>
 
+<!-- 독서 -->
+<section id="v-read" class="hide"><main>
+  <div id="shelf"></div>
+</main></section>
+
 <!-- 설정 -->
 <section id="v-set" class="hide"><main>
   <div class="card"><h2>잠금</h2>
@@ -285,6 +329,7 @@ nav button.on{color:var(--tx)}
 
 <nav>
   <button data-v="today" class="on"><span class="ic">◐</span>음주일지</button>
+  <button data-v="read"><span class="ic">❏</span>독서</button>
   <button data-v="health"><span class="ic">♥︎</span>건강</button>
   <button data-v="set"><span class="ic">⚙︎</span>설정</button>
 </nav>
@@ -298,6 +343,21 @@ nav button.on{color:var(--tx)}
     <div class="acts"><button class="btn ghost" id="shCancel">취소</button><button class="btn" id="shOk">등록</button></div>
   </div>
 </div></div>
+<div id="reader" class="hide">
+  <div class="rbar">
+    <button id="rdBack" aria-label="서재로">‹ 서재</button>
+    <b id="rdTitle"></b>
+    <button id="rdToc">목차</button>
+    <button id="rdAa">가</button>
+  </div>
+  <div class="ropts hide" id="rdOpts">
+    <button data-fs="-1">가−</button><button data-fs="1">가+</button>
+    <button data-th="night">밤</button><button data-th="paper">종이</button><button data-th="day">낮</button>
+  </div>
+  <div id="rdBody"></div>
+  <div class="rfoot"><div class="rbarline"><b id="rdBar"></b></div><span id="rdPct">0%</span></div>
+  <div class="toc hide" id="toc"><div class="tocin"><div class="toch"><b>목차</b><button id="tocX">닫기</button></div><div id="tocList"></div></div></div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -305,8 +365,8 @@ nav button.on{color:var(--tx)}
 "use strict";
 var $=function(id){return document.getElementById(id)};
 var LS="cr-data";
-var MAPS=["habits","checkups","tasks","meals","dlog"];
-function blankData(){return {habits:{},checkups:{},tasks:{},meals:{},dlog:{},log:{}}}
+var MAPS=["habits","checkups","tasks","meals","dlog","reading"];
+function blankData(){return {habits:{},checkups:{},tasks:{},meals:{},dlog:{},reading:{},log:{}}}
 function fill(o){var b=blankData(); for(var k in b) if(!o[k]) o[k]=b[k]; return o}
 var D=blankData();
 try{var s=JSON.parse(localStorage.getItem(LS)||"null"); if(s&&s.habits) D=fill(s)}catch(e){}
@@ -845,6 +905,102 @@ $("drinkExport").onclick=function(){
   toast("30일 기록을 묶었어요");
 };
 
+/* ---------- 독서 ---------- */
+var bookKey=null, LIB=null, BOOK=null, BID=null, rdBlocks=[], rdTimer=null, rdLast=-1;
+function b64bytes(b){var s=atob(b), u=new Uint8Array(s.length); for(var i=0;i<s.length;i++) u[i]=s.charCodeAt(i); return u}
+function getKey(){
+  if(bookKey) return Promise.resolve(bookKey);
+  return api("/api/bookkey").then(function(j){
+    if(j._s===401){showLock(); throw "locked"} if(j._s!==200) throw "no-key";
+    return crypto.subtle.importKey("raw",b64bytes(j.key),"AES-GCM",false,["decrypt"]);
+  }).then(function(k){bookKey=k; return k});
+}
+function openEnc(url){
+  return Promise.all([getKey(), fetch(url).then(function(r){ if(!r.ok) throw "fetch"; return r.arrayBuffer() })]).then(function(a){
+    var buf=new Uint8Array(a[1]);
+    return crypto.subtle.decrypt({name:"AES-GCM",iv:buf.slice(0,12)},a[0],buf.slice(12));
+  }).then(function(pt){ return JSON.parse(new TextDecoder().decode(pt)) });
+}
+function loadShelf(){
+  if(LIB) return renderShelf();
+  $("shelf").innerHTML='<div class="card empty">서재를 여는 중…</div>';
+  openEnc("/books/library.enc").then(function(j){LIB=j.books; renderShelf()})
+    .catch(function(e){ $("shelf").innerHTML='<div class="card empty">'+(e==="no-key"?"책 열쇠가 아직 서버에 없어요.":"서재를 열지 못했어요. 연결을 확인해 주세요.")+'</div>' });
+}
+function renderShelf(){
+  if(!LIB) return; var el=$("shelf"); el.innerHTML="";
+  LIB.forEach(function(b){
+    var r=D.reading[b.id]||{}, pct=r.pct||0, c=document.createElement("div"); c.className="book";
+    c.innerHTML='<img alt=""><div class="bi"><div class="bt"></div><div class="ba"></div><div class="bp">'+(pct?pct+"% 읽음":"아직 안 읽음")+'</div><div class="bar"><b style="width:'+pct+'%"></b></div><button class="btn">'+(pct?"이어 읽기":"읽기 시작")+'</button></div>';
+    c.querySelector("img").src=b.cover; c.querySelector(".bt").textContent=b.title;
+    c.querySelector(".ba").textContent=b.author+(b.translator?" · "+b.translator+" 옮김":"");
+    c.querySelector(".btn").onclick=function(){openBook(b)};
+    el.appendChild(c);
+  });
+}
+function openBook(meta){
+  toast("책 여는 중…");
+  openEnc("/books/"+meta.id+".enc").then(function(book){
+    BOOK=book; BID=meta.id; $("rdTitle").textContent=book.title;
+    var h="", toc=[], prevLabel="";
+    book.blocks.forEach(function(b,i){
+      var t=esc(b.text||"");
+      if(b.t==="cover") h+='<img class="rcov" data-i="'+i+'" src="'+meta.cover+'" alt="">';
+      else if(b.t==="h1"){ h+='<h2 class="rh1" data-i="'+i+'">'+(b.label?"<small>"+esc(b.label)+"</small>":"")+t+'</h2>'; toc.push({i:i,l:1,t:(b.label?b.label+" ":"")+b.text}) }
+      else if(b.t==="h2"){ h+='<h3 class="rh2" data-i="'+i+'">'+t+'</h3>'; toc.push({i:i,l:1,t:b.text}) }
+      else if(b.t==="label"){ h+='<div class="rlabel" data-i="'+i+'">'+t+'</div>'; prevLabel=b.text; return }
+      else if(b.t==="h3"){ h+='<h4 class="rh3" data-i="'+i+'">'+t+'</h4>'; if(prevLabel) toc.push({i:i,l:2,t:prevLabel+" · "+b.text}) }
+      else if(b.t==="q") h+='<blockquote data-i="'+i+'">'+t+'</blockquote>';
+      else if(b.t==="fig"){ var src=book.figs&&book.figs[b.src]; if(src) h+='<img data-i="'+i+'" src="'+src+'" alt="" loading="lazy">' }
+      else h+='<p data-i="'+i+'">'+t+'</p>';
+      prevLabel="";
+    });
+    $("rdBody").innerHTML=h; rdBlocks=$("rdBody").querySelectorAll("[data-i]");
+    var tl=$("tocList"); tl.innerHTML="";
+    toc.forEach(function(x){ var b=document.createElement("button"); b.className="l"+x.l; b.dataset.i=x.i; b.textContent=x.t;
+      b.onclick=function(){ goBlock(x.i); $("toc").classList.add("hide") }; tl.appendChild(b) });
+    applyReadPrefs(); $("reader").classList.remove("hide"); document.body.style.overflow="hidden";
+    $("toast").classList.remove("on");
+    var r=D.reading[BID]; rdLast=-1;
+    requestAnimationFrame(function(){ if(r&&r.blk) goBlock(r.blk); else $("rdBody").scrollTop=0; onRdScroll() });
+  }).catch(function(e){ toast(e==="no-key"?"책 열쇠가 아직 없어요":"책을 열지 못했어요") });
+}
+function goBlock(i){ var el=$("rdBody").querySelector('[data-i="'+i+'"]'); if(el) $("rdBody").scrollTop=el.offsetTop-12 }
+function curBlock(){
+  var top=$("rdBody").scrollTop+8, lo=0, hi=rdBlocks.length-1, ans=0;
+  while(lo<=hi){ var m=(lo+hi)>>1; if(rdBlocks[m].offsetTop<=top){ans=m; lo=m+1} else hi=m-1 }
+  return rdBlocks.length?+rdBlocks[ans].dataset.i:0;
+}
+function rdPct(){ var b=$("rdBody"), max=b.scrollHeight-b.clientHeight; return max>0?Math.min(100,Math.round(b.scrollTop/max*100)):0 }
+function onRdScroll(){
+  var p=rdPct(); $("rdPct").textContent=p+"%"; $("rdBar").style.width=p+"%";
+  clearTimeout(rdTimer); rdTimer=setTimeout(saveRead,1500);
+}
+function saveRead(){
+  if(!BID) return; var i=curBlock(); if(i===rdLast) return; rdLast=i;
+  setItem("reading",BID,{blk:i,pct:rdPct(),at:Date.now()});
+}
+$("rdBody").addEventListener("scroll",onRdScroll,{passive:true});
+$("rdBack").onclick=function(){ saveRead(); clearTimeout(rdTimer); $("reader").classList.add("hide"); $("rdOpts").classList.add("hide"); document.body.style.overflow=""; BID=null; BOOK=null; $("rdBody").innerHTML=""; renderShelf() };
+$("rdToc").onclick=function(){
+  var i=curBlock(), bs=$("tocList").children, cur=null;
+  Array.prototype.forEach.call(bs,function(b){ b.classList.remove("cur"); if(+b.dataset.i<=i) cur=b });
+  if(cur){ cur.classList.add("cur") } $("toc").classList.remove("hide"); if(cur) cur.scrollIntoView({block:"center"});
+};
+$("tocX").onclick=function(){$("toc").classList.add("hide")};
+$("toc").onclick=function(e){ if(e.target===this) this.classList.add("hide") };
+$("rdAa").onclick=function(){$("rdOpts").classList.toggle("hide")};
+function readPrefs(){ try{return JSON.parse(localStorage.getItem("cr-read")||"{}")}catch(e){return {}} }
+function applyReadPrefs(){ var p=readPrefs(); $("reader").className=p.th&&p.th!=="night"?p.th:""; $("rdBody").style.setProperty("--rfs",(p.fs||19)+"px") }
+Array.prototype.forEach.call($("rdOpts").children,function(b){ b.onclick=function(){
+  var p=readPrefs(), i=curBlock();
+  if(b.dataset.fs) p.fs=Math.max(15,Math.min(26,(p.fs||19)+(+b.dataset.fs)));
+  if(b.dataset.th) p.th=b.dataset.th;
+  try{localStorage.setItem("cr-read",JSON.stringify(p))}catch(e){}
+  applyReadPrefs(); goBlock(i);
+}});
+document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="hidden"&&BID) saveRead() });
+
 /* ---------- 이벤트 ---------- */
 $("prev").onclick=function(){cur=shift(cur,-1); render()};
 $("next").onclick=function(){if(cur<today()){cur=shift(cur,1); render()}};
@@ -859,12 +1015,12 @@ function addHabit(){
 }
 $("habAdd").onclick=addHabit;
 $("habName").onkeydown=function(e){if(e.key==="Enter") addHabit()};
-var TITLES={today:"음주일지",meal:"식사",health:"건강",set:"설정"};
+var TITLES={today:"음주일지",meal:"식사",read:"독서",health:"건강",set:"설정"};
 Array.prototype.forEach.call(document.querySelectorAll("nav button"),function(b){b.onclick=function(){
   var v=b.dataset.v;
   document.querySelectorAll("nav button").forEach(function(x){x.classList.toggle("on",x===b)});
-  ["today","meal","health","set"].forEach(function(x){$("v-"+x).classList.toggle("hide",x!==v)});
-  $("title").textContent=TITLES[v]; window.scrollTo(0,0);
+  ["today","meal","read","health","set"].forEach(function(x){$("v-"+x).classList.toggle("hide",x!==v)});
+  $("title").textContent=TITLES[v]; window.scrollTo(0,0); if(v==="read") loadShelf();
 }});
 $("lockMe").onclick=function(){ if(!confirm("이 기기를 잠글까요? 다음에 열 때 PIN을 다시 넣어야 해요.")) return;
   api("/api/auth",{body:{action:"logout"}}).then(function(){showLock()})};
