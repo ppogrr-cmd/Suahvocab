@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0f1b2d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -180,6 +180,7 @@ details[open] summary{margin-bottom:10px}
 .book .bar{margin-top:6px}
 .book .btn{margin-top:10px;padding:10px 14px;font-size:14px}
 #reader{position:fixed;inset:0;z-index:45;display:flex;flex-direction:column;background:var(--rbg);color:var(--rfg);
+  overflow:hidden;overscroll-behavior:none;touch-action:pan-y;
   --rbg:#141613;--rfg:#e4e2d8;--rmut:#8f907f;--racc:#e6b25c}
 #reader.paper{--rbg:#f4ecdc;--rfg:#33291d;--rmut:#8a7a62;--racc:#9a5f22}
 #reader.day{--rbg:#fbfaf7;--rfg:#1f201c;--rmut:#76786e;--racc:#2f7a52}
@@ -188,7 +189,8 @@ details[open] summary{margin-bottom:10px}
 .rbar button{padding:8px 10px;font-size:15px;color:var(--racc);border-radius:10px}
 .ropts{display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid rgba(128,128,128,.25)}
 .ropts button{flex:1;padding:9px 0;border-radius:10px;background:rgba(128,128,128,.15);font-size:14px}
-#rdBody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 22px 40vh;font-family:"Noto Serif KR","AppleMyungjo",serif;
+#rdBody{flex:1;overflow-y:auto;overflow-x:hidden;overscroll-behavior-x:none;touch-action:pan-y;
+  overflow-wrap:anywhere;max-width:100vw;-webkit-text-size-adjust:100%;padding:18px 22px 40vh;font-family:"Noto Serif KR","AppleMyungjo",serif;
   font-size:var(--rfs,19px);line-height:1.85;word-break:keep-all}
 #rdBody p{margin:0 0 1em;text-indent:1em}
 #rdBody blockquote{margin:0 0 1em;padding:2px 0 2px 14px;border-left:3px solid var(--racc);color:var(--rmut);font-size:.92em}
@@ -197,7 +199,8 @@ details[open] summary{margin-bottom:10px}
 #rdBody .rh2{font-size:1.18em;margin:2em 0 .8em;line-height:1.45}
 #rdBody .rh3{font-size:1.06em;margin:1.6em 0 .7em;line-height:1.5}
 #rdBody .rlabel{font-size:.75em;color:var(--racc);margin-top:2.2em;font-family:-apple-system,sans-serif;letter-spacing:.05em}
-#rdBody img{display:block;max-width:100%;margin:1.2em auto;border-radius:6px;background:#fff}
+#rdBody *{max-width:100%;box-sizing:border-box}
+#rdBody img{display:block;max-width:100%;height:auto;margin:1.2em auto;border-radius:6px;background:#fff}
 #rdBody .rcov{width:62%;max-width:260px;margin:1em auto 2em;box-shadow:0 10px 28px rgba(0,0,0,.35)}
 .rfoot{display:flex;align-items:center;gap:10px;padding:8px 16px calc(8px + env(safe-area-inset-bottom));font-size:12px;color:var(--rmut);border-top:1px solid rgba(128,128,128,.25)}
 .rbarline{flex:1;height:3px;background:rgba(128,128,128,.25);border-radius:3px;overflow:hidden}
