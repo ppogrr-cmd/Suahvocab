@@ -956,7 +956,7 @@ function renderShelf(){
     var r=D.reading[b.id]||{}, pct=r.pct||0, c=document.createElement("div"); c.className="book";
     c.innerHTML='<img alt=""><div class="bi"><div class="bt"></div><div class="ba"></div><div class="bp">'+(pct?pct+"% 읽음":"아직 안 읽음")+'</div><div class="bar"><b style="width:'+pct+'%"></b></div><button class="btn">'+(pct?"이어 읽기":"읽기 시작")+'</button></div>';
     c.querySelector("img").src=b.cover; c.querySelector(".bt").textContent=b.title;
-    c.querySelector(".ba").textContent=b.author+(b.translator?" · "+b.translator+" 옮김":"");
+    c.querySelector(".ba").textContent=(b.subtitle&&/권/.test(b.subtitle)?b.subtitle+" · ":"")+b.author+(b.translator?" · "+b.translator+" 옮김":"");
     c.querySelector(".btn").onclick=function(){openBook(b)};
     el.appendChild(c);
   });
