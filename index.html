@@ -136,6 +136,8 @@ details[open] summary{margin-bottom:10px}
 .drow input[type=range]{flex:1;margin:0;padding:0;border:0;background:none;accent-color:#f0b35a;height:28px}
 .drow .st{width:34px;height:34px;border-radius:10px;background:var(--bg);font-size:18px;flex:none}
 .drow .n{width:40px;text-align:right;font-weight:700;color:#f0b35a;font-variant-numeric:tabular-nums}
+.dper{font-size:12px;color:var(--mut,#8a8f98);margin:2px 0 0 60px}
+.dguide{font-size:12px;color:var(--mut,#8a8f98);margin-top:8px;line-height:1.5}
 .sheet{position:fixed;inset:0;background:rgba(5,10,20,.72);z-index:40;display:flex;align-items:flex-end;justify-content:center}
 .sheet .pn{background:var(--card);width:100%;max-width:560px;border-radius:20px 20px 0 0;max-height:92vh;overflow:auto;
   padding:0 0 calc(14px + env(safe-area-inset-bottom))}
@@ -808,10 +810,13 @@ function renderMeals(){
 }
 /* 술: 주종 누르고 잔수는 끌거나 −/+ */
 var DRINKS=["소주","맥주","와인","막걸리","하이볼","위스키"], DMAX=14;
+/* 한 병(캔)이 몇 잔인지: 잔 기준은 흔히 쓰는 잔 */
+var DPER={"소주":[7,"1병(360ml) = 소주잔 약 7잔"],"맥주":[2.5,"1병(500ml) = 맥주잔 약 2.5잔"],"와인":[5,"1병(750ml) = 와인잔 약 5잔"],"막걸리":[3,"1병(750ml) = 사발 약 3잔"],"하이볼":[1,"1캔(350ml) = 1잔"],"위스키":[23,"1병(700ml) = 샷(30ml) 약 23잔"]};
+function bottles(k,n){var p=DPER[k]; if(!p||p[0]<=1||n<=0) return ""; var b=Math.round(n/p[0]*10)/10; return " · 약 "+b+(k==="하이볼"?"캔":"병")}
 function drinkTxt(dr){return Object.keys(dr||{}).filter(function(k){return dr[k]>0}).map(function(k){return k+" "+dr[k]+"잔"}).join(" · ")}
 function drinkUI(box,dr,redraw){
   var open=Object.keys(dr).filter(function(k){return dr[k]>0});
-  box.innerHTML='<div class="hd"><span>술</span><span class="sum"></span></div><div class="chips"></div><div class="rows"></div>';
+  box.innerHTML='<div class="hd"><span>술</span><span class="sum"></span></div><div class="chips"></div><div class="rows"></div>'+(open.length?'':'<div class="dguide">한 병 기준 · 소주 7잔 · 맥주(500ml) 2.5잔 · 와인 5잔 · 막걸리 3잔 · 위스키 23잔</div>');
   var sum=box.querySelector(".sum"); function upd(){sum.textContent=drinkTxt(dr)||"안 마심"}
   upd();
   var ch=box.querySelector(".chips"), rows=box.querySelector(".rows");
@@ -828,13 +833,14 @@ function drinkUI(box,dr,redraw){
     r.innerHTML='<span class="k"></span><button class="st">−</button><input type="range" min="0" max="'+DMAX+'" step="1"><button class="st">+</button><span class="n"></span>';
     r.querySelector(".k").textContent=k;
     var rg=r.querySelector("input"), n=r.querySelector(".n"), bs=r.querySelectorAll(".st");
-    function show(){n.textContent=dr[k]+"잔"; rg.value=dr[k]; upd()}
+    var pr=document.createElement("div"); pr.className="dper";
+    function show(){n.textContent=dr[k]+"잔"; rg.value=dr[k]; upd(); pr.textContent=(DPER[k]?DPER[k][1]:"")+bottles(k,dr[k])}
     function commit(){ if(!(dr[k]>0)){ delete dr[k]; redraw() } }
     rg.oninput=function(){dr[k]=+rg.value; show()};
     rg.onchange=function(){commit(); rg.blur()};
     bs[0].onclick=function(){dr[k]=Math.max(0,(dr[k]||0)-1); show(); commit()};
     bs[1].onclick=function(){dr[k]=Math.min(DMAX,(dr[k]||0)+1); show(); commit()};
-    show(); rows.appendChild(r);
+    show(); rows.appendChild(r); rows.appendChild(pr);
   });
 }
 $("mprev").onclick=function(){mcur=shift(mcur,-1); render()};
