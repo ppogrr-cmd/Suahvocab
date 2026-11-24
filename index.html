@@ -347,6 +347,10 @@ nav button.on{color:var(--tx)}
 <!-- 독서 -->
 <section id="v-read" class="hide"><main>
   <div id="shelf"></div>
+  <div class="card hide" id="typoCard"><h2>오타 신고 <span id="typoCount"></span></h2>
+    <div class="empty" style="font-size:13px">고친 내용은 이 앱에서 바로 보여요. 모아서 Claude에게 보내면 책 파일에 영구 반영해 줄게요.</div>
+    <button class="btn ghost full" id="typoExport">오타 신고 파일로 Claude에 보내기</button>
+  </div>
   <div class="card" id="markCard"><h2>밑줄 모음 <span id="markCount"></span></h2>
     <input class="msearch" id="markQ" placeholder="밑줄 친 문장에서 찾기" maxlength="40">
     <div class="chips" id="markBooks"></div>
@@ -411,7 +415,7 @@ nav button.on{color:var(--tx)}
     <button data-th="night">밤</button><button data-th="paper">종이</button><button data-th="day">낮</button>
   </div>
   <div id="rdBody"></div>
-  <div class="ulbar hide" id="ulBar"><span id="ulMsg"></span><button id="ulDo">밑줄 긋기</button></div>
+  <div class="ulbar hide" id="ulBar"><span id="ulMsg"></span><button id="ulTypo" class="del">오타</button><button id="ulDo">밑줄 긋기</button></div>
   <div class="rfoot"><div class="rbarline"><b id="rdBar"></b></div><span id="rdPct">0%</span></div>
   <div class="toc hide" id="toc"><div class="tocin"><div class="toch"><b>목차</b><button id="tocX">닫기</button></div><div id="tocList"></div></div></div>
 </div>
@@ -422,8 +426,8 @@ nav button.on{color:var(--tx)}
 "use strict";
 var $=function(id){return document.getElementById(id)};
 var LS="cr-data";
-var MAPS=["habits","checkups","tasks","meals","dlog","reading","marks","zh","zhd"];
-function blankData(){return {habits:{},checkups:{},tasks:{},meals:{},dlog:{},reading:{},marks:{},zh:{},zhd:{},log:{}}}
+var MAPS=["habits","checkups","tasks","meals","dlog","reading","marks","zh","zhd","typo"];
+function blankData(){return {habits:{},checkups:{},tasks:{},meals:{},dlog:{},reading:{},marks:{},zh:{},zhd:{},typo:{},log:{}}}
 function fill(o){var b=blankData(); for(var k in b) if(!o[k]) o[k]=b[k]; return o}
 var D=blankData();
 try{var s=JSON.parse(localStorage.getItem(LS)||"null"); if(s&&s.habits) D=fill(s)}catch(e){}
@@ -953,6 +957,12 @@ $("dEdit").onclick=function(){
   var e=D.dlog[cur];
   openSheet({kind:"drink",day:cur,at:Date.now(),memo:(e&&!e.del&&e.memo)||"",drinks:dayDrinks(cur)});
 };
+$("typoExport").onclick=function(){
+  var list=typosOf(""), name="cheols-typos-"+today().replace(/-/g,"")+".json";
+  var file=new File([JSON.stringify({app:"Cheol's Routine",kind:"typo-reports",made:new Date().toISOString(),items:list.map(function(x){return {id:x.id,book:x.book,title:bookTitle(x.book),block:x.b,text:x.text,fix:x.fix,ctx:x.ctx}})})],name,{type:"application/json"});
+  if(navigator.canShare&&navigator.canShare({files:[file]})) return navigator.share({files:[file],title:name}).catch(function(){});
+  var a=document.createElement("a"); a.href=URL.createObjectURL(file); a.download=name; document.body.appendChild(a); a.click(); a.remove();
+};
 $("drinkExport").onclick=function(){
   var t=today(), days=[]; for(var i=29;i>=0;i--) days.push(shift(t,-i));
   var out={app:"Cheol's Routine",kind:"음주일지",made:new Date().toISOString(),range:[days[0],t],
@@ -1003,7 +1013,7 @@ function renderShelf(){
     c.querySelector(".btn").onclick=function(){openBook(b)};
     el.appendChild(c);
   });
-  renderMarks();
+  renderMarks(); renderTypos();
 }
 /* ---------- 밑줄 ---------- */
 var markBook="", markTimer=null;
@@ -1045,6 +1055,21 @@ function wrapRange(block,s,e,id){
 function paintMarks(){ marksOf(BID).forEach(function(m){ (m.segs||[{b:m.b,s:m.s,e:m.e}]).forEach(function(g){
   var bl=$("rdBody").querySelector('[data-i="'+g.b+'"]'); if(bl) wrapRange(bl,g.s,g.e,m.id) }) }) }
 var pendSel=null, pendDel=null;
+/* 오타: 읽다가 고른 글자를 바로 고쳐 보여주고, 모아서 내보낸다 */
+function typosOf(bid){ return Object.keys(D.typo).map(function(id){return Object.assign({id:id},D.typo[id])}).filter(function(x){return !x.del&&(!bid||x.book===bid)}) }
+function typoText(bid,i,t){ typosOf(bid).forEach(function(x){ if(x.b===i&&x.fix!=null&&x.text&&t.indexOf(x.text)>=0) t=t.replace(x.text,x.fix) }); return t }
+function renderTypos(){ var n=typosOf("").length; $("typoCard").classList.toggle("hide",!n); $("typoCount").textContent=n?n+"개":"" }
+$("ulTypo").onclick=function(){
+  if(!pendSel) return; var info=pendSel, g=info.segs[0];
+  if(info.segs.length>1){ toast("한 문단 안에서만 골라 주세요"); return }
+  var fix=prompt("바르게 고친 글자를 적어 주세요\n(비우면 ‘오타 있음’으로만 표시)",info.text); if(fix===null) return;
+  var id="t"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+  var bl=$("rdBody").querySelector('[data-i="'+g.b+'"]'), ctx=bl?bl.textContent:"";
+  setItem("typo",id,{book:BID,b:g.b,text:info.text,fix:(fix===""||fix===info.text)?null:fix,ctx:ctx.slice(Math.max(0,g.s-30),g.e+30),at:Date.now()});
+  window.getSelection().removeAllRanges(); pendSel=null; $("ulBar").classList.add("hide");
+  if(bl&&fix&&fix!==info.text){ bl.textContent=typoText(BID,g.b,BOOK.blocks[g.b].text||""); marksOf(BID).forEach(function(m){ (m.segs||[{b:m.b,s:m.s,e:m.e}]).forEach(function(q){ if(q.b===g.b) wrapRange(bl,q.s,q.e,m.id) }) }) }
+  toast("오타를 기록했어요");
+};
 function selInfo(){
   var sel=window.getSelection(); if(!sel||sel.isCollapsed||!sel.rangeCount) return null;
   var r=sel.getRangeAt(0), b1=blockOf(r.startContainer), b2=blockOf(r.endContainer); if(!b1||!b2) return null;
@@ -1057,12 +1082,12 @@ function selInfo(){
 }
 document.addEventListener("selectionchange",function(){
   if(!BID) return; var info=selInfo();
-  if(info){ pendSel=info; pendDel=null; $("ulMsg").textContent="“"+info.text.slice(0,40)+(info.text.length>40?"…":"")+"”"; $("ulDo").textContent="밑줄 긋기"; $("ulDo").className=""; $("ulBar").classList.remove("hide") }
+  if(info){ pendSel=info; pendDel=null; $("ulTypo").classList.remove("hide"); $("ulMsg").textContent="“"+info.text.slice(0,40)+(info.text.length>40?"…":"")+"”"; $("ulDo").textContent="밑줄 긋기"; $("ulDo").className=""; $("ulBar").classList.remove("hide") }
   else if(!pendDel){ pendSel=null; $("ulBar").classList.add("hide") }
 });
 $("rdBody").addEventListener("click",function(e){
   var mk=e.target.closest&&e.target.closest("mark.ul"); if(!mk||!window.getSelection().isCollapsed) return;
-  var m=D.marks[mk.dataset.m]; if(!m) return; pendDel=mk.dataset.m; pendSel=null;
+  var m=D.marks[mk.dataset.m]; if(!m) return; pendDel=mk.dataset.m; pendSel=null; $("ulTypo").classList.add("hide");
   $("ulMsg").textContent="“"+m.text.slice(0,40)+(m.text.length>40?"…":"")+"”"; $("ulDo").textContent="밑줄 지우기"; $("ulDo").className="del"; $("ulBar").classList.remove("hide");
 });
 $("ulDo").onclick=function(){
@@ -1080,7 +1105,7 @@ function openBook(meta,jump){
     BOOK=book; BID=meta.id; $("rdTitle").textContent=book.title;
     var h="", toc=[], prevLabel="";
     book.blocks.forEach(function(b,i){
-      var t=esc(b.text||"");
+      var t=esc(typoText(meta.id,i,b.text||""));
       if(b.t==="cover") h+='<img class="rcov" data-i="'+i+'" src="'+meta.cover+'" alt="">';
       else if(b.t==="h1"){ h+='<h2 class="rh1" data-i="'+i+'">'+(b.label?"<small>"+esc(b.label)+"</small>":"")+t+'</h2>'; toc.push({i:i,l:1,t:(b.label?b.label+" ":"")+b.text}) }
       else if(b.t==="h2"){ h+='<h3 class="rh2" data-i="'+i+'">'+t+'</h3>'; toc.push({i:i,l:1,t:b.text}) }
