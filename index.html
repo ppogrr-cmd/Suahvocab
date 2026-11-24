@@ -958,7 +958,12 @@ function loadShelf(){
 }
 function renderShelf(){
   if(!LIB) return; var el=$("shelf"); el.innerHTML="";
-  LIB.forEach(function(b){
+  /* 읽던 책(최근에 읽은 순) → 안 읽은 책 → 다 읽은 책 */
+  function grp(b){var r=D.reading[b.id]||{}, p=r.pct||0; return p>=100?2:p>0?0:1}
+  LIB.map(function(b,i){return {b:b,i:i}}).sort(function(x,y){
+    var gx=grp(x.b), gy=grp(y.b); if(gx!==gy) return gx-gy;
+    if(gx!==1){ var d=((D.reading[y.b.id]||{}).at||0)-((D.reading[x.b.id]||{}).at||0); if(d) return d }
+    return x.i-y.i }).map(function(x){return x.b}).forEach(function(b){
     var r=D.reading[b.id]||{}, pct=r.pct||0, c=document.createElement("div"); c.className="book";
     c.innerHTML='<img alt=""><div class="bi"><div class="bt"></div><div class="ba"></div><div class="bp">'+(pct?pct+"% 읽음":"아직 안 읽음")+'</div><div class="bar"><b style="width:'+pct+'%"></b></div><button class="btn">'+(pct?"이어 읽기":"읽기 시작")+'</button></div>';
     c.querySelector("img").src=b.cover; c.querySelector(".bt").textContent=b.title;
