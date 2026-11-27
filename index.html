@@ -384,13 +384,12 @@ nav button.on{color:var(--tx)}
 
 <!-- 중국어 -->
 <section id="v-zh" class="hide"><main>
-  <div class="seg" id="zSeg" style="margin:0 0 12px"><button data-m="book" class="on">교재</button><button data-m="talk">회화</button></div>
-  <div id="zTalk" class="hide"></div>
-  <div id="zBookWrap"><div id="zStudy"></div>
-  <div class="card"><h2>진도 <span id="zDeck"></span></h2><div class="zstats" id="zStats"></div>
-    <div class="empty" style="font-size:12px;margin-top:10px">하루 새 문장 10개를 순서대로 배우고, 전에 본 문장은 기억 곡선에 맞춰 1·3·7·14·30·60일 뒤에 다시 섞여 나와요. 모르면 다음 날 다시 나와요.</div>
+  <div id="zTalk"></div>
+  <div id="zBookWrap" class="hide"><button class="btn ghost" id="zRevBack" style="padding:9px 14px;font-size:14px;margin-bottom:10px">← 회화</button><div id="zStudy"></div>
+  <div class="card"><h2>복습 문장 <span id="zDeck"></span></h2><div class="zstats" id="zStats"></div>
+    <div class="empty" style="font-size:12px;margin-top:10px">체크한 대사는 기억 곡선에 맞춰 1·3·7·14·30·60일 뒤에 다시 나와요. 몰랐으면 다음 날 또 나와요.</div>
   </div>
-  <div class="card"><details id="zAllD"><summary>전체 문장 보기</summary><div id="zAll"></div></details></div>
+  <div class="card"><details id="zAllD"><summary>체크한 문장 전체 보기</summary><div id="zAll"></div></details></div>
   </div>
 </main></section>
 
@@ -1209,25 +1208,25 @@ $("habAdd").onclick=addHabit;
 $("habName").onkeydown=function(e){if(e.key==="Enter") addHabit()};
 /* ---------- 중국어 ---------- */
 var ZH=null, ZNEW=10, ZREVMAX=40, ZIV=[0,1,3,7,14,30,60], zFlip=false, zCur=null;
-var zMode="book";
-function setZMode(m){ zMode=m; Array.prototype.forEach.call($("zSeg").children,function(b){b.classList.toggle("on",b.dataset.m===m)});
-  $("zTalk").classList.toggle("hide",m!=="talk"); $("zBookWrap").classList.toggle("hide",m!=="book"); if(m==="talk") loadTalk(); else renderZh() }
-function loadZh(){
-  if(!$("zSeg").dataset.on){ $("zSeg").dataset.on=1; Array.prototype.forEach.call($("zSeg").children,function(b){b.onclick=function(){setZMode(b.dataset.m)}}) }
-  if(zMode==="talk") loadTalk();
-  if(ZH) return renderZh();
-  $("zStudy").innerHTML='<div class="card empty">문장을 여는 중…</div>';
-  openEnc("/books/zh.enc").then(function(j){ZH=j; renderZh()})
-    .catch(function(e){ ZH={items:[]}; renderZh() });
-}
-function zItems(){ var base=(ZH&&ZH.items)||[], extra=Object.keys(D.zh).filter(function(k){var r=D.zh[k]; return k.indexOf("t:")===0&&r&&r.zh&&!r.del}).map(function(k){var r=D.zh[k]; return {id:k,zh:r.zh,py:r.py,ko:r.ko,src:r.src}});
+var zMode="talk";
+function setZMode(m){ zMode=m; $("zTalk").classList.toggle("hide",m==="rev"); $("zBookWrap").classList.toggle("hide",m!=="rev"); window.scrollTo(0,0); if(m==="rev"){ ZH=ZH||{items:[],title:""}; zFlip=false; renderZh() } else loadTalk() }
+function loadZh(){ ZH=ZH||{items:[],title:""}; if(!$("zRevBack").onclick) $("zRevBack").onclick=function(){ setZMode("talk") }; setZMode(zMode) }
+function zDueCount(){ var t=today(); return zItems().filter(function(x){var r=D.zh[x.id]; return r&&r.due<=t}).length }
+/* 대사 체크 = 복습 카드에 넣기 / 빼기 */
+function tChecked(ep,i){ var r=D.zh["t:"+ep+":"+i]; return !!(r&&r.zh&&!r.del) }
+function tToggle(ep,i){ var e=TK.eps.filter(function(x){return x.id===ep})[0], l=e.lines[i], id="t:"+ep+":"+i, r=D.zh[id]||{};
+  if(tChecked(ep,i)){ setItem("zh",id,Object.assign({},r,{del:true})); toast("복습에서 뺐어요") }
+  else { setItem("zh",id,Object.assign({},r,{zh:l.zh,py:l.py,ko:l.ko,src:TK.series.title+" "+e.no+"화",seen:r.seen||today(),lv:0,due:today(),n:r.n||0,del:false})); toast("복습에 넣었어요") } }
+function zItems(){ var base=[], extra=Object.keys(D.zh).filter(function(k){var r=D.zh[k]; return k.indexOf("t:")===0&&r&&r.zh&&!r.del}).map(function(k){var r=D.zh[k]; return {id:k,zh:r.zh,py:r.py,ko:r.ko,src:r.src}});
   var all=base.concat(extra); all._m=null; ZITEMS=all; return all }
 var ZITEMS=[];
 function zById(id){ var a=ZITEMS.length?ZITEMS:zItems(); if(!a._m){var m={}; a.forEach(function(x,i){m[x.id]=x; x._i=i}); a._m=m} return a._m[id] }
 function zDays(a,b){var p=a.split("-"),q=b.split("-"); return Math.round((new Date(+q[0],q[1]-1,+q[2])-new Date(+p[0],p[1]-1,+p[2]))/864e5)}
 /* 오늘 학습 순서: 처음 열 때 한 번 만들고 저장 (기기끼리 같음) */
 function zPlan(){
-  var t=today(), pl=D.zhd[t]; if(pl&&pl.q) return pl;
+  var t=today(), pl=D.zhd[t];
+  if(pl&&pl.q){ var add=zItems().filter(function(x){var r=D.zh[x.id]; return r&&r.due<=t&&pl.q.indexOf(x.id)<0}).map(function(x){return x.id});
+    if(add.length){ pl.q=pl.q.concat(add); setItem("zhd",t,pl) } return pl }
   var its=zItems(); its.forEach(function(x,i){x._i=i}); var rev=[], nw=[];
   its.forEach(function(x){ var r=D.zh[x.id];
     if(r&&r.seen){ if(r.due<=t) rev.push(x) } else if(!x.src&&nw.length<ZNEW) nw.push(x) });
@@ -1258,15 +1257,16 @@ function renderZh(){
   $("zDeck").textContent=ZH.title||"";
   var t=today(), seen=0, good=0, tom=0;
   its.forEach(function(x){var r=D.zh[x.id]; if(r&&r.seen){seen++; if(r.lv>=4) good++; if(r.due<=shift(t,1)) tom++}});
-  $("zStats").innerHTML='<div><b>'+its.length+'</b>전체</div><div><b>'+seen+'</b>배운 문장</div><div><b>'+good+'</b>익힌 문장</div><div><b>'+Math.max(0,its.length-seen)+'</b>남은 문장</div>';
+  var dueN=0; its.forEach(function(x){var r=D.zh[x.id]; if(r&&r.due<=t) dueN++});
+  $("zStats").innerHTML='<div><b>'+its.length+'</b>체크한 문장</div><div><b>'+dueN+'</b>오늘 남은</div><div><b>'+good+'</b>익힌 문장</div><div><b>'+Math.max(0,tom-dueN)+'</b>내일 복습</div>';
   $("zAll").innerHTML=its.map(function(x){var r=D.zh[x.id]; return '<div class="zrow"><span class="lv">'+(r&&r.seen?"단계 "+r.lv+" · 다음 "+(r.due||"").slice(5).replace("-","/"):"아직")+'</span><div class="z">'+esc(x.zh)+'</div><div class="p">'+esc(x.py)+'</div><div class="k">'+esc(x.ko)+'</div></div>'}).join("")||'<div class="empty">아직 문장이 없어요.</div>';
-  if(!its.length){ box.innerHTML='<div class="card empty">아직 교재 문장이 없어요. 교재 스캔(사진이나 PDF)을 Claude 대화에 올리고 “중국어 탭에 추가해줘”라고 하면 문장·병음·뜻으로 정리해서 넣어줄게요. 회화에서 막힌 대사도 여기로 복습하러 와요.</div>'; return }
+  if(!its.length){ box.innerHTML='<div class="card empty">아직 체크한 대사가 없어요. 회화에서 대사 옆 ☆를 누르면 여기로 복습하러 와요.</div>'; return }
   var pl=zPlan(), id=pl.q[pl.i], tot=pl.q.length, nNew=(pl.nw||[]).length;
-  var head='<div class="zprog"><span>오늘 '+Math.min(pl.i,tot)+' / '+tot+'</span><div class="bar"><b style="width:'+(tot?Math.round(Math.min(pl.i,tot)/tot*100):0)+'%"></b></div><span>새 '+nNew+' · 복습 '+(tot-nNew)+'</span></div>';
+  var head='<div class="zprog"><span>오늘 '+Math.min(pl.i,tot)+' / '+tot+'</span><div class="bar"><b style="width:'+(tot?Math.round(Math.min(pl.i,tot)/tot*100):0)+'%"></b></div><span>'+(nNew?'새 '+nNew+' · ':'')+'복습 '+(tot-nNew)+'</span></div>';
   if(!id){
     var nx=0; its.forEach(function(x){var r=D.zh[x.id]; if(r&&r.seen&&r.due===shift(t,1)) nx++});
-    box.innerHTML=head+'<div class="card" style="text-align:center"><div style="font-size:40px">🎉</div><h2 style="justify-content:center">오늘 공부 끝</h2><div class="empty">처음에 바로 안 문장 '+(pl.ok||0)+'개 · 내일 복습 '+nx+'개'+(seen>=its.length?'<br>교재 문장을 다 배웠어요. 다음 교재를 올려주세요.':'')+'</div></div>';
-    return }
+    box.innerHTML=head+'<div class="card" style="text-align:center"><div style="font-size:40px">🎉</div><h2 style="justify-content:center">오늘 공부 끝</h2><div class="empty">처음에 바로 안 문장 '+(pl.ok||0)+'개 · 내일 복습 '+nx+'개'+""+'</div><button class="btn ghost full" id="zDoneBack">회화로 돌아가기</button></div>';
+    $("zDoneBack").onclick=function(){ setZMode("talk") }; return }
   var x=zById(id); if(!x){ pl.i++; zSave(pl); return renderZh() }
   var r=D.zh[id], isNew=!(r&&r.seen)&&(pl.nw||[]).indexOf(id)>=0, again=pl.bad&&pl.bad[id];
   var tag=again?'<b>한 번 더</b>':isNew?'<b>새 문장</b> · '+(x._i+1)+'번째':x.src?'복습 · '+esc(x.src):'복습 · '+(x._i+1)+'번째';
@@ -1290,11 +1290,14 @@ function loadTalk(){
 function tProg(id){ return D.zh["e:"+id]||{} }
 function renderTalk(){
   TE=null; var s=TK.series;
-  var h='<div class="card"><div class="tser"><b>'+esc(s.title)+'</b>'+esc(s.py)+' · '+esc(s.ko)+'<div style="margin-top:8px">'+esc(s.intro)+'</div></div>';
+  var nChk=zItems().length, nDue=zDueCount();
+  var h='<div class="card" style="display:flex;align-items:center;gap:12px"><div style="flex:1"><h2 style="margin:0">오늘 복습 '+nDue+'개</h2><div class="empty" style="font-size:12px;margin-top:4px">체크한 대사 '+nChk+'개 · ☆를 누르면 복습에 들어가요</div></div><button class="btn" id="tRev"'+(nChk?'':' disabled style="opacity:.4"')+'>복습하기</button></div>';
+  h+='<div class="card"><div class="tser"><b>'+esc(s.title)+'</b>'+esc(s.py)+' · '+esc(s.ko)+'<div style="margin-top:8px">'+esc(s.intro)+'</div></div>';
   TK.eps.forEach(function(e){ var p=tProg(e.id);
     h+='<button class="tep" data-e="'+e.id+'"><span class="no">'+e.no+'</span><span class="tt"><b>'+esc(e.title)+'</b> <small style="color:var(--mut)">'+esc(e.tpy)+'</small><span>'+esc(e.tko)+' · '+e.cast.map(function(c){return esc(TK.chars[c].name)}).join(" × ")+'</span></span><span class="st">'+(p.best?"단계 "+p.best+" 완료":p.at?"진행 중":"")+'</span></button>' });
-  h+='</div><div class="empty" style="font-size:12px;padding:0 4px">역할 하나를 골라 내 대사는 소리 내 읽고, 상대 대사는 앱이 읽어줘요. 막힌 대사는 교재 탭 복습 카드로 들어가요.</div>';
+  h+='</div><div class="empty" style="font-size:12px;padding:0 4px">역할 하나를 골라 내 대사는 소리 내 읽고, 상대 대사는 앱이 읽어줘요. 대사 옆 ☆를 누르거나 막혀서 넘긴 대사는 복습 카드로 들어가요.</div>';
   $("zTalk").innerHTML=h;
+  $("tRev").onclick=function(){ if(zItems().length) setZMode("rev") };
   Array.prototype.forEach.call($("zTalk").querySelectorAll(".tep"),function(b){b.onclick=function(){ openEp(b.dataset.e) }});
 }
 function openEp(id){ TE=TK.eps.filter(function(e){return e.id===id})[0]; TR=TE.cast[0]; TI=-1; THEARD={}; TMISS={}; TSHOWK={}; tAd=null; renderEp(); window.scrollTo(0,0) }
@@ -1338,11 +1341,14 @@ function renderEp(){
     h+='<div class="empty" style="font-size:12px;margin-top:6px">'+esc(c[TR].ko)+'</div>';
     h+='<h2 style="margin-top:14px">난이도</h2><div class="seg" id="tLv"><button data-l="1" class="'+(TLV===1?"on":"")+'">보고 읽기</button><button data-l="2" class="'+(TLV===2?"on":"")+'">병음 숨김</button><button data-l="3" class="'+(TLV===3?"on":"")+'">뜻만 보고</button></div>';
     h+='<button class="btn full" id="tGo">시작</button></div>';
+    h+='<div class="card"><h2>대본 <span style="font-size:12px;color:var(--mut);font-weight:400">☆ 눌러서 복습에 넣기</span></h2>'+e.lines.map(function(l,i){ var on=tChecked(e.id,i);
+      return '<div class="zrow" style="display:flex;gap:10px"><button class="tchk" data-c="'+i+'" style="font-size:20px;color:'+(on?'#f0b35a':'var(--mut)')+'">'+(on?'★':'☆')+'</button><div style="flex:1"><span class="lv">'+esc(c[l.who].name)+'</span><div class="z">'+esc(l.zh)+'</div><div class="p">'+esc(l.py)+'</div><div class="k">'+esc(l.ko)+'</div></div></div>' }).join("")+'</div>';
     h+='<div class="card"><h2>표현 노트</h2>'+e.notes.map(function(n){return '<div class="tnote"><b>'+esc(n[0])+'</b><span>'+esc(n[1])+'</span>'+esc(n[2])+'</div>'}).join("")+'</div>';
     box.innerHTML=h;
     $("tBack").onclick=function(){ speechSynthesis.cancel(); renderTalk() };
     Array.prototype.forEach.call(box.querySelectorAll("#tRole button"),function(b){b.onclick=function(){TR=b.dataset.r; renderEp()}});
     Array.prototype.forEach.call(box.querySelectorAll("#tLv button"),function(b){b.onclick=function(){TLV=+b.dataset.l; renderEp()}});
+    Array.prototype.forEach.call(box.querySelectorAll(".tchk"),function(b){b.onclick=function(){ tToggle(e.id,+b.dataset.c); renderEp() }});
     $("tGo").onclick=function(){ /* iOS: 첫 음성은 사용자 터치 안에서 */ try{speechSynthesis.speak(new SpeechSynthesisUtterance(""))}catch(x){} tNext() };
     return }
   h+='</div><div class="tlog" id="tLog">';
@@ -1353,8 +1359,9 @@ function renderEp(){
       body=(TLV===3&&!TSHOWK[i]?'<div class="z" style="font-size:16px">'+esc(l.ko)+'</div><div class="k" data-k="'+i+'" style="text-decoration:underline">중국어 보기 (막힘으로 기록)</div>'
         :'<div class="z">'+(hd?tMark(l.zh,hd.t):esc(l.zh))+'</div>'+(TLV===1||TSHOWK["p"+i]?'<div class="p">'+esc(l.py)+'</div>':'<div class="k" data-k="p'+i+'" style="text-decoration:underline">병음 보기</div>')+(TLV===1?'<div class="k">'+esc(l.ko)+'</div>':''));
       if(hd) body+='<div class="heard">들린 말: '+esc(hd.t||"…")+' <b class="'+(hd.s>=0.8?"ok":"bad")+'">'+Math.round(hd.s*100)+'%</b></div>'; }
-    else body='<div class="z">'+esc(l.zh)+'</div><div class="p">'+esc(l.py)+'</div><div class="k">'+esc(l.ko)+'</div>'+(TMISS[i]?'<div class="k bad">복습 카드에 넣었어요</div>':hd?'<div class="k ok">'+Math.round(hd.s*100)+'%</div>':'');
-    h+='<div class="tb'+(me?" me":"")+(i===TI?" cur":"")+'"><div class="w">'+esc(c[l.who].name)+'</div>'+body+'</div>' }
+    else body='<div class="z">'+esc(l.zh)+'</div><div class="p">'+esc(l.py)+'</div><div class="k">'+esc(l.ko)+'</div>'+(TMISS[i]?'<div class="k bad">막혀서 복습에 넣었어요</div>':hd?'<div class="k ok">'+Math.round(hd.s*100)+'%</div>':'');
+    var on=tChecked(e.id,i);
+    h+='<div class="tb'+(me?" me":"")+(i===TI?" cur":"")+'"><div class="w" style="display:flex;justify-content:space-between;gap:8px"><span>'+esc(c[l.who].name)+'</span><button class="tchk" data-c="'+i+'" style="font-size:16px;line-height:1;color:'+(on?'#f0b35a':'var(--mut)')+'">'+(on?'★':'☆')+'</button></div>'+body+'</div>' }
   if(tAd) tAd.log.forEach(function(m){ h+='<div class="tb'+(m.me?" me":"")+'"><div class="w">'+esc(m.me?c[TR].name:c[tAd.with].name)+' · 애드리브</div><div class="z">'+esc(m.zh)+'</div>'+(m.py?'<div class="p">'+esc(m.py)+'</div>':'')+(m.ko?'<div class="k">'+esc(m.ko)+'</div>':'')+'</div>' });
   h+='</div>';
   if(TI<e.lines.length){ var L=e.lines[TI];
@@ -1368,6 +1375,7 @@ function renderEp(){
   box.innerHTML=h;
   $("tBack").onclick=function(){ speechSynthesis.cancel(); try{recog&&recog.abort()}catch(x){} TI=-1; renderEp() };
   Array.prototype.forEach.call(box.querySelectorAll("[data-k]"),function(b){b.onclick=function(){ var k=b.dataset.k; TSHOWK[k]=1; if(/^\d+$/.test(k)) tMiss(+k); renderEp() }});
+  Array.prototype.forEach.call(box.querySelectorAll(".tchk"),function(b){b.onclick=function(ev){ ev.stopPropagation(); tToggle(e.id,+b.dataset.c); renderEp() }});
   if($("tMic")) $("tMic").onclick=function(){ tListen(TI) };
   if($("tHear")) $("tHear").onclick=function(){ tSpeak(e.lines[TI].zh,c[TR].g) };
   if($("tPass")) $("tPass").onclick=function(){ var hd=THEARD[TI]; if(!(hd&&hd.s>=0.8)) tMiss(TI); tNext() };
