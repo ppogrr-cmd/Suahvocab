@@ -91,3 +91,17 @@ export async function advise(data, today) {
     `기록이 적으면 그 점을 말하고 있는 범위에서만 조언해. 진단이나 약 이야기는 하지 말고, 필요하면 진료 때 물어보라고만 해.`;
   return ask(SMART(), [{ type: "text", text: prompt }], 1200);
 }
+
+// 회화 애드리브: 대본 장면을 이어서 상대역이 한마디 → { zh, py, ko, tip }
+export async function talk({ scene, me, you, script, log }) {
+  const hist = (log || []).map((m) => `${m.me ? me.name : you.name}：${String(m.zh || "").slice(0, 200)}`).join("\n");
+  const prompt =
+    `너는 중국 직장 드라마의 등장인물 "${you.name}"(${you.ko})이야. 상대는 "${me.name}"(${me.ko}). 상대역은 중국어가 유창한 한국인 학습자가 연기 중이야.\n` +
+    `장면: ${scene}\n대본 마지막 부분:\n${(script || []).join("\n")}\n\n이후 즉흥 대화:\n${hist}\n\n` +
+    `${you.name}로서 다음 한마디를 해. 규칙:\n- 실제 상하이 직장인이 쓰는 자연스러운 구어체 보통화, 1~2문장, 캐릭터 성격 유지, 장면을 조금씩 앞으로 진행\n` +
+    `- 상대 마지막 말에 어색하거나 틀린 중국어가 있으면 tip에 한국어로 짧게 더 자연스러운 표현을 알려주고, 없으면 tip은 빈 문자열\n` +
+    `JSON만: {"zh":"중국어","py":"성조 표시 병음","ko":"한국어 뜻","tip":""}`;
+  const text = await ask(SMART(), [{ type: "text", text: prompt }], 400);
+  const j = jsonIn(text) || { zh: text.slice(0, 120) };
+  return { zh: String(j.zh || "").slice(0, 200), py: String(j.py || "").slice(0, 300), ko: String(j.ko || "").slice(0, 200), tip: String(j.tip || "").slice(0, 200) };
+}
