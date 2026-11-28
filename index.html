@@ -1456,16 +1456,13 @@ function renderCellar(){
   var list=all.filter(function(b){ var a=b.ai||{}; return (cKind==="all"||(a.kind||"기타")===cKind) && (!q||[bName(b),a.nameOrig,a.producer,a.country,a.region,a.style,a.base].join(" ").toLowerCase().indexOf(q)>=0) })
     .sort(function(x,y){ return bLast(y).localeCompare(bLast(x)) || (y.at||0)-(x.at||0) });
   var h='<div class="chead"><div><h1>음주일지</h1><small>마신 술 '+all.length+'종 · 감상 '+nTimes+'번 · '+Object.keys(cs).length+'개국</small></div></div>';
-  h+='<div class="cadd"><button class="btn" id="bAddPh">📷 라벨 찍어 기록</button><button class="btn ghost" id="bAddNm">✏️ 이름으로</button></div>';
   if(all.length){
     h+='<div class="cchips"><button data-k="all" class="'+(cKind==="all"?"on":"")+'">전체 '+all.length+'</button>'+Object.keys(kinds).sort(function(a,b){return kinds[b]-kinds[a]}).map(function(k){return '<button data-k="'+esc(k)+'" class="'+(cKind===k?"on":"")+'">'+bIc(k)+' '+esc(k)+' '+kinds[k]+'</button>'}).join("")+'</div>';
     h+='<input class="csearch" id="cQ" type="search" placeholder="이름·생산자·국가·품종으로 찾기" value="'+esc(cQ)+'">';
     h+=list.length?'<div class="cgrid">'+list.map(function(b){ var a=b.ai||{}, im=bImg(b), sv=bStars(b);
       return '<button class="ccard" data-b="'+b.id+'"><div class="ph">'+(im?'<img src="'+esc(im)+'" loading="lazy" alt="">':bIc(a.kind))+((b.notes||[]).length>1?'<span class="badge">'+b.notes.length+'번</span>':'')+'</div><div class="bd"><div class="k">'+bIc(a.kind)+' '+esc([a.style||a.kind,a.country].filter(Boolean).join(" · ")||"정보 없음")+'</div><div class="n">'+esc(bName(b))+'</div><div class="st">'+(sv?starTxt(sv):'<span style="color:var(--mut)">감상 전</span>')+'</div></div></button>' }).join("")+'</div>':'<div class="card empty">해당하는 술이 없어요.</div>';
-  } else h+='<div class="card empty">아직 기록이 없어요. 마신 술 라벨을 찍으면 Claude가 어떤 술인지 알려주고, 그 아래에 내 감상을 적을 수 있어요.</div>';
+  } else h+='<div class="card empty">아직 기록이 없어요. Claude 대화에 마신 술 라벨 사진을 보내면 정리해서 넣어줄게요.</div>';
   box.innerHTML=h;
-  $("bAddPh").onclick=function(){ $("bFile").click() };
-  $("bAddNm").onclick=function(){ var n=prompt("마신 술 이름 (예: 발베니 12년 더블우드)"); if(n&&n.trim()) bNew(null,n.trim()) };
   Array.prototype.forEach.call(box.querySelectorAll(".cchips button"),function(b){b.onclick=function(){cKind=b.dataset.k; renderCellar()}});
   if($("cQ")) $("cQ").oninput=function(){ cQ=this.value; var pos=this.selectionStart; renderCellar(); var i=$("cQ"); i.focus(); try{i.setSelectionRange(pos,pos)}catch(e){} };
   Array.prototype.forEach.call(box.querySelectorAll(".ccard"),function(b){b.onclick=function(){ openBottle(b.dataset.b) }});
@@ -1496,26 +1493,26 @@ function renderBottle(){
     '<div class="bdchips">'+[a.country&&(a.country+(a.region?" · "+a.region:"")),a.vintage,a.abv,a.price].filter(Boolean).map(function(x){return '<span>'+esc(x)+'</span>'}).join("")+'</div>'+
     (a.rarity?'<div style="margin-top:8px;font-size:13px"><span class="rar">'+"◆◆◆◆◆".slice(0,a.rarity)+'<span style="color:var(--line)">'+"◆◆◆◆◆".slice(0,5-a.rarity)+'</span></span> '+esc(a.rarityNote||"")+'</div>':'')+'</div></div>';
   if(bBusy[b.id]) h+='<div class="bdsec"><p>Claude가 라벨을 읽고 있어요… (10~30초)</p></div>';
-  else if(!b.ai) h+='<div class="bdsec"><p>'+esc(b.aiErr||"아직 정보가 없어요.")+'</p><button class="btn ghost full" id="bdRetry" style="margin-top:10px">정보 다시 받기</button></div>';
-  if(b.ai&&a.kind==="없음") h+='<div class="bdsec"><p>술병으로 보이지 않아요. 아래 ‘이름 고쳐서 정보 다시 받기’로 알려주면 다시 찾아볼게요.</p></div>';
+  else if(!b.ai) h+='<div class="bdsec"><p>아직 정보가 없어요. Claude 대화에 이 술 사진을 보내 주세요.</p></div>';
+  if(b.ai&&a.kind==="없음") h+='<div class="bdsec"><p>술병으로 보이지 않아요. Claude 대화에서 이름을 알려주세요.</p></div>';
   if(b.ai&&a.kind!=="없음"){
     if(a.story) h+='<div class="bdsec"><h3>이야기</h3><p>'+esc(a.story)+'</p>'+(a.producer?'<div style="margin-top:8px;font-size:13px;color:var(--mut)">생산자 · '+esc(a.producer)+'</div>':'')+'</div>';
     if(a.base) h+='<div class="bdsec"><h3>'+(a.kind==="와인"?"품종":"원료")+'</h3><p>'+esc(a.base)+'</p></div>';
     if(a.visual||a.nose||a.palate) h+='<div class="bdsec tnote3"><h3>테이스팅 노트</h3>'+(a.visual?'<div><b>Visual</b>'+esc(a.visual)+'</div>':'')+(a.nose?'<div><b>Nose</b>'+esc(a.nose)+'</div>':'')+(a.palate?'<div><b>Palate</b>'+esc(a.palate)+'</div>':'')+((a.aromas||[]).length?'<div class="bdchips">'+a.aromas.map(function(x){return '<span>#'+esc(x)+'</span>'}).join("")+'</div>':'')+'</div>';
     if(sv.temp||sv.glass||sv.how||(a.pairing||[]).length) h+='<div class="bdsec"><h3>마시는 법</h3><div class="bdkv">'+(sv.temp?'<span>온도</span><span>'+esc(sv.temp)+'</span>':'')+(sv.glass?'<span>잔</span><span>'+esc(sv.glass)+'</span>':'')+(sv.how?'<span>다루기</span><span>'+esc(sv.how)+'</span>':'')+((a.pairing||[]).length?'<span>페어링</span><span>'+esc(a.pairing.join(", "))+'</span>':'')+(a.drink?'<span>시기</span><span>'+esc(a.drink)+'</span>':'')+'</div></div>';
-    if(a.confidence==="low") h+='<div style="margin:8px 16px 0;font-size:12px;color:var(--mut)">라벨이 잘 안 읽혀서 추정이 섞였어요. 틀리면 아래 ‘이름 고쳐서 정보 다시 받기’를 눌러 주세요.</div>';
+    if(a.confidence==="low") h+='<div style="margin:8px 16px 0;font-size:12px;color:var(--mut)">라벨이 잘 안 읽혀서 추정이 섞였어요. 틀리면 Claude 대화에서 알려주세요.</div>';
   }
   var ns=(b.notes||[]).slice().sort(function(x,y){return (y.date||"").localeCompare(x.date||"")});
   h+='<div class="bdsec"><h3>나의 감상 '+(ns.length?'· '+ns.length+'번':'')+'</h3>';
   h+=ns.map(function(n){ return '<div class="mynote"><div class="h"><span>'+esc(n.date||"")+(n.place?' · '+esc(n.place):'')+(n.with?' · '+esc(n.with):'')+'</span><b>'+(n.stars?starTxt(n.stars):'')+'</b></div>'+(n.memo?'<div class="m">'+esc(n.memo)+'</div>':'')+(n.again?'<div style="font-size:12px;color:var(--acc2);margin-top:4px">'+esc(n.again)+'</div>':'')+'<div style="text-align:right"><button data-ne="'+n.id+'" style="font-size:12px;color:var(--mut);padding:4px">고치기</button></div></div>' }).join("");
   if(nDraft) h+=noteForm(); else h+='<button class="btn full" id="bdNote" style="margin-top:8px">'+(ns.length?'다시 마신 기록 추가':'감상 쓰기')+'</button>';
   h+='</div>';
-  h+='<div style="display:flex;gap:8px;margin:16px"><button class="btn ghost" id="bdFix" style="flex:1">이름 고쳐서 정보 다시 받기</button><button class="btn ghost" id="bdDel2" style="flex:1;color:#ff9b8a">이 술 삭제</button></div>';
+  h+='<div style="display:flex;gap:8px;margin:16px"><button class="btn ghost" id="bdDel2" style="flex:1;color:#ff9b8a">이 술 삭제</button></div>';
   $("bdView").innerHTML=h;
   $("bdBack").onclick=closeBottle;
   function bDel(){ if(!confirm("‘"+bName(b)+"’ 기록과 감상을 모두 지울까요?")) return; setItem("cellar",b.id,Object.assign({},D.cellar[b.id],{del:true})); if(b.img) api("/api/bottle?id="+b.id,{method:"DELETE"}).catch(function(){}); toast("삭제했어요"); closeBottle() }
   $("bdDel").onclick=bDel; $("bdDel2").onclick=bDel;
-  $("bdFix").onclick=function(){ var n=prompt("정확한 술 이름",bName(b)); if(n&&n.trim()){ setItem("cellar",b.id,Object.assign({},D.cellar[b.id],{name:n.trim()})); bFetch(b.id,null,n.trim()) } };
+
   if($("bdRetry")) $("bdRetry").onclick=function(){ bFetch(b.id,bLocal[b.id]||null,b.name||b.hint||"") };
   if($("bdNote")) $("bdNote").onclick=function(){ nDraft={id:"n"+Date.now().toString(36),date:today(),stars:0,place:"",with:"",memo:"",again:""}; renderBottle(); setTimeout(function(){ $("nMemo")&&$("nMemo").scrollIntoView({block:"center"}) },50) };
   Array.prototype.forEach.call($("bdView").querySelectorAll("[data-ne]"),function(x){x.onclick=function(){ nDraft=Object.assign({},(b.notes||[]).filter(function(n){return n.id===x.dataset.ne})[0]); renderBottle() }});
@@ -1540,7 +1537,8 @@ function bindNoteForm(bid){
 /* Claude가 대신 등록해 준 술: 처음 동기화 뒤 한 번, 아직 없는 것만 넣는다 */
 function cSeed(){ if(cSeed.done) return; cSeed.done=1;
   openEnc("/books/cellar-seed.enc").then(function(j){ (j.items||[]).forEach(function(it){
-    if(D.cellar[it.id]) return;
+    var cur=D.cellar[it.id];
+    if(cur){ if(!cur.del&&(it.rev||0)>(cur.rev||0)) setItem("cellar",it.id,Object.assign({},cur,{ai:it.rec.ai,rev:it.rev})); return }
     if(it.img) bLocal[it.id]=it.img;
     setItem("cellar",it.id,Object.assign({},it.rec));
     if(it.img) api("/api/bottle",{body:{id:it.id,img:it.img,noAi:true}}).then(function(r){ if(r._s===200&&D.cellar[it.id]){ setItem("cellar",it.id,Object.assign({},D.cellar[it.id],{img:1})); delete bLocal[it.id]; renderCellar() } }).catch(function(){});
