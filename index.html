@@ -1534,6 +1534,15 @@ function bindNoteForm(bid){
   if($("nDel")) $("nDel").onclick=function(){ if(!confirm("이 감상을 지울까요?")) return; var r=D.cellar[bid]; setItem("cellar",bid,Object.assign({},r,{notes:(r.notes||[]).filter(function(x){return x.id!==nDraft.id})})); nDraft=null; renderBottle() };
   $("nSave").onclick=function(){ grab(); var r=D.cellar[bid], ns=(r.notes||[]).filter(function(x){return x.id!==nDraft.id}); ns.push(Object.assign({},nDraft,{t:Date.now()})); setItem("cellar",bid,Object.assign({},r,{notes:ns})); nDraft=null; toast("감상을 저장했어요"); renderBottle() };
 }
+/* Claude가 대신 등록해 준 술: 처음 동기화 뒤 한 번, 아직 없는 것만 넣는다 */
+function cSeed(){ if(cSeed.done) return; cSeed.done=1;
+  openEnc("/books/cellar-seed.enc").then(function(j){ (j.items||[]).forEach(function(it){
+    if(D.cellar[it.id]) return;
+    if(it.img) bLocal[it.id]=it.img;
+    setItem("cellar",it.id,Object.assign({},it.rec));
+    if(it.img) api("/api/bottle",{body:{id:it.id,img:it.img,noAi:true}}).then(function(r){ if(r._s===200&&D.cellar[it.id]){ setItem("cellar",it.id,Object.assign({},D.cellar[it.id],{img:1})); delete bLocal[it.id]; renderCellar() } }).catch(function(){});
+  }); renderCellar() }).catch(function(){});
+}
 var TITLES={today:"음주일지",meal:"식사",read:"독서",zh:"중국어",health:"건강",set:"설정"};
 Array.prototype.forEach.call(document.querySelectorAll("nav button"),function(b){b.onclick=function(){
   var v=b.dataset.v;
@@ -1554,7 +1563,7 @@ function pull(){
   return api("/api/data").then(function(j){
     if(j._s===401) return showLock();
     if(j._s!==200){syncLabel("오프라인 · 기기에 저장됨"); return}
-    mergeIn(j); saveLocal(); lastSync=Date.now(); render(); flushImgs(); loadAdvice();
+    mergeIn(j); saveLocal(); lastSync=Date.now(); render(); flushImgs(); loadAdvice(); cSeed();
     if(hasDirty) return push(); syncLabel("동기화됨");
   }).catch(function(){syncLabel("오프라인 · 기기에 저장됨")});
 }
