@@ -46,6 +46,24 @@ input{font:inherit}
 .bdhero{display:grid;grid-template-columns:minmax(0,40%) minmax(0,1fr);gap:14px;padding:6px 16px 4px;align-items:start}
 .bdhero .ph{aspect-ratio:4/5;border-radius:14px;background:#0b1424;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:54px}
 .bdhero .ph img{width:100%;height:100%;object-fit:cover}
+.bgal{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 16px 2px;scrollbar-width:none}
+.bgal::-webkit-scrollbar{display:none}
+.bgal img{flex:none;height:320px;max-width:86%;object-fit:cover;border-radius:14px;scroll-snap-align:center;background:#0b1424}
+.bgal.one img{max-width:100%;width:100%;height:auto;max-height:420px;object-fit:contain}
+.bgal .noimg{flex:1;height:200px;border-radius:14px;background:#0b1424;display:flex;align-items:center;justify-content:center;font-size:60px}
+.binfo{padding:10px 16px 0}
+.binfo h2{margin:2px 0;font-size:21px;line-height:1.3}.binfo .o{color:var(--mut);font-size:13px;font-style:italic}
+#bZoom{position:fixed;inset:0;z-index:70;background:#000}
+#bZoom .zwrap{position:absolute;inset:0;overflow:auto;display:flex;align-items:center;justify-content:center;-webkit-overflow-scrolling:touch}
+#bZoom .zwrap img{max-width:100%;max-height:100%;object-fit:contain}
+#bZoom .zwrap.big{display:block}
+#bZoom .zwrap.big img{max-width:none;max-height:none;width:250%}
+#bZoom button{position:absolute;background:rgba(255,255,255,.15);color:#fff;border-radius:50%;width:44px;height:44px;font-size:22px}
+#bZoom .zx{top:calc(env(safe-area-inset-top) + 12px);right:12px}
+#bZoom .zp{left:10px;top:50%}#bZoom .zn{right:10px;top:50%}
+#bZoom .zc{position:absolute;top:calc(env(safe-area-inset-top) + 22px);left:0;right:0;text-align:center;color:#fff;font-size:13px;pointer-events:none}
+#bZoom .zh{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 14px);left:0;right:0;text-align:center;color:rgba(255,255,255,.6);font-size:12px;pointer-events:none}
+.ccard .badge.ph2{left:auto;right:6px}
 .bdhero h2{margin:2px 0 2px;font-size:20px;line-height:1.3}
 .bdhero .o{color:var(--mut);font-size:13px;font-style:italic}
 .bdchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}.bdchips span{font-size:12px;background:var(--card2);padding:3px 8px;border-radius:6px}
@@ -368,6 +386,7 @@ nav button.on{color:var(--tx)}
   </div>
 </section>
 <div id="bdView" class="hide"></div>
+<div id="bZoom" class="hide"></div>
 <input type="file" id="bFile" accept="image/*" class="hide">
 
 <!-- 건강 -->
@@ -1446,7 +1465,17 @@ function bottles(){ return Object.keys(D.cellar).map(function(id){return Object.
 function bLast(b){ var ns=(b.notes||[]); return ns.length?ns.map(function(n){return n.date||""}).sort().pop():new Date(b.at||0).toISOString().slice(0,10) }
 function bStars(b){ var ns=(b.notes||[]).filter(function(n){return n.stars}); if(!ns.length) return 0; return ns.reduce(function(a,n){return a+n.stars},0)/ns.length }
 function bName(b){ var a=b.ai||{}; return b.name||a.nameKo||a.nameOrig||(bBusy[b.id]?"라벨 읽는 중…":"이름 없음") }
-function bImg(b){ return bLocal[b.id]||(b.img?"/api/bottle?id="+b.id:"") }
+function bPid(id,i){ return i?id+"p"+(i+1):id }
+function bImgs(b){ var n=Math.max(b.imgN||0,b.img?1:0), out=[]; for(var i=0;i<Math.max(n,8);i++){ var k=bPid(b.id,i); if(bLocal[k]) out.push(bLocal[k]); else if(i<n) out.push("/api/bottle?id="+k) } return out }
+function bImg(b){ return bImgs(b)[0]||"" }
+var ZIMGS=[], ZI=0;
+function zoomOpen(list,i){ ZIMGS=list; ZI=i; var z=$("bZoom"); z.classList.remove("hide"); zoomShow() }
+function zoomShow(){ var z=$("bZoom"); z.innerHTML='<div class="zwrap" id="zWrap"><img id="zImg" src="'+esc(ZIMGS[ZI])+'" alt=""></div><button class="zx" id="zX">✕</button>'+(ZIMGS.length>1?'<button class="zp" id="zP">‹</button><button class="zn" id="zN">›</button><div class="zc">'+(ZI+1)+' / '+ZIMGS.length+'</div>':'')+'<div class="zh">사진을 누르면 확대·축소</div>';
+  $("zX").onclick=function(){ z.classList.add("hide"); z.innerHTML="" };
+  $("zImg").onclick=function(e){ var w=$("zWrap"), on=w.classList.toggle("big"); if(on){ var r=this.getBoundingClientRect(); setTimeout(function(){ w.scrollLeft=(w.scrollWidth-w.clientWidth)/2; w.scrollTop=(w.scrollHeight-w.clientHeight)/2 },0) } };
+  if($("zP")) $("zP").onclick=function(){ ZI=(ZI-1+ZIMGS.length)%ZIMGS.length; zoomShow() };
+  if($("zN")) $("zN").onclick=function(){ ZI=(ZI+1)%ZIMGS.length; zoomShow() };
+}
 function starTxt(v){ var r=Math.round(v); return "★★★★★".slice(0,r)+"☆☆☆☆☆".slice(0,5-r) }
 function renderCellar(){
   var box=$("cellarMain"); if(!box) return;
@@ -1460,7 +1489,7 @@ function renderCellar(){
     h+='<div class="cchips"><button data-k="all" class="'+(cKind==="all"?"on":"")+'">전체 '+all.length+'</button>'+Object.keys(kinds).sort(function(a,b){return kinds[b]-kinds[a]}).map(function(k){return '<button data-k="'+esc(k)+'" class="'+(cKind===k?"on":"")+'">'+bIc(k)+' '+esc(k)+' '+kinds[k]+'</button>'}).join("")+'</div>';
     h+='<input class="csearch" id="cQ" type="search" placeholder="이름·생산자·국가·품종으로 찾기" value="'+esc(cQ)+'">';
     h+=list.length?'<div class="cgrid">'+list.map(function(b){ var a=b.ai||{}, im=bImg(b), sv=bStars(b);
-      return '<button class="ccard" data-b="'+b.id+'"><div class="ph">'+(im?'<img src="'+esc(im)+'" loading="lazy" alt="">':bIc(a.kind))+((b.notes||[]).length>1?'<span class="badge">'+b.notes.length+'번</span>':'')+'</div><div class="bd"><div class="k">'+bIc(a.kind)+' '+esc([a.style||a.kind,a.country].filter(Boolean).join(" · ")||"정보 없음")+'</div><div class="n">'+esc(bName(b))+'</div><div class="st">'+(sv?starTxt(sv):'<span style="color:var(--mut)">감상 전</span>')+'</div></div></button>' }).join("")+'</div>':'<div class="card empty">해당하는 술이 없어요.</div>';
+      return '<button class="ccard" data-b="'+b.id+'"><div class="ph">'+(im?'<img src="'+esc(im)+'" loading="lazy" alt="">':bIc(a.kind))+((b.notes||[]).length>1?'<span class="badge">'+b.notes.length+'번</span>':'')+(bImgs(b).length>1?'<span class="badge ph2">📷'+bImgs(b).length+'</span>':'')+'</div><div class="bd"><div class="k">'+bIc(a.kind)+' '+esc([a.style||a.kind,a.country].filter(Boolean).join(" · ")||"정보 없음")+'</div><div class="n">'+esc(bName(b))+'</div><div class="st">'+(sv?starTxt(sv):'<span style="color:var(--mut)">감상 전</span>')+'</div></div></button>' }).join("")+'</div>':'<div class="card empty">해당하는 술이 없어요.</div>';
   } else h+='<div class="card empty">아직 기록이 없어요. Claude 대화에 마신 술 라벨 사진을 보내면 정리해서 넣어줄게요.</div>';
   box.innerHTML=h;
   Array.prototype.forEach.call(box.querySelectorAll(".cchips button"),function(b){b.onclick=function(){cKind=b.dataset.k; renderCellar()}});
@@ -1489,9 +1518,9 @@ function closeBottle(){ BOPEN=null; $("bdView").classList.add("hide"); renderCel
 function renderBottle(){
   var b=D.cellar[BOPEN]; if(!b){ closeBottle(); return } b=Object.assign({id:BOPEN},b); var a=b.ai||{}, im=bImg(b), sv=a.serve||{};
   var h='<div class="bdtop"><button id="bdBack">← 목록</button><button id="bdDel" style="color:#ff9b8a">삭제</button></div>';
-  h+='<div class="bdhero"><div class="ph">'+(im?'<img src="'+esc(im)+'" alt="">':bIc(a.kind))+'</div><div><div style="font-size:12px;color:var(--mut)">'+bIc(a.kind)+' '+esc([a.kind,a.style].filter(Boolean).join(" · "))+'</div><h2>'+esc(bName(b))+'</h2><div class="o">'+esc(a.nameOrig||"")+'</div>'+
+  var ims=bImgs(b); h+='<div class="bgal'+(ims.length===1?' one':'')+'">'+(ims.length?ims.map(function(u,i){return '<img src="'+esc(u)+'" data-z="'+i+'" alt="">'}).join(""):'<div class="noimg">'+bIc(a.kind)+'</div>')+'</div><div class="binfo"><div style="font-size:12px;color:var(--mut)">'+bIc(a.kind)+' '+esc([a.kind,a.style].filter(Boolean).join(" · "))+'</div><h2>'+esc(bName(b))+'</h2><div class="o">'+esc(a.nameOrig||"")+'</div>'+
     '<div class="bdchips">'+[a.country&&(a.country+(a.region?" · "+a.region:"")),a.vintage,a.abv,a.price].filter(Boolean).map(function(x){return '<span>'+esc(x)+'</span>'}).join("")+'</div>'+
-    (a.rarity?'<div style="margin-top:8px;font-size:13px"><span class="rar">'+"◆◆◆◆◆".slice(0,a.rarity)+'<span style="color:var(--line)">'+"◆◆◆◆◆".slice(0,5-a.rarity)+'</span></span> '+esc(a.rarityNote||"")+'</div>':'')+'</div></div>';
+    (a.rarity?'<div style="margin-top:8px;font-size:13px"><span class="rar">'+"◆◆◆◆◆".slice(0,a.rarity)+'<span style="color:var(--line)">'+"◆◆◆◆◆".slice(0,5-a.rarity)+'</span></span> '+esc(a.rarityNote||"")+'</div>':'')+'</div>';
   if(bBusy[b.id]) h+='<div class="bdsec"><p>Claude가 라벨을 읽고 있어요… (10~30초)</p></div>';
   else if(!b.ai) h+='<div class="bdsec"><p>아직 정보가 없어요. Claude 대화에 이 술 사진을 보내 주세요.</p></div>';
   if(b.ai&&a.kind==="없음") h+='<div class="bdsec"><p>술병으로 보이지 않아요. Claude 대화에서 이름을 알려주세요.</p></div>';
@@ -1510,6 +1539,7 @@ function renderBottle(){
   h+='<div style="display:flex;gap:8px;margin:16px"><button class="btn ghost" id="bdDel2" style="flex:1;color:#ff9b8a">이 술 삭제</button></div>';
   $("bdView").innerHTML=h;
   $("bdBack").onclick=closeBottle;
+  Array.prototype.forEach.call($("bdView").querySelectorAll("[data-z]"),function(x){x.onclick=function(){ zoomOpen(bImgs(D.cellar[BOPEN]?Object.assign({id:BOPEN},D.cellar[BOPEN]):b),+x.dataset.z) }});
   function bDel(){ if(!confirm("‘"+bName(b)+"’ 기록과 감상을 모두 지울까요?")) return; setItem("cellar",b.id,Object.assign({},D.cellar[b.id],{del:true})); if(b.img) api("/api/bottle?id="+b.id,{method:"DELETE"}).catch(function(){}); toast("삭제했어요"); closeBottle() }
   $("bdDel").onclick=bDel; $("bdDel2").onclick=bDel;
 
@@ -1537,11 +1567,16 @@ function bindNoteForm(bid){
 /* Claude가 대신 등록해 준 술: 처음 동기화 뒤 한 번, 아직 없는 것만 넣는다 */
 function cSeed(){ if(cSeed.done) return; cSeed.done=1;
   openEnc("/books/cellar-seed.enc").then(function(j){ (j.items||[]).forEach(function(it){
-    var cur=D.cellar[it.id];
-    if(cur){ if(!cur.del&&(it.rev||0)>(cur.rev||0)) setItem("cellar",it.id,Object.assign({},cur,{ai:it.rec.ai,rev:it.rev})); return }
-    if(it.img) bLocal[it.id]=it.img;
-    setItem("cellar",it.id,Object.assign({},it.rec));
-    if(it.img) api("/api/bottle",{body:{id:it.id,img:it.img,noAi:true}}).then(function(r){ if(r._s===200&&D.cellar[it.id]){ setItem("cellar",it.id,Object.assign({},D.cellar[it.id],{img:1})); delete bLocal[it.id]; renderCellar() } }).catch(function(){});
+    var cur=D.cellar[it.id], imgs=it.imgs||(it.img?[it.img]:[]);
+    if(cur&&cur.del) return;
+    if(!cur){ setItem("cellar",it.id,Object.assign({},it.rec,{img:0,imgN:0})); cur=D.cellar[it.id] }
+    else if((it.rev||0)>(cur.rev||0)) setItem("cellar",it.id,Object.assign({},cur,{ai:it.rec.ai,rev:it.rev}));
+    var have=Math.max(cur.imgN||0,cur.img?1:0);
+    if(imgs.length<=have) return;
+    imgs.forEach(function(d,i){ if(i>=have) bLocal[bPid(it.id,i)]=d });
+    var chain=Promise.resolve(), ok=have;
+    imgs.forEach(function(d,i){ if(i<have) return; chain=chain.then(function(){ return api("/api/bottle",{body:{id:bPid(it.id,i),img:d,noAi:true}}).then(function(r){ if(r._s===200){ ok=i+1; delete bLocal[bPid(it.id,i)] } else throw 0 }) }) });
+    chain.catch(function(){}).then(function(){ if(ok>have&&D.cellar[it.id]) setItem("cellar",it.id,Object.assign({},D.cellar[it.id],{img:1,imgN:ok})); renderCellar(); if(BOPEN===it.id&&!nDraft) renderBottle() });
   }); renderCellar() }).catch(function(){});
 }
 var TITLES={today:"음주일지",meal:"식사",read:"독서",zh:"중국어",health:"건강",set:"설정"};
