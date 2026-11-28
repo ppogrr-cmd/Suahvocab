@@ -3,8 +3,8 @@
 import { P, kv, kvReady, isAuthed, body } from "./_lib.js";
 
 const KEY = `${P}data`;
-const MAPS = ["habits", "checkups", "tasks", "meals", "dlog", "reading", "marks", "zh", "zhd", "typo"]; // 항목 단위로 병합하는 묶음
-const EMPTY = { habits: {}, checkups: {}, tasks: {}, meals: {}, dlog: {}, reading: {}, marks: {}, zh: {}, zhd: {}, typo: {}, log: {} };
+const MAPS = ["habits", "checkups", "tasks", "meals", "dlog", "reading", "marks", "zh", "zhd", "typo", "cellar"]; // 항목 단위로 병합하는 묶음
+const EMPTY = { habits: {}, checkups: {}, tasks: {}, meals: {}, dlog: {}, reading: {}, marks: {}, zh: {}, zhd: {}, typo: {}, cellar: {}, log: {} };
 
 function newer(a, b) {
   return !a || (b && (b.t || 0) > (a.t || 0));
