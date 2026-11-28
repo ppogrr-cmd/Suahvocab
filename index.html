@@ -53,6 +53,36 @@ input{font:inherit}
 .bgal .noimg{flex:1;height:200px;border-radius:14px;background:#0b1424;display:flex;align-items:center;justify-content:center;font-size:60px}
 .binfo{padding:10px 16px 0}
 .binfo h2{margin:2px 0;font-size:21px;line-height:1.3}.binfo .o{color:var(--mut);font-size:13px;font-style:italic}
+/* 도감 카드 */
+.tcg{--tc:#8fa3bf;--tc2:#4b5d78;position:relative;border-radius:14px;padding:6px;background:linear-gradient(145deg,var(--tc),var(--tc2) 55%,var(--tc));box-shadow:0 4px 14px rgba(0,0,0,.35);text-align:left;display:block;width:100%;min-width:0;color:#1d1a17;overflow:hidden}
+.tcg .in{background:linear-gradient(180deg,#fbf6ea,#efe6d2);border-radius:9px;padding:6px 7px 7px;display:flex;flex-direction:column;gap:5px;height:100%;box-sizing:border-box}
+.tcg .top{display:flex;align-items:baseline;gap:4px;min-width:0}
+.tcg .no{font-size:9px;font-weight:800;color:var(--tc2);white-space:nowrap}
+.tcg .nm{flex:1;min-width:0;font-weight:800;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tcg .abv{font-weight:900;font-size:15px;color:#b3261e;white-space:nowrap}.tcg .abv small{font-size:8px;font-weight:800;margin-right:1px;color:#6b5b4a}
+.tcg .win{position:relative;aspect-ratio:3/4;border-radius:5px;overflow:hidden;background:radial-gradient(circle at 50% 30%,#fff8e8,var(--tc) 160%);border:2px solid #c9b48a;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;font-size:46px}
+.tcg .win img{width:100%;height:100%;object-fit:contain}
+.tcg .typ{display:flex;justify-content:space-between;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:#4b3f33;background:linear-gradient(90deg,#e9dcc0,#f6efdf);border-radius:4px;padding:2px 6px;white-space:nowrap;overflow:hidden}
+.tcg .typ span:first-child{overflow:hidden;text-overflow:ellipsis}
+.tcg .tag{display:inline-flex;align-items:center;gap:3px;background:var(--tc);color:#fff;border-radius:999px;padding:1px 6px;font-size:9px;font-weight:800;flex:none}
+.tcg .mv{display:flex;flex-wrap:wrap;gap:3px}.tcg .mv span{font-size:10px;font-weight:700;background:#fff;border:1px solid #d9c9a6;border-radius:4px;padding:1px 5px}
+.tcg .ft{display:flex;justify-content:space-between;align-items:center;font-size:9.5px;color:#6b5b4a;font-weight:700}
+.tcg .rr{color:var(--tc2);letter-spacing:1px}.tcg .my{color:#c8871a}
+.tcg.holo::after{content:"";position:absolute;inset:0;border-radius:14px;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.55) 45%,rgba(255,220,255,.35) 50%,transparent 62%);background-size:250% 100%;mix-blend-mode:soft-light;animation:holo 4s ease-in-out infinite}
+@keyframes holo{0%{background-position:150% 0}100%{background-position:-50% 0}}
+.tcg.big{max-width:380px;margin:4px auto 0;padding:9px;border-radius:20px}
+.tcg.big .in{padding:10px 12px 12px;gap:8px;border-radius:13px}
+.tcg.big .nm{font-size:18px;white-space:normal;line-height:1.3}.tcg.big .no{font-size:11px}.tcg.big .abv{font-size:24px}.tcg.big .abv small{font-size:11px}
+.tcg.big .orig{font-size:11px;color:#6b5b4a;font-style:italic;margin-top:-6px}
+.tcg.big .typ{font-size:12px;padding:4px 8px}.tcg.big .tag{font-size:11px;padding:2px 8px}
+.tcg.big .mv span{font-size:12.5px;padding:2px 7px}
+.tcg.big .flav{font-size:13px;line-height:1.55;font-style:italic;color:#3e342a;border-top:1px solid #d9c9a6;border-bottom:1px solid #d9c9a6;padding:6px 2px}
+.tcg.big .ft{font-size:11.5px}
+.stats4{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 8px;align-items:center;font-size:11.5px;font-weight:800;color:#4b3f33}
+.stats4 .bar{display:grid;grid-template-columns:repeat(5,1fr);gap:2px}.stats4 .bar i{display:block;height:8px;border-radius:2px;background:#e2d6bc}.stats4 .bar i.on{background:var(--tc)}
+.pair2{font-size:12px;color:#4b3f33}.pair2 b{color:var(--tc2);margin-right:4px}
+.bmore{display:block;margin:12px auto 0;padding:10px 22px;border-radius:999px;background:var(--card2);font-size:14px}
+.cgrid{gap:12px}
 #bZoom{position:fixed;inset:0;z-index:70;background:#000}
 #bZoom .zwrap{position:absolute;inset:0;overflow:auto;display:flex;align-items:center;justify-content:center;-webkit-overflow-scrolling:touch}
 #bZoom .zwrap img{max-width:100%;max-height:100%;object-fit:contain}
@@ -1478,6 +1508,29 @@ function zoomShow(){ var z=$("bZoom"); z.innerHTML='<div class="zwrap" id="zWrap
   if($("zP")) $("zP").onclick=function(){ ZI=(ZI-1+ZIMGS.length)%ZIMGS.length; zoomShow() };
   if($("zN")) $("zN").onclick=function(){ ZI=(ZI+1)%ZIMGS.length; zoomShow() };
 }
+var TYPE_C={"레드":["#b0304f","#5e0f26"],"화이트":["#d9b84a","#8a6a12"],"로제":["#e98aa0","#a3405a"],"스파클링":["#d8c36a","#8b7a2c"],"위스키":["#d08a3a","#7a4512"],"브랜디":["#b5632e","#5e2a10"],"사케":["#7fb0d8","#2f5f8a"],"맥주":["#f0b429","#9a6a06"],"전통주":["#bda57a","#6b5636"],"소주":["#6cc3bd","#2a7a74"],"고량주":["#d9483b","#7d1a12"],"진":["#5fb39a","#24685a"],"럼":["#a8683a","#55300f"],"보드카":["#9fb4cf","#4d6584"],"데킬라":["#9cc45a","#4f7020"],"리큐르":["#c27bd1","#6d2f7a"]};
+function typeOf(a){ a=a||{}; var st=a.style||"";
+  if(a.kind==="와인"){ if(/로제|rosé|rose/i.test(st)) return "로제"; if(/스파클링|샴페인|프리찬테|스푸만테|크레망|까바|카바/.test(st)) return "스파클링"; if(/화이트/.test(st)) return "화이트"; return "레드" }
+  return TYPE_C[a.kind]?a.kind:"기타" }
+function bNo(id){ var ids=bottles().sort(function(x,y){return (x.at||0)-(y.at||0)}).map(function(b){return b.id}); var i=ids.indexOf(id); return "No."+String(i+1).padStart(3,"0") }
+function bShort(b){ var a=b.ai||{}; return b.name||a.short||a.nameKo||a.nameOrig||"이름 없음" }
+function bAbv(a){ var m=String((a||{}).abv||"").match(/[\d.,]+/); return m?m[0].replace(",","."):"" }
+function tcgCard(b,big){ var a=b.ai||{}, t=typeOf(a), c=TYPE_C[t]||["#8fa3bf","#4b5d78"], im=bImg(b), sv=bStars(b), rr=a.rarity||0, ab=bAbv(a);
+  var h='<button class="tcg'+(big?" big":"")+(rr>=3?" holo":"")+'" data-b="'+b.id+'" style="--tc:'+c[0]+';--tc2:'+c[1]+'"><div class="in">'+
+    '<div class="top"><span class="no">'+bNo(b.id)+'</span><span class="nm">'+esc(big?(a.nameKo||bShort(b)):bShort(b))+'</span>'+(ab?'<span class="abv"><small>ABV</small>'+esc(ab)+'%</span>':'')+'</div>'+
+    (big&&a.nameOrig?'<div class="orig">'+esc(a.nameOrig)+'</div>':'')+
+    '<div class="win">'+(im?'<img src="'+esc(im)+'" alt=""'+(big?' data-z="0"':' loading="lazy"')+'>':bIc(a.kind))+'</div>'+
+    '<div class="typ"><span>'+esc([a.country,a.region&&big?a.region.split("·")[0].trim():"",a.vintage].filter(Boolean).join(" · "))+'</span><span class="tag">'+bIc(a.kind)+' '+esc(t)+'</span></div>';
+  if((a.aromas||[]).length) h+='<div class="mv">'+a.aromas.slice(0,big?5:2).map(function(x){return '<span>'+esc(x)+'</span>'}).join("")+'</div>';
+  if(big){
+    var st=a.stats||{}, keys=[["body","바디"],["acid","산미"],["sweet","단맛"],["aroma","향"]].filter(function(k){return st[k[0]]});
+    if(keys.length) h+='<div class="stats4">'+keys.map(function(k){ var v=st[k[0]]; return '<span>'+k[1]+'</span><span class="bar">'+[1,2,3,4,5].map(function(i){return '<i class="'+(i<=v?"on":"")+'"></i>'}).join("")+'</span>' }).join("")+'</div>';
+    if(a.summary) h+='<div class="flav">'+esc(a.summary)+'</div>';
+    if((a.pairing||[]).length) h+='<div class="pair2"><b>궁합</b>'+esc(a.pairing.slice(0,3).join(" · "))+'</div>';
+  }
+  h+='<div class="ft"><span class="rr">'+(rr?"◆".repeat(rr):"")+'</span>'+(big&&a.price?'<span>'+esc(a.price.replace(/^국내\s*/,""))+'</span>':'')+'<span class="my">'+(sv?"★"+(Math.round(sv*10)/10):((b.notes||[]).length?"감상 "+b.notes.length:""))+'</span></div>';
+  return h+'</div></button>' }
+var BMORE=false;
 function starTxt(v){ var r=Math.round(v); return "★★★★★".slice(0,r)+"☆☆☆☆☆".slice(0,5-r) }
 function renderCellar(){
   var box=$("cellarMain"); if(!box) return;
@@ -1490,13 +1543,12 @@ function renderCellar(){
   if(all.length){
     h+='<div class="cchips"><button data-k="all" class="'+(cKind==="all"?"on":"")+'">전체 '+all.length+'</button>'+Object.keys(kinds).sort(function(a,b){return kinds[b]-kinds[a]}).map(function(k){return '<button data-k="'+esc(k)+'" class="'+(cKind===k?"on":"")+'">'+bIc(k)+' '+esc(k)+' '+kinds[k]+'</button>'}).join("")+'</div>';
     h+='<input class="csearch" id="cQ" type="search" placeholder="이름·생산자·국가·품종으로 찾기" value="'+esc(cQ)+'">';
-    h+=list.length?'<div class="cgrid">'+list.map(function(b){ var a=b.ai||{}, im=bImg(b), sv=bStars(b);
-      return '<button class="ccard" data-b="'+b.id+'"><div class="ph">'+(im?'<img src="'+esc(im)+'" loading="lazy" alt="">':bIc(a.kind))+((b.notes||[]).length>1?'<span class="badge">'+b.notes.length+'번</span>':'')+(bImgs(b).length>1?'<span class="badge ph2">📷'+bImgs(b).length+'</span>':'')+'</div><div class="bd"><div class="k">'+bIc(a.kind)+' '+esc([a.style||a.kind,a.country].filter(Boolean).join(" · ")||"정보 없음")+'</div><div class="n">'+esc(bName(b))+'</div><div class="st">'+(sv?starTxt(sv):'<span style="color:var(--mut)">감상 전</span>')+'</div></div></button>' }).join("")+'</div>':'<div class="card empty">해당하는 술이 없어요.</div>';
+    h+=list.length?'<div class="cgrid">'+list.map(function(b){ return tcgCard(b,false) }).join("")+'</div>':'<div class="card empty">해당하는 술이 없어요.</div>';
   } else h+='<div class="card empty">아직 기록이 없어요. Claude 대화에 마신 술 라벨 사진을 보내면 정리해서 넣어줄게요.</div>';
   box.innerHTML=h;
   Array.prototype.forEach.call(box.querySelectorAll(".cchips button"),function(b){b.onclick=function(){cKind=b.dataset.k; renderCellar()}});
   if($("cQ")) $("cQ").oninput=function(){ cQ=this.value; var pos=this.selectionStart; renderCellar(); var i=$("cQ"); i.focus(); try{i.setSelectionRange(pos,pos)}catch(e){} };
-  Array.prototype.forEach.call(box.querySelectorAll(".ccard"),function(b){b.onclick=function(){ openBottle(b.dataset.b) }});
+  Array.prototype.forEach.call(box.querySelectorAll(".tcg"),function(b){b.onclick=function(){ openBottle(b.dataset.b) }});
 }
 $("bFile").onchange=function(){ var f=this.files[0]; this.value=""; if(!f) return; toast("사진 줄이는 중…"); resize(f).then(function(d){ bNew(d,"") }).catch(function(){ toast("사진을 읽지 못했어요") }) };
 function bNew(img,name){
@@ -1515,18 +1567,19 @@ function bFetch(id,img,hint){
     if(BOPEN===id) renderBottle(); renderCellar();
   }).catch(function(){ delete bBusy[id]; if(D.cellar[id]) setItem("cellar",id,Object.assign({},D.cellar[id],{aiErr:"연결이 안 돼요"})); if(BOPEN===id) renderBottle(); renderCellar() });
 }
-function openBottle(id){ BOPEN=id; nDraft=null; $("bdView").classList.remove("hide"); $("bdView").scrollTop=0; renderBottle() }
+function openBottle(id){ BOPEN=id; nDraft=null; BMORE=false; $("bdView").classList.remove("hide"); $("bdView").scrollTop=0; renderBottle() }
 function closeBottle(){ BOPEN=null; $("bdView").classList.add("hide"); renderCellar() }
 function renderBottle(){
   var b=D.cellar[BOPEN]; if(!b){ closeBottle(); return } b=Object.assign({id:BOPEN},b); var a=b.ai||{}, im=bImg(b), sv=a.serve||{};
   var h='<div class="bdtop"><button id="bdBack">← 목록</button><button id="bdDel" style="color:#ff9b8a">삭제</button></div>';
-  var ims=bImgs(b); h+='<div class="bgal'+(ims.length===1?' one':'')+'">'+(ims.length?ims.map(function(u,i){return '<img src="'+esc(u)+'" data-z="'+i+'" alt="">'}).join(""):'<div class="noimg">'+bIc(a.kind)+'</div>')+'</div><div class="binfo"><div style="font-size:12px;color:var(--mut)">'+bIc(a.kind)+' '+esc([a.kind,a.style].filter(Boolean).join(" · "))+'</div><h2>'+esc(bName(b))+'</h2><div class="o">'+esc(a.nameOrig||"")+'</div>'+
-    '<div class="bdchips">'+[a.country&&(a.country+(a.region?" · "+a.region:"")),a.vintage,a.abv,a.price].filter(Boolean).map(function(x){return '<span>'+esc(x)+'</span>'}).join("")+'</div>'+
-    (a.rarity?'<div style="margin-top:8px;font-size:13px"><span class="rar">'+"◆◆◆◆◆".slice(0,a.rarity)+'<span style="color:var(--line)">'+"◆◆◆◆◆".slice(0,5-a.rarity)+'</span></span> '+esc(a.rarityNote||"")+'</div>':'')+'</div>';
+  h+=tcgCard(b,true);
+  var ims=bImgs(b); if(ims.length>1) h+='<div class="bgal">'+ims.map(function(u,i){return '<img src="'+esc(u)+'" data-z="'+i+'" alt="" style="height:110px">'}).join("")+'</div>';
   if(bBusy[b.id]) h+='<div class="bdsec"><p>Claude가 라벨을 읽고 있어요… (10~30초)</p></div>';
   else if(!b.ai) h+='<div class="bdsec"><p>아직 정보가 없어요. Claude 대화에 이 술 사진을 보내 주세요.</p></div>';
   if(b.ai&&a.kind==="없음") h+='<div class="bdsec"><p>술병으로 보이지 않아요. Claude 대화에서 이름을 알려주세요.</p></div>';
-  if(b.ai&&a.kind!=="없음"){
+  if(b.ai&&a.kind!=="없음") h+='<button class="bmore" id="bdMoreBtn">'+(BMORE?"간단히 보기 ▲":"더보기 ▼  이야기 · 테이스팅 · 마시는 법 · 라벨")+'</button>';
+  if(b.ai&&a.kind!=="없음"&&BMORE){
+    h+='<div class="bdsec"><h3>기본 정보</h3><div class="bdkv">'+[["이름",a.nameKo],["원어",a.nameOrig],["생산자",a.producer],["산지",[a.country,a.region].filter(Boolean).join(" · ")],["빈티지",a.vintage],["도수",a.abv],["종류",[a.kind,a.style].filter(Boolean).join(" · ")],["가격",a.price],["희귀도",a.rarityNote]].filter(function(x){return x[1]}).map(function(x){return '<span>'+x[0]+'</span><span>'+esc(x[1])+'</span>'}).join("")+'</div></div>';
     if(a.story) h+='<div class="bdsec"><h3>이야기</h3><p>'+esc(a.story)+'</p>'+(a.producer?'<div style="margin-top:8px;font-size:13px;color:var(--mut)">생산자 · '+esc(a.producer)+'</div>':'')+'</div>';
     if(a.base) h+='<div class="bdsec"><h3>'+(a.kind==="와인"?"품종":"원료")+'</h3><p>'+esc(a.base)+'</p></div>';
     if((a.label||[]).length) h+='<div class="bdsec"><h3>라벨 읽기</h3>'+a.label.map(function(l){ return '<div class="lrow">'+(l.w?'<div class="lw">'+esc(l.w)+'</div>':'')+'<div class="lo">'+esc(l.o)+'</div><div class="lk">'+esc(l.k)+'</div></div>' }).join("")+'</div>';
@@ -1542,6 +1595,7 @@ function renderBottle(){
   h+='<div style="display:flex;gap:8px;margin:16px"><button class="btn ghost" id="bdDel2" style="flex:1;color:#ff9b8a">이 술 삭제</button></div>';
   $("bdView").innerHTML=h;
   $("bdBack").onclick=closeBottle;
+  if($("bdMoreBtn")) $("bdMoreBtn").onclick=function(){ BMORE=!BMORE; renderBottle() };
   Array.prototype.forEach.call($("bdView").querySelectorAll("[data-z]"),function(x){x.onclick=function(){ zoomOpen(bImgs(D.cellar[BOPEN]?Object.assign({id:BOPEN},D.cellar[BOPEN]):b),+x.dataset.z) }});
   function bDel(){ if(!confirm("‘"+bName(b)+"’ 기록과 감상을 모두 지울까요?")) return; setItem("cellar",b.id,Object.assign({},D.cellar[b.id],{del:true})); if(b.img) api("/api/bottle?id="+b.id,{method:"DELETE"}).catch(function(){}); toast("삭제했어요"); closeBottle() }
   $("bdDel").onclick=bDel; $("bdDel2").onclick=bDel;
