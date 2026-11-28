@@ -71,6 +71,8 @@ input{font:inherit}
 .bdsec h3{margin:0 0 8px;font-size:13px;color:var(--acc);letter-spacing:.04em}
 .bdsec p{margin:0;line-height:1.7;font-size:15px}
 .bdkv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;font-size:14px}.bdkv span:nth-child(odd){color:var(--mut)}
+.lrow{padding:9px 0;border-top:1px solid var(--line)}.lrow:first-of-type{border-top:0;padding-top:0}
+.lrow .lw{font-size:11px;color:var(--acc2);margin-bottom:2px}.lrow .lo{font-size:13px;color:var(--mut);font-style:italic;line-height:1.5;white-space:pre-wrap}.lrow .lk{font-size:15px;line-height:1.65;margin-top:3px;white-space:pre-wrap}
 .tnote3 div{margin-bottom:8px;line-height:1.6;font-size:14.5px}.tnote3 b{color:var(--acc2);margin-right:6px}
 .rar{color:#f0b35a;letter-spacing:2px}
 .mynote{border-top:1px solid var(--line);padding:10px 0}.mynote:first-of-type{border-top:0}
@@ -1527,6 +1529,7 @@ function renderBottle(){
   if(b.ai&&a.kind!=="없음"){
     if(a.story) h+='<div class="bdsec"><h3>이야기</h3><p>'+esc(a.story)+'</p>'+(a.producer?'<div style="margin-top:8px;font-size:13px;color:var(--mut)">생산자 · '+esc(a.producer)+'</div>':'')+'</div>';
     if(a.base) h+='<div class="bdsec"><h3>'+(a.kind==="와인"?"품종":"원료")+'</h3><p>'+esc(a.base)+'</p></div>';
+    if((a.label||[]).length) h+='<div class="bdsec"><h3>라벨 읽기</h3>'+a.label.map(function(l){ return '<div class="lrow">'+(l.w?'<div class="lw">'+esc(l.w)+'</div>':'')+'<div class="lo">'+esc(l.o)+'</div><div class="lk">'+esc(l.k)+'</div></div>' }).join("")+'</div>';
     if(a.visual||a.nose||a.palate) h+='<div class="bdsec tnote3"><h3>테이스팅 노트</h3>'+(a.visual?'<div><b>Visual</b>'+esc(a.visual)+'</div>':'')+(a.nose?'<div><b>Nose</b>'+esc(a.nose)+'</div>':'')+(a.palate?'<div><b>Palate</b>'+esc(a.palate)+'</div>':'')+((a.aromas||[]).length?'<div class="bdchips">'+a.aromas.map(function(x){return '<span>#'+esc(x)+'</span>'}).join("")+'</div>':'')+'</div>';
     if(sv.temp||sv.glass||sv.how||(a.pairing||[]).length) h+='<div class="bdsec"><h3>마시는 법</h3><div class="bdkv">'+(sv.temp?'<span>온도</span><span>'+esc(sv.temp)+'</span>':'')+(sv.glass?'<span>잔</span><span>'+esc(sv.glass)+'</span>':'')+(sv.how?'<span>다루기</span><span>'+esc(sv.how)+'</span>':'')+((a.pairing||[]).length?'<span>페어링</span><span>'+esc(a.pairing.join(", "))+'</span>':'')+(a.drink?'<span>시기</span><span>'+esc(a.drink)+'</span>':'')+'</div></div>';
     if(a.confidence==="low") h+='<div style="margin:8px 16px 0;font-size:12px;color:var(--mut)">라벨이 잘 안 읽혀서 추정이 섞였어요. 틀리면 Claude 대화에서 알려주세요.</div>';
