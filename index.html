@@ -33,8 +33,8 @@ input{font:inherit}
 .cgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 @media(min-width:700px){.cgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .ccard{background:var(--card);border-radius:14px;overflow:hidden;text-align:left;display:flex;flex-direction:column;min-width:0}
-.ccard .ph{aspect-ratio:4/5;background:#0b1424;display:flex;align-items:center;justify-content:center;font-size:44px;position:relative;overflow:hidden}
-.ccard .ph img{width:100%;height:100%;object-fit:cover}
+.ccard .ph{aspect-ratio:3/4;background:#0b1424;display:flex;align-items:center;justify-content:center;font-size:44px;position:relative;overflow:hidden}
+.ccard .ph img{width:100%;height:100%;object-fit:contain}
 .ccard .bd{padding:9px 10px 11px;min-width:0}
 .ccard .k{font-size:11px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ccard .n{font-size:14px;font-weight:700;line-height:1.35;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -48,7 +48,7 @@ input{font:inherit}
 .bdhero .ph img{width:100%;height:100%;object-fit:cover}
 .bgal{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 16px 2px;scrollbar-width:none}
 .bgal::-webkit-scrollbar{display:none}
-.bgal img{flex:none;height:320px;max-width:86%;object-fit:cover;border-radius:14px;scroll-snap-align:center;background:#0b1424}
+.bgal img{flex:none;height:360px;max-width:86%;object-fit:contain;border-radius:14px;scroll-snap-align:center;background:#0b1424}
 .bgal.one img{max-width:100%;width:100%;height:auto;max-height:420px;object-fit:contain}
 .bgal .noimg{flex:1;height:200px;border-radius:14px;background:#0b1424;display:flex;align-items:center;justify-content:center;font-size:60px}
 .binfo{padding:10px 16px 0}
@@ -1468,7 +1468,7 @@ function bLast(b){ var ns=(b.notes||[]); return ns.length?ns.map(function(n){ret
 function bStars(b){ var ns=(b.notes||[]).filter(function(n){return n.stars}); if(!ns.length) return 0; return ns.reduce(function(a,n){return a+n.stars},0)/ns.length }
 function bName(b){ var a=b.ai||{}; return b.name||a.nameKo||a.nameOrig||(bBusy[b.id]?"라벨 읽는 중…":"이름 없음") }
 function bPid(id,i){ return i?id+"p"+(i+1):id }
-function bImgs(b){ var n=Math.max(b.imgN||0,b.img?1:0), out=[]; for(var i=0;i<Math.max(n,8);i++){ var k=bPid(b.id,i); if(bLocal[k]) out.push(bLocal[k]); else if(i<n) out.push("/api/bottle?id="+k) } return out }
+function bImgs(b){ var n=Math.max(b.imgN||0,b.img?1:0), out=[]; for(var i=0;i<Math.max(n,8);i++){ var k=bPid(b.id,i); if(bLocal[k]) out.push(bLocal[k]); else if(i<n) out.push("/api/bottle?id="+k+(b.imgRev?"&v="+b.imgRev:"")) } return out }
 function bImg(b){ return bImgs(b)[0]||"" }
 var ZIMGS=[], ZI=0;
 function zoomOpen(list,i){ ZIMGS=list; ZI=i; var z=$("bZoom"); z.classList.remove("hide"); zoomShow() }
@@ -1574,12 +1574,13 @@ function cSeed(){ if(cSeed.done) return; cSeed.done=1;
     if(cur&&cur.del) return;
     if(!cur){ setItem("cellar",it.id,Object.assign({},it.rec,{img:0,imgN:0})); cur=D.cellar[it.id] }
     else if((it.rev||0)>(cur.rev||0)) setItem("cellar",it.id,Object.assign({},cur,{ai:it.rec.ai,rev:it.rev}));
-    var have=Math.max(cur.imgN||0,cur.img?1:0);
+    var have=Math.max(cur.imgN||0,cur.img?1:0), irev=it.imgRev||0;
+    if(irev>(cur.imgRev||0)) have=0;
     if(imgs.length<=have) return;
     imgs.forEach(function(d,i){ if(i>=have) bLocal[bPid(it.id,i)]=d });
     var chain=Promise.resolve(), ok=have;
     imgs.forEach(function(d,i){ if(i<have) return; chain=chain.then(function(){ return api("/api/bottle",{body:{id:bPid(it.id,i),img:d,noAi:true}}).then(function(r){ if(r._s===200){ ok=i+1; delete bLocal[bPid(it.id,i)] } else throw 0 }) }) });
-    chain.catch(function(){}).then(function(){ if(ok>have&&D.cellar[it.id]) setItem("cellar",it.id,Object.assign({},D.cellar[it.id],{img:1,imgN:ok})); renderCellar(); if(BOPEN===it.id&&!nDraft) renderBottle() });
+    chain.catch(function(){}).then(function(){ if(ok>have&&D.cellar[it.id]) setItem("cellar",it.id,Object.assign({},D.cellar[it.id],{img:1,imgN:Math.max(ok,(D.cellar[it.id].imgN||0)),imgRev:irev})); renderCellar(); if(BOPEN===it.id&&!nDraft) renderBottle() });
   }); renderCellar() }).catch(function(){});
 }
 var TITLES={today:"음주일지",meal:"식사",read:"독서",zh:"중국어",health:"건강",set:"설정"};
